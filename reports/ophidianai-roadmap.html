@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OphidianAI -- Website Roadmap V1.0</title>
+<style>
+  @page {
+    size: letter;
+    margin: 0;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-size: 12px;
+    line-height: 1.45;
+    color: #1a1a1a;
+    background: #fff;
+  }
+
+  /* ==================== COVER PAGE ==================== */
+  .cover-page {
+    width: 8.5in;
+    min-height: 11in;
+    background: #0F1729;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    page-break-after: always;
+    position: relative;
+    padding: 1in;
+  }
+
+  .cover-logo {
+    width: 160px;
+    height: auto;
+    margin-bottom: 48px;
+  }
+
+  .cover-title {
+    font-size: 42px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+
+  .cover-subtitle {
+    font-size: 18px;
+    font-weight: 600;
+    color: #0DB1B2;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  .cover-meta {
+    font-size: 13px;
+    color: #8892a4;
+    line-height: 2;
+  }
+
+  .cover-tagline {
+    position: absolute;
+    bottom: 60px;
+    font-size: 12px;
+    color: #4a5568;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  /* ==================== CONTENT PAGES ==================== */
+  .content-page {
+    width: 8.5in;
+    min-height: 11in;
+    padding: 0.45in 0.6in 0.6in 0.6in;
+    page-break-after: always;
+    position: relative;
+  }
+
+  .content-page:last-child {
+    page-break-after: avoid;
+  }
+
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .page-header-logo {
+    width: 32px;
+    height: auto;
+  }
+
+  .page-header-text {
+    font-size: 10px;
+    color: #94a3b8;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 2px;
+  }
+
+  .section-title span {
+    color: #0DB1B2;
+  }
+
+  .section-subtitle {
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 14px;
+  }
+
+  .section-divider {
+    width: 60px;
+    height: 3px;
+    background: #0DB1B2;
+    margin-bottom: 14px;
+    border: none;
+  }
+
+  h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-top: 14px;
+    margin-bottom: 4px;
+  }
+
+  h3::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 2px;
+    background: #0DB1B2;
+    margin-top: 4px;
+  }
+
+  /* Feature items */
+  .feature-item {
+    margin-bottom: 7px;
+    padding: 8px 12px;
+    background: #f8fafc;
+    border-radius: 6px;
+    border-left: 4px solid #0DB1B2;
+  }
+
+  .feature-item.high { border-left-color: #0DB1B2; }
+  .feature-item.medium { border-left-color: #f59e0b; }
+  .feature-item.low { border-left-color: #94a3b8; }
+
+  .feature-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+
+  .feature-item-title {
+    font-weight: 700;
+    font-size: 13px;
+    color: #1e293b;
+  }
+
+  .feature-item-desc {
+    font-size: 11px;
+    color: #64748b;
+    line-height: 1.4;
+  }
+
+  .feature-item-benefit {
+    font-size: 10px;
+    color: #475569;
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  /* Badges */
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-green { background: #dcfce7; color: #166534; }
+  .badge-orange { background: #fed7aa; color: #9a3412; }
+  .badge-gray { background: #e2e8f0; color: #475569; }
+  .badge-blue { background: #dbeafe; color: #1e40af; }
+  .badge-teal { background: #ccfbf1; color: #115e59; }
+
+  /* Impact labels */
+  .impact {
+    display: inline-block;
+    padding: 2px 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 3px;
+  }
+
+  .impact-high { background: #dcfce7; color: #166534; }
+  .impact-medium { background: #fed7aa; color: #9a3412; }
+  .impact-low { background: #e2e8f0; color: #475569; }
+  .impact-critical { background: #fecaca; color: #991b1b; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 12px;
+    font-size: 11px;
+  }
+
+  table th {
+    background: #1E293B;
+    color: #ffffff;
+    text-align: left;
+    padding: 6px 10px;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  table td {
+    padding: 5px 10px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  table tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+
+  .intro-text {
+    font-size: 12px;
+    color: #475569;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  /* Footer */
+  .page-footer {
+    position: absolute;
+    bottom: 0.35in;
+    left: 0.6in;
+    right: 0.6in;
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: #94a3b8;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 8px;
+  }
+
+  /* Cards grid */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .stat-card {
+    background: #f8fafc;
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .stat-card-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+  }
+
+  .stat-card-value span {
+    font-size: 14px;
+    color: #0DB1B2;
+    margin-left: 4px;
+  }
+
+  .stat-card-label {
+    font-size: 11px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .note-box {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    font-size: 11px;
+    color: #166534;
+    line-height: 1.4;
+  }
+
+  .note-box strong {
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .note-box.warning {
+    background: #fffbeb;
+    border-color: #fde68a;
+    color: #92400e;
+  }
+
+  /* Phase timeline */
+  .phase-block {
+    margin-bottom: 10px;
+    padding: 10px 14px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+  }
+
+  .phase-block-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+
+  .phase-block-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e293b;
+  }
+
+  .phase-block-desc {
+    font-size: 11px;
+    color: #64748b;
+    line-height: 1.4;
+  }
+
+  .phase-block ul {
+    margin-top: 4px;
+    padding-left: 16px;
+  }
+
+  .phase-block li {
+    font-size: 11px;
+    color: #475569;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== PAGE 1: COVER ==================== -->
+<div class="cover-page">
+  <img class="cover-logo" src="LOGO_PLACEHOLDER" alt="OphidianAI">
+  <div class="cover-title">OphidianAI</div>
+  <div class="cover-subtitle">Website Roadmap</div>
+  <div class="cover-meta">
+    Internal Planning Document<br>
+    March 8, 2026<br>
+    Companion to Status Report V1.0
+  </div>
+  <div class="cover-tagline">Intelligence, Engineered.</div>
+</div>
+
+<!-- ==================== PAGE 2: OVERVIEW ==================== -->
+<div class="content-page">
+  <div class="page-header">
+    <img class="page-header-logo" src="LOGO_PLACEHOLDER" alt="OphidianAI">
+    <div class="page-header-text">OphidianAI Website Roadmap</div>
+  </div>
+
+  <div class="section-title">Roadmap <span>Overview</span></div>
+  <hr class="section-divider">
+  <p class="intro-text">The OphidianAI website is live and functional. This roadmap covers what remains to reach full production readiness, followed by growth-focused enhancements. Items are organized into three phases: <strong>Immediate</strong> (required for production), <strong>Near-Term</strong> (next 30 days), and <strong>Future</strong> (backlog).</p>
+
+  <div class="cards-grid">
+    <div class="stat-card">
+      <div class="stat-card-value">89%</div>
+      <div class="stat-card-label">Current Audit Score</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-value">100%</div>
+      <div class="stat-card-label">Target Score</div>
+    </div>
+  </div>
+
+  <h3>Phase Summary</h3>
+  <table>
+    <thead>
+      <tr><th>Phase</th><th>Focus</th><th>Items</th><th>Timeline</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="impact impact-critical">IMMEDIATE</span></td><td>Production prerequisites</td><td>3 items</td><td>Before go-live</td></tr>
+      <tr><td><span class="impact impact-high">NEAR-TERM</span></td><td>Revenue enablement + content</td><td>6 items</td><td>Next 30 days</td></tr>
+      <tr><td><span class="impact impact-medium">FUTURE</span></td><td>Growth + polish</td><td>7 items</td><td>Backlog</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Current Gaps</h3>
+  <table>
+    <thead>
+      <tr><th>Area</th><th>Current</th><th>Target</th><th>Blocking</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Contact Form</td><td>Code wired, no API key</td><td>Fully operational</td><td>Resend account</td></tr>
+      <tr><td>Domain</td><td>Vercel subdomain</td><td>ophidianai.com</td><td>DNS config</td></tr>
+      <tr><td>Payments</td><td>Not implemented</td><td>Self-serve checkout</td><td>Pricing finalized</td></tr>
+      <tr><td>Content</td><td>1 blog post</td><td>5+ posts</td><td>Content creation time</td></tr>
+      <tr><td>Social</td><td>No profiles linked</td><td>LinkedIn, GitHub active</td><td>Account setup</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span>OphidianAI -- Internal</span>
+    <span>Page 2</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 3: IMMEDIATE ==================== -->
+<div class="content-page">
+  <div class="page-header">
+    <img class="page-header-logo" src="LOGO_PLACEHOLDER" alt="OphidianAI">
+    <div class="page-header-text">OphidianAI Website Roadmap</div>
+  </div>
+
+  <div class="section-title">Phase 1: <span>Immediate</span></div>
+  <div class="section-subtitle">Required before full production launch</div>
+  <hr class="section-divider">
+
+  <div class="note-box warning">
+    <strong>These items must be completed before directing clients to the site.</strong>
+    The contact form is the primary lead capture mechanism. Without it, the site cannot convert visitors into leads.
+  </div>
+
+  <div class="feature-item high">
+    <div class="feature-item-header">
+      <div class="feature-item-title">1. Set Up Resend + RESEND_API_KEY</div>
+      <span class="impact impact-critical">CRITICAL</span>
+    </div>
+    <div class="feature-item-desc">Create a Resend account at resend.com. Generate an API key. Add <code>RESEND_API_KEY</code> to Vercel project environment variables. The contact form server action is already wired -- this is the only missing piece.</div>
+    <div class="feature-item-benefit">Without this, every contact form submission silently fails. No leads captured.</div>
+  </div>
+
+  <div class="feature-item high">
+    <div class="feature-item-header">
+      <div class="feature-item-title">2. Connect Custom Domain</div>
+      <span class="impact impact-critical">CRITICAL</span>
+    </div>
+    <div class="feature-item-desc">Add ophidianai.com (or chosen domain) to the Vercel project. Update DNS records (CNAME or A record) at the domain registrar. Vercel handles SSL automatically. Update the metadataBase URL in the root layout once the domain is live.</div>
+    <div class="feature-item-benefit">Professional domain builds credibility. Required for client-facing outreach.</div>
+  </div>
+
+  <div class="feature-item high">
+    <div class="feature-item-header">
+      <div class="feature-item-title">3. Verify Resend Domain</div>
+      <span class="impact impact-high">HIGH</span>
+    </div>
+    <div class="feature-item-desc">After connecting the domain, verify it in Resend so contact form emails come from <code>contact@ophidianai.com</code> instead of <code>onboarding@resend.dev</code>. Requires adding DNS records (DKIM, SPF). Prevents emails from landing in spam.</div>
+    <div class="feature-item-benefit">Emails from a verified domain have much higher deliverability and look professional.</div>
+  </div>
+
+  <div class="page-footer">
+    <span>OphidianAI -- Internal</span>
+    <span>Page 3</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 4: NEAR-TERM ==================== -->
+<div class="content-page">
+  <div class="page-header">
+    <img class="page-header-logo" src="LOGO_PLACEHOLDER" alt="OphidianAI">
+    <div class="page-header-text">OphidianAI Website Roadmap</div>
+  </div>
+
+  <div class="section-title">Phase 2: <span>Near-Term</span></div>
+  <div class="section-subtitle">Revenue enablement and content -- next 30 days</div>
+  <hr class="section-divider">
+
+  <div class="feature-item high">
+    <div class="feature-item-header">
+      <div class="feature-item-title">1. Stripe Subscription Checkout</div>
+      <span class="impact impact-high">HIGH</span>
+    </div>
+    <div class="feature-item-desc">Wire Stripe Checkout for Starter ($2,000/mo) and Growth ($3,500/mo) tiers. Create Stripe Products and Prices. Add API route for creating checkout sessions. Enterprise tier links to contact form or Calendly. Update pricing page CTAs to trigger checkout.</div>
+    <div class="feature-item-benefit">Enables self-serve revenue. Clients can sign up without a sales call for standard tiers.</div>
+  </div>
+
+  <div class="feature-item high">
+    <div class="feature-item-header">
+      <div class="feature-item-title">2. Blog Content Sprint</div>
+      <span class="impact impact-high">HIGH</span>
+    </div>
+    <div class="feature-item-desc">Publish 4-5 more blog posts covering: AI integration use cases for small businesses, case study deep-dive on Bloomin' Acres, "what to expect" from working with an AI agency, industry trends, and common automation opportunities. Each post is an MDX file in src/content/blog/.</div>
+    <div class="feature-item-benefit">SEO authority. Each post is a potential organic search entry point. Demonstrates expertise to prospects.</div>
+  </div>
+
+  <div class="feature-item high">
+    <div class="feature-item-header">
+      <div class="feature-item-title">3. Calendly Integration</div>
+      <span class="impact impact-high">HIGH</span>
+    </div>
+    <div class="feature-item-desc">Create Calendly account. Add embedded booking widget on the Contact page and Pricing page (Enterprise tier). Lazy-load the embed for performance. Provides a lower-friction alternative to the contact form for prospects ready to talk.</div>
+    <div class="feature-item-benefit">Reduces friction for high-intent prospects. Enterprise leads can book directly.</div>
+  </div>
+
+  <div class="feature-item medium">
+    <div class="feature-item-header">
+      <div class="feature-item-title">4. Privacy Policy + Terms of Service</div>
+      <span class="impact impact-medium">MEDIUM</span>
+    </div>
+    <div class="feature-item-desc">Create /privacy and /terms pages with appropriate legal content. Required for Stripe integration and general business compliance. Add links back to the footer once pages exist.</div>
+    <div class="feature-item-benefit">Legal requirement for payment processing. Builds trust with prospects.</div>
+  </div>
+
+  <div class="feature-item medium">
+    <div class="feature-item-header">
+      <div class="feature-item-title">5. Portfolio Expansion</div>
+      <span class="impact impact-medium">MEDIUM</span>
+    </div>
+    <div class="feature-item-desc">Add more detail to the Bloomin' Acres case study: before/after screenshots, key metrics, technologies used, timeline, client testimonial (if available). As new projects complete, add them to the portfolio grid.</div>
+    <div class="feature-item-benefit">Portfolio depth is the #1 trust factor for prospective clients evaluating an agency.</div>
+  </div>
+
+  <div class="feature-item medium">
+    <div class="feature-item-header">
+      <div class="feature-item-title">6. Social Media Links</div>
+      <span class="impact impact-medium">MEDIUM</span>
+    </div>
+    <div class="feature-item-desc">Set up LinkedIn company page and professional profile. Once active, add social links back to the footer. Consider an X/Twitter presence for industry visibility. GitHub link already present.</div>
+    <div class="feature-item-benefit">Social presence validates the business. LinkedIn is critical for B2B credibility.</div>
+  </div>
+
+  <div class="page-footer">
+    <span>OphidianAI -- Internal</span>
+    <span>Page 4</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 5: FUTURE ==================== -->
+<div class="content-page">
+  <div class="page-header">
+    <img class="page-header-logo" src="LOGO_PLACEHOLDER" alt="OphidianAI">
+    <div class="page-header-text">OphidianAI Website Roadmap</div>
+  </div>
+
+  <div class="section-title">Phase 3: <span>Future</span></div>
+  <div class="section-subtitle">Growth features and polish -- backlog</div>
+  <hr class="section-divider">
+
+  <div class="feature-item medium">
+    <div class="feature-item-header">
+      <div class="feature-item-title">1. Client Portal</div>
+      <span class="impact impact-medium">MEDIUM</span>
+    </div>
+    <div class="feature-item-desc">Authenticated area where active clients can view project status, deliverables, invoices, and communication history. Integrate with Supabase Auth. Could replace or complement ClickUp for client-facing project visibility.</div>
+    <div class="feature-item-benefit">Professional client experience. Reduces back-and-forth emails about project status.</div>
+  </div>
+
+  <div class="feature-item medium">
+    <div class="feature-item-header">
+      <div class="feature-item-title">2. Newsletter / Email List</div>
+      <span class="impact impact-medium">MEDIUM</span>
+    </div>
+    <div class="feature-item-desc">Add email signup form (footer or dedicated section). Integrate with Resend or a dedicated newsletter service. Use for blog post announcements, AI industry updates, and promotional campaigns.</div>
+    <div class="feature-item-benefit">Owned audience. Direct channel to prospects who aren't ready to buy yet.</div>
+  </div>
+
+  <div class="feature-item medium">
+    <div class="feature-item-header">
+      <div class="feature-item-title">3. Testimonials Section</div>
+      <span class="impact impact-medium">MEDIUM</span>
+    </div>
+    <div class="feature-item-desc">Add a TestimonialCarousel component to the home page. Collect quotes from Bloomin' Acres and future clients. Display with name, company, and headshot. Social proof is one of the strongest conversion drivers.</div>
+    <div class="feature-item-benefit">Testimonials can increase conversion by 20-30% on service pages.</div>
+  </div>
+
+  <div class="feature-item low">
+    <div class="feature-item-header">
+      <div class="feature-item-title">4. Founder Photo</div>
+      <span class="impact impact-low">LOW</span>
+    </div>
+    <div class="feature-item-desc">Replace the styled EL monogram on the About page with a professional headshot. Personal photos on agency sites increase trust and humanize the brand.</div>
+    <div class="feature-item-benefit">People buy from people. A face builds connection.</div>
+  </div>
+
+  <div class="feature-item low">
+    <div class="feature-item-header">
+      <div class="feature-item-title">5. Favicon Variants</div>
+      <span class="impact impact-low">LOW</span>
+    </div>
+    <div class="feature-item-desc">Add apple-touch-icon.png and favicon-32x32.png for better device coverage. Currently only favicon.ico exists. Low effort, marginally improves appearance on iOS home screen and browser tabs.</div>
+    <div class="feature-item-benefit">Small polish item. Improves appearance on Apple devices.</div>
+  </div>
+
+  <div class="feature-item low">
+    <div class="feature-item-header">
+      <div class="feature-item-title">6. Blog Featured Images</div>
+      <span class="impact impact-low">LOW</span>
+    </div>
+    <div class="feature-item-desc">Add featured image support to MDX frontmatter. Display on blog index cards and at the top of individual posts. Currently using a generic icon placeholder.</div>
+    <div class="feature-item-benefit">Visual blog cards get more clicks. Better social media sharing appearance.</div>
+  </div>
+
+  <div class="feature-item low">
+    <div class="feature-item-header">
+      <div class="feature-item-title">7. Performance Monitoring</div>
+      <span class="impact impact-low">LOW</span>
+    </div>
+    <div class="feature-item-desc">Set up Web Vitals monitoring via Vercel Analytics (already installed) or a dedicated service. Track LCP, FID, CLS across pages. Set up alerts for regressions. Run Lighthouse CI on deploys.</div>
+    <div class="feature-item-benefit">Catch performance regressions before they affect user experience or SEO rankings.</div>
+  </div>
+
+  <div class="page-footer">
+    <span>OphidianAI -- Internal</span>
+    <span>Page 5</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 6: IMPLEMENTATION SUMMARY ==================== -->
+<div class="content-page">
+  <div class="page-header">
+    <img class="page-header-logo" src="LOGO_PLACEHOLDER" alt="OphidianAI">
+    <div class="page-header-text">OphidianAI Website Roadmap</div>
+  </div>
+
+  <div class="section-title">Implementation <span>Summary</span></div>
+  <hr class="section-divider">
+
+  <table>
+    <thead>
+      <tr><th>Item</th><th>Phase</th><th>Category</th><th>Scope</th><th>Dependency</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Resend API key setup</td><td><span class="impact impact-critical">IMMED.</span></td><td>Integration</td><td>Small</td><td>Resend account</td></tr>
+      <tr><td>Custom domain</td><td><span class="impact impact-critical">IMMED.</span></td><td>Infrastructure</td><td>Small</td><td>Domain registrar</td></tr>
+      <tr><td>Resend domain verification</td><td><span class="impact impact-critical">IMMED.</span></td><td>Integration</td><td>Small</td><td>Custom domain</td></tr>
+      <tr><td>Stripe checkout</td><td><span class="impact impact-high">NEAR</span></td><td>Revenue</td><td>Medium</td><td>Pricing finalized</td></tr>
+      <tr><td>Blog content sprint</td><td><span class="impact impact-high">NEAR</span></td><td>Content</td><td>Medium</td><td>None</td></tr>
+      <tr><td>Calendly integration</td><td><span class="impact impact-high">NEAR</span></td><td>Integration</td><td>Small</td><td>Calendly account</td></tr>
+      <tr><td>Privacy/Terms pages</td><td><span class="impact impact-medium">NEAR</span></td><td>Legal</td><td>Small</td><td>None</td></tr>
+      <tr><td>Portfolio expansion</td><td><span class="impact impact-medium">NEAR</span></td><td>Content</td><td>Small</td><td>None</td></tr>
+      <tr><td>Social media links</td><td><span class="impact impact-medium">NEAR</span></td><td>Marketing</td><td>Small</td><td>Account setup</td></tr>
+      <tr><td>Client portal</td><td><span class="impact impact-low">FUTURE</span></td><td>Feature</td><td>Large</td><td>Supabase Auth</td></tr>
+      <tr><td>Newsletter signup</td><td><span class="impact impact-low">FUTURE</span></td><td>Marketing</td><td>Medium</td><td>Email service</td></tr>
+      <tr><td>Testimonials section</td><td><span class="impact impact-low">FUTURE</span></td><td>Content</td><td>Small</td><td>Client quotes</td></tr>
+      <tr><td>Founder photo</td><td><span class="impact impact-low">FUTURE</span></td><td>Content</td><td>Small</td><td>Photo taken</td></tr>
+      <tr><td>Favicon variants</td><td><span class="impact impact-low">FUTURE</span></td><td>Polish</td><td>Small</td><td>None</td></tr>
+      <tr><td>Blog featured images</td><td><span class="impact impact-low">FUTURE</span></td><td>Feature</td><td>Small</td><td>None</td></tr>
+      <tr><td>Performance monitoring</td><td><span class="impact impact-low">FUTURE</span></td><td>Operations</td><td>Small</td><td>None</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note-box">
+    <strong>Next Steps</strong>
+    Phase 1 items are blockers. Start with the Resend account and domain setup -- both are quick wins that unlock full site functionality. Phase 2 items can be tackled in parallel once Phase 1 is complete.
+  </div>
+
+  <div class="page-footer">
+    <span>OphidianAI -- Internal</span>
+    <span>Page 6</span>
+  </div>
+</div>
+
+</body>
+</html>
