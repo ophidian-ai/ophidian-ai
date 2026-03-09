@@ -99,37 +99,40 @@ const PricingSwitch = ({
 }) => {
   return (
     <div className="flex justify-center">
-      <div className="relative mx-auto flex w-fit rounded-full bg-background-alt border border-primary/20 p-1">
-        <button
-          onClick={() => { if (isYearly) onToggle(); }}
-          className={cn(
-            "relative z-10 w-fit h-10 rounded-full sm:px-6 px-3 sm:py-2 py-1 font-medium transition-colors",
-            !isYearly ? "text-background" : "text-foreground-muted"
-          )}
-        >
-          <span className="relative z-10">Monthly</span>
-        </button>
+      <div className="glass-button-wrap">
+        <div className="relative flex w-fit rounded-full border border-[rgba(57,255,20,0.25)] bg-[linear-gradient(135deg,rgba(57,255,20,0.15)_0%,rgba(57,255,20,0.08)_50%,rgba(57,255,20,0.03)_100%)] backdrop-blur-[12px] p-1">
+          <button
+            onClick={() => { if (isYearly) onToggle(); }}
+            className={cn(
+              "relative z-10 w-fit h-10 rounded-full sm:px-6 px-3 sm:py-2 py-1 font-medium transition-all duration-300",
+              !isYearly ? "text-[#0D1B2A]" : "text-[#39FF14]/60 hover:text-[#39FF14]"
+            )}
+          >
+            <span className="relative z-10">Monthly</span>
+          </button>
 
-        <button
-          onClick={() => { if (!isYearly) onToggle(); }}
-          className={cn(
-            "relative z-10 w-fit h-10 flex-shrink-0 rounded-full sm:px-6 px-3 sm:py-2 py-1 font-medium transition-colors",
-            isYearly ? "text-background" : "text-foreground-muted"
-          )}
-        >
-          <span className="relative z-10">Yearly</span>
-        </button>
+          <button
+            onClick={() => { if (!isYearly) onToggle(); }}
+            className={cn(
+              "relative z-10 w-fit h-10 flex-shrink-0 rounded-full sm:px-6 px-3 sm:py-2 py-1 font-medium transition-all duration-300",
+              isYearly ? "text-[#0D1B2A]" : "text-[#39FF14]/60 hover:text-[#39FF14]"
+            )}
+          >
+            <span className="relative z-10">Yearly</span>
+          </button>
 
-        {/* Single animated indicator that slides between positions */}
-        <motion.div
-          className="absolute top-1 bottom-1 rounded-full bg-gradient-to-t from-primary to-primary-light border-2 border-primary shadow-sm shadow-primary/30"
-          layout
-          transition={{ type: "spring", stiffness: 500, damping: 30 }}
-          style={{
-            left: isYearly ? "50%" : "4px",
-            right: isYearly ? "4px" : "50%",
-          }}
-        />
+          {/* Sliding indicator */}
+          <motion.div
+            className="absolute top-1 bottom-1 rounded-full bg-[#39FF14] shadow-[0_0_20px_rgba(57,255,20,0.3)]"
+            layout
+            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+            style={{
+              left: isYearly ? "50%" : "4px",
+              right: isYearly ? "4px" : "50%",
+            }}
+          />
+        </div>
+        <div className="glass-button-shadow" />
       </div>
     </div>
   );

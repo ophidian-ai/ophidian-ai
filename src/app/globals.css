@@ -116,6 +116,11 @@ h4 { font-size: 1.25rem; }
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+/* On glow-cards, remove the glass border so the glow border shows through */
+.glow-card.glass {
+  border-color: transparent;
+}
+
 /* Glow border effect */
 .glow-border {
   position: relative;
@@ -304,9 +309,6 @@ h4 { font-size: 1.25rem; }
     hsl(var(--hue) calc(var(--saturation) * 1%) calc(var(--lightness) * 1%) / var(--bg-spot-opacity)),
     transparent
   );
-  background-size: calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)));
-  background-position: 50% 50%;
-  background-attachment: fixed;
 }
 
 [data-glow]::before,
@@ -317,10 +319,6 @@ h4 { font-size: 1.25rem; }
   inset: calc(var(--border-size, 2px) * -1);
   border: var(--border-size, 2px) solid transparent;
   border-radius: calc(var(--radius, 12) * 1px);
-  background-attachment: fixed;
-  background-size: calc(100% + (2 * var(--border-size, 2px))) calc(100% + (2 * var(--border-size, 2px)));
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
   mask: linear-gradient(transparent, transparent), linear-gradient(white, white);
   mask-clip: padding-box, border-box;
   mask-composite: intersect;
