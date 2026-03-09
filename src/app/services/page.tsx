@@ -1,5 +1,4 @@
 import { PageWrapper } from "@/components/layout/PageWrapper";
-import { HeroSimple } from "@/components/sections/HeroSimple";
 import { FeaturesGrid } from "@/components/sections/FeaturesGrid";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { Container } from "@/components/ui/Container";
@@ -130,16 +129,6 @@ export default function ServicesPage() {
     <PageWrapper>
       <JsonLd data={serviceSchema} />
       <div className="grain">
-        <HeroSimple
-          title="Our Services"
-          subtitle="AI integration services that automate your operations, eliminate busywork, and give your team superpowers. Subscription-based, so you get continuous improvement -- not a one-time handoff."
-          breadcrumbs={[
-            { label: "Home", href: "/" },
-            { label: "Services", href: "/services" },
-          ]}
-        />
-
-        {/* Detailed Service Blocks */}
         <section className="py-24 md:py-32">
           <Container width="default">
             <div className="space-y-32">

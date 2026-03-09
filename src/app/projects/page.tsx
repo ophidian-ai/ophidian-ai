@@ -1,8 +1,6 @@
 "use client";
 
 import { PageWrapper } from "@/components/layout/PageWrapper";
-import { HeroSimple } from "@/components/sections/HeroSimple";
-import { CTABanner } from "@/components/sections/CTABanner";
 import {
   CircularGallery,
   type GalleryItem,
@@ -70,37 +68,19 @@ export default function ProjectsPage() {
   return (
     <PageWrapper>
       <div className="grain">
-        <HeroSimple
-          title="Projects Gallery"
-          subtitle="Explore our work. Each project is built for performance, designed for impact."
-          breadcrumbs={[
-            { label: "Home", href: "/" },
-            { label: "Projects", href: "/projects" },
-          ]}
-        />
-
-        {/* Circular Gallery Section */}
-        <div className="w-full bg-background" style={{ height: "500vh" }}>
-          <div className="w-full h-screen sticky top-0 flex flex-col items-center justify-center overflow-hidden">
-            <div className="text-center mb-8 absolute top-16 z-10">
-              <h2 className="text-4xl font-bold text-foreground">
-                Our <span className="gradient-text">Work</span>
-              </h2>
-              <p className="text-foreground-muted mt-2">
-                Scroll to explore the gallery
-              </p>
-            </div>
-            <div className="w-full h-full">
-              <CircularGallery items={projectData} />
-            </div>
+        <div className="w-full h-screen flex flex-col items-center justify-center overflow-hidden relative">
+          <div className="text-center mb-8 absolute top-16 z-10">
+            <h2 className="text-4xl font-bold text-foreground">
+              Our <span className="gradient-text">Work</span>
+            </h2>
+            <p className="text-foreground-muted mt-2">
+              Scroll to explore the gallery
+            </p>
+          </div>
+          <div className="w-full h-full">
+            <CircularGallery items={projectData} />
           </div>
         </div>
-
-        <CTABanner
-          headline="Want to be our next project?"
-          subtitle="Let's build something great together. No contracts, no pressure."
-          cta={{ label: "Start a Project", href: "/contact" }}
-        />
       </div>
     </PageWrapper>
   );

@@ -1,5 +1,4 @@
 import { PageWrapper } from "@/components/layout/PageWrapper";
-import { HeroSimple } from "@/components/sections/HeroSimple";
 import { ContactForm } from "@/components/sections/ContactForm";
 import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
@@ -9,16 +8,6 @@ import { Card } from "@/components/ui/Card";
 export default function ContactPage() {
   return (
     <PageWrapper>
-      <HeroSimple
-        title="Get in Touch"
-        subtitle="Have a project in mind or want to explore what AI can do for your business? We'd love to hear from you."
-        breadcrumbs={[
-          { label: "Home", href: "/" },
-          { label: "Contact", href: "/contact" },
-        ]}
-      />
-
-      {/* Two-column layout: form + contact info */}
       <section className="pb-24 md:pb-32">
         <Container width="default">
           <div className="grid gap-12 lg:grid-cols-5">

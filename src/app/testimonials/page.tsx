@@ -1,7 +1,6 @@
 "use client";
 
 import { PageWrapper } from "@/components/layout/PageWrapper";
-import { HeroSimple } from "@/components/sections/HeroSimple";
 import { CTABanner } from "@/components/sections/CTABanner";
 import {
   TestimonialsColumn,
@@ -74,16 +73,7 @@ export default function TestimonialsPage() {
   return (
     <PageWrapper>
       <div className="grain">
-        <HeroSimple
-          title="What Our Clients Say"
-          subtitle="Real feedback from businesses we've helped grow."
-          breadcrumbs={[
-            { label: "Home", href: "/" },
-            { label: "Testimonials", href: "/testimonials" },
-          ]}
-        />
-
-        <section className="bg-background my-20 relative">
+        <section className="mt-10 mb-20 relative">
           <div className="container z-10 mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}

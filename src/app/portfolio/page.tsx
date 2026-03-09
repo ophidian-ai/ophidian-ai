@@ -1,5 +1,4 @@
 import { PageWrapper } from "@/components/layout/PageWrapper";
-import { HeroSimple } from "@/components/sections/HeroSimple";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
@@ -11,16 +10,6 @@ export default function PortfolioPage() {
   return (
     <PageWrapper>
       <div className="grain">
-        <HeroSimple
-          title="Our Work"
-          subtitle="Real solutions for real businesses. Every project is built to perform, not just look good."
-          breadcrumbs={[
-            { label: "Home", href: "/" },
-            { label: "Portfolio", href: "/portfolio" },
-          ]}
-        />
-
-        {/* Featured Case Study */}
         <section className="py-24 md:py-32">
           <Container width="default">
             <div className="glass rounded-2xl overflow-hidden border border-primary/10 animate-fade-up">

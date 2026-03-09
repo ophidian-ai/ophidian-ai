@@ -1,5 +1,4 @@
 import { PageWrapper } from "@/components/layout/PageWrapper";
-import { HeroSimple } from "@/components/sections/HeroSimple";
 import { FAQAccordion } from "@/components/sections/FAQAccordion";
 import { CTABanner } from "@/components/sections/CTABanner";
 
@@ -45,15 +44,6 @@ export default function FAQPage() {
   return (
     <PageWrapper>
       <div className="grain">
-        <HeroSimple
-          title="Frequently Asked Questions"
-          subtitle="Everything you need to know about working with OphidianAI."
-          breadcrumbs={[
-            { label: "Home", href: "/" },
-            { label: "FAQ", href: "/faq" },
-          ]}
-        />
-
         <FAQAccordion
           heading="Common Questions"
           subtitle="If you do not see your question here, reach out and we will get you an answer."

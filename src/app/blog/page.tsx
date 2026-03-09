@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { PageWrapper } from "@/components/layout/PageWrapper";
-import { HeroSimple } from "@/components/sections/HeroSimple";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
@@ -15,15 +14,6 @@ export default function BlogPage() {
   return (
     <PageWrapper>
       <div className="grain">
-        <HeroSimple
-          title="Blog"
-          subtitle="Insights on AI, automation, and building smarter businesses."
-          breadcrumbs={[
-            { label: "Home", href: "/" },
-            { label: "Blog", href: "/blog" },
-          ]}
-        />
-
         <section className="py-24 md:py-32">
           <Container width="default">
             {posts.length === 0 ? (

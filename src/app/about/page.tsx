@@ -1,5 +1,4 @@
 import { PageWrapper } from "@/components/layout/PageWrapper";
-import { HeroSimple } from "@/components/sections/HeroSimple";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { Container } from "@/components/ui/Container";
@@ -29,16 +28,6 @@ export default function AboutPage() {
   return (
     <PageWrapper>
       <div className="grain">
-        <HeroSimple
-          title="About OphidianAI"
-          subtitle="We help businesses cut through the AI noise and build integrations that actually move the needle -- no hype, no bloat, just results."
-          breadcrumbs={[
-            { label: "Home", href: "/" },
-            { label: "About", href: "/about" },
-          ]}
-        />
-
-        {/* Story Section */}
         <section className="py-24 md:py-32">
           <Container width="default">
             <div className="flex flex-col items-start gap-12 lg:flex-row lg:gap-16 animate-fade-up">

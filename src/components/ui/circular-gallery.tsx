@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, HTMLAttributes } from "react";
+import React, { useEffect, useRef, useCallback, HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
 export interface GalleryItem {
@@ -18,68 +18,107 @@ interface CircularGalleryProps extends HTMLAttributes<HTMLDivElement> {
   items: GalleryItem[];
   radius?: number;
   autoRotateSpeed?: number;
+  scrollSensitivity?: number;
+  smoothing?: number;
 }
 
 const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
   (
-    { items, className, radius = 600, autoRotateSpeed = 0.02, ...props },
+    {
+      items,
+      className,
+      radius = 600,
+      autoRotateSpeed = 0.02,
+      scrollSensitivity = 0.15,
+      smoothing = 0.08,
+      ...props
+    },
     ref
   ) => {
-    const [rotation, setRotation] = useState(0);
-    const [isScrolling, setIsScrolling] = useState(false);
-    const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const animationFrameRef = useRef<number | null>(null);
-
-    useEffect(() => {
-      const handleScroll = () => {
-        setIsScrolling(true);
-        if (scrollTimeoutRef.current) {
-          clearTimeout(scrollTimeoutRef.current);
-        }
-
-        const scrollableHeight =
-          document.documentElement.scrollHeight - window.innerHeight;
-        const scrollProgress =
-          scrollableHeight > 0 ? window.scrollY / scrollableHeight : 0;
-        const scrollRotation = scrollProgress * 360;
-        setRotation(scrollRotation);
-
-        scrollTimeoutRef.current = setTimeout(() => {
-          setIsScrolling(false);
-        }, 150);
-      };
-
-      window.addEventListener("scroll", handleScroll, { passive: true });
-      return () => {
-        window.removeEventListener("scroll", handleScroll);
-        if (scrollTimeoutRef.current) {
-          clearTimeout(scrollTimeoutRef.current);
-        }
-      };
-    }, []);
-
-    useEffect(() => {
-      const autoRotate = () => {
-        if (!isScrolling) {
-          setRotation((prev) => prev + autoRotateSpeed);
-        }
-        animationFrameRef.current = requestAnimationFrame(autoRotate);
-      };
-
-      animationFrameRef.current = requestAnimationFrame(autoRotate);
-
-      return () => {
-        if (animationFrameRef.current) {
-          cancelAnimationFrame(animationFrameRef.current);
-        }
-      };
-    }, [isScrolling, autoRotateSpeed]);
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const carouselRef = useRef<HTMLDivElement | null>(null);
+    const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const targetRotation = useRef(0);
+    const currentRotation = useRef(0);
+    const isInteracting = useRef(false);
+    const interactionTimeout = useRef<NodeJS.Timeout | null>(null);
+    const rafId = useRef<number | null>(null);
 
     const anglePerItem = 360 / items.length;
 
+    const handleWheel = useCallback(
+      (e: WheelEvent) => {
+        e.preventDefault();
+        isInteracting.current = true;
+        targetRotation.current += e.deltaY * scrollSensitivity;
+
+        if (interactionTimeout.current) {
+          clearTimeout(interactionTimeout.current);
+        }
+        interactionTimeout.current = setTimeout(() => {
+          isInteracting.current = false;
+        }, 200);
+      },
+      [scrollSensitivity]
+    );
+
+    useEffect(() => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      container.addEventListener("wheel", handleWheel, { passive: false });
+      return () => {
+        container.removeEventListener("wheel", handleWheel);
+        if (interactionTimeout.current) {
+          clearTimeout(interactionTimeout.current);
+        }
+      };
+    }, [handleWheel]);
+
+    useEffect(() => {
+      const animate = () => {
+        // Auto-rotate when not interacting
+        if (!isInteracting.current) {
+          targetRotation.current += autoRotateSpeed;
+        }
+
+        // Lerp toward target
+        const diff = targetRotation.current - currentRotation.current;
+        currentRotation.current += diff * smoothing;
+
+        // Apply transform directly to DOM (no React re-render)
+        if (carouselRef.current) {
+          carouselRef.current.style.transform = `rotateY(${currentRotation.current}deg)`;
+        }
+
+        // Update card opacities
+        const totalRot = currentRotation.current % 360;
+        cardRefs.current.forEach((card, i) => {
+          if (!card) return;
+          const itemAngle = i * anglePerItem;
+          const relativeAngle = (itemAngle + totalRot + 360) % 360;
+          const normalizedAngle = Math.abs(
+            relativeAngle > 180 ? 360 - relativeAngle : relativeAngle
+          );
+          card.style.opacity = String(Math.max(0.3, 1 - normalizedAngle / 180));
+        });
+
+        rafId.current = requestAnimationFrame(animate);
+      };
+
+      rafId.current = requestAnimationFrame(animate);
+      return () => {
+        if (rafId.current) cancelAnimationFrame(rafId.current);
+      };
+    }, [autoRotateSpeed, smoothing, anglePerItem]);
+
     return (
       <div
-        ref={ref}
+        ref={(node) => {
+          containerRef.current = node;
+          if (typeof ref === "function") ref(node);
+          else if (ref) ref.current = node;
+        }}
         role="region"
         aria-label="3D Project Gallery"
         className={cn(
@@ -90,20 +129,12 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
         {...props}
       >
         <div
+          ref={carouselRef}
           className="relative w-full h-full"
-          style={{
-            transform: `rotateY(${rotation}deg)`,
-            transformStyle: "preserve-3d",
-          }}
+          style={{ transformStyle: "preserve-3d" }}
         >
           {items.map((item, i) => {
             const itemAngle = i * anglePerItem;
-            const totalRotation = rotation % 360;
-            const relativeAngle = (itemAngle + totalRotation + 360) % 360;
-            const normalizedAngle = Math.abs(
-              relativeAngle > 180 ? 360 - relativeAngle : relativeAngle
-            );
-            const opacity = Math.max(0.3, 1 - normalizedAngle / 180);
 
             const cardContent = (
               <div className="relative w-full h-full rounded-xl shadow-2xl overflow-hidden group border border-primary/20 bg-surface/70 backdrop-blur-lg transition-all duration-300 hover:border-primary/40 hover:shadow-glow">
@@ -125,6 +156,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
             return (
               <div
                 key={item.photo.url}
+                ref={(el) => { cardRefs.current[i] = el; }}
                 role="group"
                 aria-label={item.title}
                 className="absolute w-[300px] h-[400px]"
@@ -134,8 +166,6 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                   top: "50%",
                   marginLeft: "-150px",
                   marginTop: "-200px",
-                  opacity: opacity,
-                  transition: "opacity 0.3s linear",
                 }}
               >
                 {item.href ? (
