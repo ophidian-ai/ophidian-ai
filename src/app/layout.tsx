@@ -3,6 +3,7 @@ import { Inter, Space_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { JsonLd } from "@/components/JsonLd";
 import { GlobalBackground } from "@/components/layout/GlobalBackground";
+import AIChatWidget from "@/components/ui/ai-orb";
 import "./globals.css";
 
 const inter = Inter({
@@ -83,6 +84,7 @@ export default function RootLayout({
         <div className="relative z-10">
           {children}
         </div>
+        <AIChatWidget />
         <Analytics />
       </body>
     </html>

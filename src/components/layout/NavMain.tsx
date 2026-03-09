@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { GlassButton } from "@/components/ui/glass-button";
+import { AccountPopover } from "@/components/ui/account-popover";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -14,6 +15,14 @@ const navLinks = [
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ] as const;
+
+// TODO: Replace with real auth state (e.g. from Supabase/NextAuth)
+const mockUser = null as {
+  name: string;
+  email: string;
+  avatarUrl?: string;
+  initials: string;
+} | null;
 
 export function NavMain() {
   const [isOpen, setIsOpen] = useState(false);
@@ -76,11 +85,12 @@ export function NavMain() {
               ))}
             </div>
 
-            {/* Desktop CTA */}
-            <div className="hidden md:block">
+            {/* Desktop CTA + Account */}
+            <div className="hidden items-center gap-3 md:flex">
               <GlassButton size="sm" href="/contact">
                 Get Started
               </GlassButton>
+              <AccountPopover user={mockUser} />
             </div>
 
             {/* Mobile menu button */}
@@ -139,9 +149,12 @@ export function NavMain() {
               {label}
             </Link>
           ))}
-          <div className="mt-4 border-t border-surface-border pt-4">
+          <div className="mt-4 border-t border-surface-border pt-4 space-y-3">
             <GlassButton size="default" href="/contact" onClick={closeMenu} className="w-full">
               Get Started
+            </GlassButton>
+            <GlassButton size="default" href="/sign-in" onClick={closeMenu} className="w-full">
+              Sign In
             </GlassButton>
           </div>
         </div>
