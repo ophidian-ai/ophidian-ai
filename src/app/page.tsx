@@ -1,6 +1,8 @@
+"use client";
+
 import { NavMain } from "@/components/layout/NavMain";
 import { FooterMain } from "@/components/layout/FooterMain";
-import { HeroMain } from "@/components/sections/HeroMain";
+import { HeroAnimated } from "@/components/ui/hero-animated";
 import { StatsBar } from "@/components/sections/StatsBar";
 import { FeaturesGrid } from "@/components/sections/FeaturesGrid";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
@@ -11,11 +13,50 @@ export default function Home() {
     <>
       <NavMain />
       <div className="grain">
-        <HeroMain
-          headline="AI that works for your business, not the other way around."
-          subtitle="We build custom AI integrations that automate operations, accelerate decisions, and unlock revenue -- so you can focus on what you do best."
-          primaryCta={{ label: "See Our Plans", href: "/pricing" }}
-          secondaryCta={{ label: "Book a Call", href: "/contact" }}
+        <HeroAnimated
+          taglineWords={[
+            "Welcome",
+            "to",
+            "OphidianAI",
+            "--",
+            "Intelligence.",
+            "Engineered.",
+          ]}
+          headlineWords={[
+            "AI",
+            "that",
+            "works",
+            "for",
+            "your",
+            "business,",
+            "not",
+            "the",
+            "other",
+            "way",
+            "around.",
+          ]}
+          sublineWords={[
+            "Custom",
+            "AI",
+            "integrations",
+            "that",
+            "automate",
+            "operations,",
+            "accelerate",
+            "decisions,",
+            "and",
+            "unlock",
+            "revenue.",
+          ]}
+          bottomWords={[
+            "Custom",
+            "websites,",
+            "AI",
+            "tools,",
+            "built",
+            "for",
+            "performance.",
+          ]}
         />
 
         <StatsBar

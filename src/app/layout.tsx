@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Space_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { JsonLd } from "@/components/JsonLd";
+import { GlobalBackground } from "@/components/layout/GlobalBackground";
 import "./globals.css";
 
 const inter = Inter({
@@ -78,7 +79,10 @@ export default function RootLayout({
         className={`${inter.variable} ${spaceMono.variable} font-sans antialiased bg-background text-foreground`}
       >
         <JsonLd data={organizationSchema} />
-        {children}
+        <GlobalBackground />
+        <div className="relative z-10">
+          {children}
+        </div>
         <Analytics />
       </body>
     </html>
