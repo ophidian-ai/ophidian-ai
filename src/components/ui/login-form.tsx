@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Eye, EyeOff, Mail, Lock, Chrome } from "lucide-react";
+import { GlassButton } from "@/components/ui/glass-button";
 
 interface LoginFormProps {
   onSubmit: (email: string, password: string, remember: boolean) => void;
@@ -187,13 +188,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           </a>
         </div>
 
-        <button
+        <GlassButton
           type="submit"
           disabled={isSubmitting}
-          className="w-full py-3 rounded-lg bg-gradient-to-r from-primary to-primary-dark text-background font-semibold transition-all duration-200 hover:brightness-110 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none shadow-lg shadow-primary/20 hover:shadow-primary/40 cursor-pointer"
+          size="default"
+          className="w-full"
         >
           {isSubmitting ? "Signing in..." : "Sign In"}
-        </button>
+        </GlassButton>
       </form>
 
       <p className="mt-6 text-center text-sm text-foreground-dim">

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { MeshGradientBg } from "@/components/ui/mesh-gradient-bg";
 import { User, Mail, Building2, ArrowRight } from "lucide-react";
+import { GlassButton } from "@/components/ui/glass-button";
 
 export default function AccountSetupPage() {
   const [firstName, setFirstName] = useState("");
@@ -126,10 +127,12 @@ export default function AccountSetupPage() {
               </div>
             </div>
 
-            <button
+            <GlassButton
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3 rounded-lg bg-gradient-to-r from-primary to-primary-dark text-background font-semibold transition-all duration-200 hover:brightness-110 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none shadow-lg shadow-primary/20 hover:shadow-primary/40 flex items-center justify-center gap-2 cursor-pointer"
+              size="lg"
+              className="w-full"
+              contentClassName="flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
                 "Setting up..."
@@ -139,7 +142,7 @@ export default function AccountSetupPage() {
                   <ArrowRight size={18} />
                 </>
               )}
-            </button>
+            </GlassButton>
           </form>
         </div>
       </div>

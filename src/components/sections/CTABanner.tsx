@@ -1,7 +1,7 @@
 import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
-import { Button } from "@/components/ui/Button";
+import { GlassButton } from "@/components/ui/glass-button";
 
 export type CTABannerProps = {
   headline: string;
@@ -28,9 +28,9 @@ export function CTABanner({ headline, subtitle, cta }: CTABannerProps) {
             </Text>
           )}
 
-          <Button variant="cta" size="lg" href={cta.href}>
+          <GlassButton size="lg" href={cta.href}>
             {cta.label}
-          </Button>
+          </GlassButton>
         </div>
       </Container>
     </section>

@@ -4,7 +4,7 @@ import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
 import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
+import { GlassButton } from "@/components/ui/glass-button";
 
 export default function PortfolioPage() {
   return (
@@ -77,9 +77,9 @@ export default function PortfolioPage() {
                 -- if you have a project in mind, we would love to hear about
                 it.
               </Text>
-              <Button variant="primary" size="lg" href="/contact">
+              <GlassButton size="lg" href="/contact">
                 Start a Project
-              </Button>
+              </GlassButton>
             </div>
           </Container>
         </section>

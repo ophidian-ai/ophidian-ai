@@ -30,7 +30,7 @@ const variantClasses: Record<Variant, string> = {
   ghost:
     "text-foreground-muted hover:text-foreground hover:bg-surface-hover active:bg-surface",
   cta:
-    "bg-accent text-background font-semibold hover:brightness-110 active:brightness-95 shadow-glow-accent",
+    "bg-[#39FF14] text-[#0D1B2A] font-semibold hover:brightness-110 active:brightness-95 shadow-glow",
 };
 
 const sizeClasses: Record<Size, string> = {

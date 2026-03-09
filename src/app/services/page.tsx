@@ -4,7 +4,7 @@ import { CTABanner } from "@/components/sections/CTABanner";
 import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
-import { Button } from "@/components/ui/Button";
+import { GlassButton } from "@/components/ui/glass-button";
 import { JsonLd } from "@/components/JsonLd";
 
 const serviceSchema = {
@@ -180,9 +180,9 @@ export default function ServicesPage() {
                           </li>
                         ))}
                       </ul>
-                      <Button variant="secondary" size="md" href="/contact">
+                      <GlassButton size="default" href="/contact">
                         Learn More
-                      </Button>
+                      </GlassButton>
                     </div>
                   </div>
                 );

@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
-import { Button } from "@/components/ui/Button";
+import { GlassButton } from "@/components/ui/glass-button";
 import {
   submitContactForm,
   type ContactFormState,
@@ -156,15 +156,14 @@ export function ContactForm({ heading, subtitle }: ContactFormProps) {
             />
           </div>
 
-          <Button
+          <GlassButton
             type="submit"
-            variant="cta"
             size="lg"
             className="w-full sm:w-auto"
             disabled={isPending}
           >
             {isPending ? "Sending..." : "Send Message"}
-          </Button>
+          </GlassButton>
         </form>
       </Container>
     </section>

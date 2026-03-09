@@ -10,7 +10,7 @@ export default function ContactPage() {
     <PageWrapper>
       <section className="pb-24 md:pb-32">
         <Container width="default">
-          <div className="grid gap-12 lg:grid-cols-5">
+          <div className="grid gap-12 lg:grid-cols-5 items-start">
             {/* Left: Contact form */}
             <div className="lg:col-span-3">
               <ContactForm
@@ -19,8 +19,8 @@ export default function ContactPage() {
               />
             </div>
 
-            {/* Right: Contact info */}
-            <div className="lg:col-span-2 space-y-8">
+            {/* Right: Contact info -- aligned with the textarea */}
+            <div className="lg:col-span-2 lg:mt-[19.5rem]">
               <Card>
                 <Heading level={3} className="mb-6 text-lg font-semibold">
                   Contact Information

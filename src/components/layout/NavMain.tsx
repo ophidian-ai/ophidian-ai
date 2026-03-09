@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { GlassButton } from "@/components/ui/glass-button";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -47,9 +49,16 @@ export function NavMain() {
             {/* Logo */}
             <Link
               href="/"
-              className="group text-xl font-bold tracking-tight text-foreground transition-colors"
+              className="group flex items-center gap-2 text-xl font-bold tracking-tight transition-colors"
             >
-              <span className="transition-all duration-300 group-hover:gradient-text group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-accent group-hover:bg-clip-text group-hover:text-transparent">
+              <Image
+                src="/images/logo_icon.png"
+                alt="OphidianAI"
+                width={32}
+                height={32}
+                className="h-8 w-8"
+              />
+              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent transition-all duration-500 group-hover:from-accent group-hover:to-primary">
                 OphidianAI
               </span>
             </Link>
@@ -69,12 +78,9 @@ export function NavMain() {
 
             {/* Desktop CTA */}
             <div className="hidden md:block">
-              <Link
-                href="/contact"
-                className="inline-flex items-center rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-background transition-all duration-300 hover:shadow-glow-accent hover:brightness-110"
-              >
+              <GlassButton size="sm" href="/contact">
                 Get Started
-              </Link>
+              </GlassButton>
             </div>
 
             {/* Mobile menu button */}
@@ -134,13 +140,9 @@ export function NavMain() {
             </Link>
           ))}
           <div className="mt-4 border-t border-surface-border pt-4">
-            <Link
-              href="/contact"
-              onClick={closeMenu}
-              className="inline-flex w-full items-center justify-center rounded-lg bg-accent px-4 py-3 text-sm font-semibold text-background transition-all duration-300 hover:brightness-110"
-            >
+            <GlassButton size="default" href="/contact" onClick={closeMenu} className="w-full">
               Get Started
-            </Link>
+            </GlassButton>
           </div>
         </div>
       </div>

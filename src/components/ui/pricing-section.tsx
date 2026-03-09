@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import NumberFlow from "@number-flow/react";
 import { motion, AnimatePresence } from "motion/react";
 import { useState } from "react";
+import { GlassButton } from "@/components/ui/glass-button";
 
 interface PricingPlan {
   name: string;
@@ -222,16 +223,13 @@ export default function PricingSection({
               </CardHeader>
 
               <CardContent className="pt-0">
-                <button
+                <GlassButton
+                  size="lg"
                   onClick={() => onPlanSelect?.(plan)}
-                  className={`w-full mb-6 p-4 text-xl rounded-xl transition-all cursor-pointer ${
-                    plan.popular
-                      ? "bg-gradient-to-t from-primary to-primary-light shadow-lg shadow-primary/30 border border-primary text-background font-semibold hover:brightness-110"
-                      : "bg-gradient-to-t from-background-alt to-surface shadow-lg shadow-black/30 border border-primary/20 text-foreground hover:border-primary/40"
-                  }`}
+                  className="w-full mb-6"
                 >
                   {plan.buttonText}
-                </button>
+                </GlassButton>
 
                 <div className="space-y-3 pt-4 border-t border-primary/10">
                   <h4 className="font-medium text-base mb-3">

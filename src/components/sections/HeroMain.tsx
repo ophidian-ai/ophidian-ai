@@ -1,7 +1,7 @@
 import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
-import { Button } from "@/components/ui/Button";
+import { GlassButton } from "@/components/ui/glass-button";
 
 export type HeroMainProps = {
   headline: string;
@@ -36,14 +36,14 @@ export function HeroMain({
           </Text>
 
           <div className="flex flex-wrap gap-4">
-            <Button variant="primary" size="lg" href={primaryCta.href}>
+            <GlassButton size="lg" href={primaryCta.href}>
               {primaryCta.label}
-            </Button>
+            </GlassButton>
 
             {secondaryCta && (
-              <Button variant="secondary" size="lg" href={secondaryCta.href}>
+              <GlassButton size="default" href={secondaryCta.href}>
                 {secondaryCta.label}
-              </Button>
+              </GlassButton>
             )}
           </div>
         </div>
