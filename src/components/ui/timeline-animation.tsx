@@ -1,7 +1,7 @@
 "use client";
 
 import React, { type RefObject } from "react";
-import { motion, type Variants, useInView } from "framer-motion";
+import { motion, type Variants, useInView } from "motion/react";
 
 interface TimelineContentProps {
   children: React.ReactNode;

@@ -1,9 +1,49 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, Component, type ReactNode } from "react"
 import { X, Send } from "lucide-react"
-import { GlassOrb3D } from "@/components/ui/glass-orb-3d"
+import dynamic from "next/dynamic"
+
+// Lazy-load Three.js glass orb (saves ~183KB from initial bundle)
+const GlassOrb3D = dynamic(
+  () => import("@/components/ui/glass-orb-3d").then((m) => m.GlassOrb3D),
+  {
+    ssr: false,
+    loading: () => <OrbFallback />,
+  }
+)
+
+// CSS-only fallback orb (shown while Three.js loads or on WebGL failure)
+function OrbFallback({ className = "h-14 w-14" }: { className?: string }) {
+  return (
+    <div
+      className={cn("rounded-full bg-gradient-to-br from-primary/40 to-accent/30 backdrop-blur-sm border border-primary/20 animate-pulse", className)}
+    />
+  )
+}
+
+// Error boundary for WebGL crashes
+class WebGLErrorBoundary extends Component<
+  { children: ReactNode; fallbackClassName?: string },
+  { hasError: boolean }
+> {
+  constructor(props: { children: ReactNode; fallbackClassName?: string }) {
+    super(props)
+    this.state = { hasError: false }
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <OrbFallback className={this.props.fallbackClassName} />
+    }
+    return this.props.children
+  }
+}
 
 interface ChatMessage {
   role: "user" | "assistant"
@@ -51,7 +91,7 @@ export function AIChatWidget() {
           {/* Header */}
           <div className="flex items-center justify-between border-b border-primary/10 px-4 py-3">
             <div className="flex items-center gap-2">
-              <GlassOrb3D size="24px" />
+              <WebGLErrorBoundary fallbackClassName="h-6 w-6"><GlassOrb3D size="24px" /></WebGLErrorBoundary>
               <span className="font-semibold text-sm text-foreground">
                 Iris
               </span>
@@ -124,10 +164,12 @@ export function AIChatWidget() {
             <X className="h-5 w-5 text-primary" />
           </div>
         ) : (
-          <GlassOrb3D
-            size="56px"
-            className="group-hover:scale-110 transition-transform duration-300"
-          />
+          <WebGLErrorBoundary>
+            <GlassOrb3D
+              size="56px"
+              className="group-hover:scale-110 transition-transform duration-300"
+            />
+          </WebGLErrorBoundary>
         )}
       </button>
     </div>

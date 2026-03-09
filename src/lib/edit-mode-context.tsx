@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { invalidateContentCache } from "@/lib/use-page-content"
 
 type PendingChange = {
   page: string
@@ -108,6 +109,10 @@ export function EditModeProvider({ children }: { children: React.ReactNode }) {
     await supabase
       .from("site_content")
       .upsert(upserts, { onConflict: "page,key" })
+
+    // Invalidate cached content for all affected pages so next render fetches fresh data
+    const affectedPages = new Set(upserts.map(u => u.page))
+    for (const p of affectedPages) invalidateContentCache(p)
 
     setPendingChanges(new Map())
     setIsEditMode(false)
