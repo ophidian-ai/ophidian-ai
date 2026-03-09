@@ -71,14 +71,18 @@ export function EditableImage({
     : { width: width ?? 400, height: height ?? 300, alt, className }
 
   return (
-    <div className={`relative ${isEditMode ? "cursor-pointer group" : ""}`} onClick={handleClick}>
+    <div
+      className={`relative w-full h-full ${isEditMode ? "cursor-pointer group" : ""}`}
+      onClick={handleClick}
+      {...(isEditMode ? { role: "button", tabIndex: 0, onKeyDown: (e: React.KeyboardEvent) => { if (e.key === "Enter" || e.key === " ") handleClick() } } : {})}
+    >
       <Image src={src} {...imageProps} />
 
       {isEditMode && (
         <>
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors rounded flex items-center justify-center">
-            <span className="text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-              {uploading ? "Uploading..." : "Click to replace"}
+          <div className="absolute inset-0 z-10 bg-black/0 group-hover:bg-black/40 transition-colors rounded flex items-center justify-center pointer-events-none">
+            <span className="text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg">
+              {uploading ? "Uploading..." : "Click to replace image"}
             </span>
           </div>
           <input
