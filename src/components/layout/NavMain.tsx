@@ -35,7 +35,13 @@ export function NavMain() {
 
   // Fetch auth state from Supabase
   useEffect(() => {
-    const supabase = createClient();
+    let supabase: ReturnType<typeof createClient>;
+    try {
+      supabase = createClient();
+    } catch {
+      // Supabase not configured -- skip auth
+      return;
+    }
 
     async function getUser() {
       const { data: { user } } = await supabase.auth.getUser();
