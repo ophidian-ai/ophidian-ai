@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils"
 import { useState, useRef, useEffect } from "react"
 import { MessageSquare, X, Send } from "lucide-react"
 import { SiriOrb } from "@/components/ui/siri-orb"
+import { GlassOrb3D } from "@/components/ui/glass-orb-3d"
 
 interface ChatMessage {
   role: "user" | "assistant"
@@ -52,14 +53,16 @@ export function AIChatWidget() {
           {/* Header */}
           <div className="flex items-center justify-between border-b border-surface-border px-4 py-3">
             <div className="flex items-center gap-2">
-              <SiriOrb size="24px" animationDuration={15} />
+              <GlassOrb3D size="24px" />
               <span className="font-semibold text-sm text-foreground">
                 OphidianAI Assistant
               </span>
             </div>
             <button
+              type="button"
               onClick={() => setIsOpen(false)}
               className="text-foreground-muted hover:text-foreground transition-colors"
+              aria-label="Close chat"
             >
               <X className="h-4 w-4" />
             </button>
@@ -102,6 +105,7 @@ export function AIChatWidget() {
               <button
                 type="submit"
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors"
+                aria-label="Send message"
               >
                 <Send className="h-4 w-4" />
               </button>
@@ -112,6 +116,7 @@ export function AIChatWidget() {
 
       {/* Floating orb trigger */}
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
         className="group relative flex h-14 w-14 items-center justify-center rounded-full overflow-hidden shadow-glow hover:shadow-[0_0_30px_rgba(57,255,20,0.4)] transition-all duration-300"
         aria-label={isOpen ? "Close chat" : "Open chat"}
@@ -121,9 +126,8 @@ export function AIChatWidget() {
             <X className="h-5 w-5 text-primary" />
           </div>
         ) : (
-          <SiriOrb
+          <GlassOrb3D
             size="56px"
-            animationDuration={15}
             className="group-hover:scale-110 transition-transform duration-300"
           />
         )}

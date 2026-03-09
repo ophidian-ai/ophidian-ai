@@ -20,6 +20,7 @@ import {
   Check,
   AlertCircle,
   FolderOpen,
+  Camera,
 } from "lucide-react"
 import { motion } from "motion/react"
 
@@ -46,17 +47,21 @@ export default function AccountPage() {
   const [passwordMessage, setPasswordMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
   const [savingProfile, setSavingProfile] = useState(false)
   const [savingPassword, setSavingPassword] = useState(false)
+  const [uploadingAvatar, setUploadingAvatar] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [userId, setUserId] = useState<string | null>(null)
   const router = useRouter()
-  const supabase = createClient()
 
   useEffect(() => {
     async function load() {
+      const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
         router.push("/sign-in")
         return
       }
+
+      setUserId(user.id)
 
       const { data } = await supabase
         .from("profiles")
@@ -71,12 +76,13 @@ export default function AccountPage() {
       setLoading(false)
     }
     load()
-  }, [router, supabase])
+  }, [router])
 
   const handleSaveProfile = async () => {
     setSavingProfile(true)
     setProfileMessage(null)
 
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
 
@@ -91,6 +97,50 @@ export default function AccountPage() {
       setProfileMessage({ type: "error", text: error.message })
     } else {
       setProfileMessage({ type: "success", text: "Profile updated." })
+    }
+  }
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !userId) return
+
+    setUploadingAvatar(true)
+    setProfileMessage(null)
+
+    const supabase = createClient()
+    const ext = file.name.split(".").pop()
+    const filePath = `${userId}/avatar.${ext}`
+
+    // Upload to Supabase Storage
+    const { error: uploadError } = await supabase.storage
+      .from("avatars")
+      .upload(filePath, file, { upsert: true })
+
+    if (uploadError) {
+      setProfileMessage({ type: "error", text: uploadError.message })
+      setUploadingAvatar(false)
+      return
+    }
+
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from("avatars")
+      .getPublicUrl(filePath)
+
+    // Update profile with avatar URL (add cache buster)
+    const avatarUrl = `${publicUrl}?t=${Date.now()}`
+    const { error: updateError } = await supabase
+      .from("profiles")
+      .update({ avatar_url: avatarUrl })
+      .eq("id", userId)
+
+    setUploadingAvatar(false)
+
+    if (updateError) {
+      setProfileMessage({ type: "error", text: updateError.message })
+    } else {
+      setProfile((prev) => prev ? { ...prev, avatar_url: avatarUrl } : prev)
+      setProfileMessage({ type: "success", text: "Avatar updated." })
     }
   }
 
@@ -110,6 +160,7 @@ export default function AccountPage() {
       return
     }
 
+    const supabase = createClient()
     const { error } = await supabase.auth.updateUser({ password: newPassword })
 
     setSavingPassword(false)
@@ -125,8 +176,10 @@ export default function AccountPage() {
   }
 
   const handleSignOut = async () => {
+    const supabase = createClient()
     await supabase.auth.signOut()
-    router.push("/sign-in")
+    router.push("/")
+    router.refresh()
   }
 
   if (loading) {
@@ -205,6 +258,44 @@ export default function AccountPage() {
               </div>
 
               <div className="space-y-4">
+                {/* Avatar Upload */}
+                <div className="flex items-center gap-4">
+                  <div className="relative group">
+                    <div className="h-16 w-16 rounded-full overflow-hidden bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                      {profile?.avatar_url ? (
+                        <Image
+                          src={profile.avatar_url}
+                          alt="Avatar"
+                          width={64}
+                          height={64}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-background text-lg font-bold">
+                          {fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase() || "?"}
+                        </span>
+                      )}
+                    </div>
+                    <label className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                      <Camera size={18} className="text-white" />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleAvatarUpload}
+                        className="hidden"
+                        disabled={uploadingAvatar}
+                        aria-label="Upload avatar"
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <p className="text-sm text-foreground font-medium">Profile Photo</p>
+                    <p className="text-xs text-foreground-dim">
+                      {uploadingAvatar ? "Uploading..." : "Hover and click to change"}
+                    </p>
+                  </div>
+                </div>
+
                 <div>
                   <label className="block text-sm text-foreground-muted mb-1.5">Email</label>
                   <div className="flex items-center gap-2 px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm text-foreground-dim">
