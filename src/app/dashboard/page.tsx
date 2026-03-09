@@ -1,8 +1,12 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { motion } from "motion/react";
-import { GlowCard } from "@/components/ui/spotlight-card";
+import { useState, useEffect } from "react"
+import { motion } from "motion/react"
+import Link from "next/link"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { createClient } from "@/lib/supabase/client"
+import { GlowCard } from "@/components/ui/spotlight-card"
 import {
   LayoutDashboard,
   Bot,
@@ -19,7 +23,8 @@ import {
   ChevronRight,
   Bell,
   Search,
-} from "lucide-react";
+  FolderOpen,
+} from "lucide-react"
 import {
   AreaChart,
   Area,
@@ -30,70 +35,68 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-} from "recharts";
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts"
 
-// --- Data ---
-const revenueData = [
-  { month: "Jan", revenue: 2400, cost: 1200 },
-  { month: "Feb", revenue: 3600, cost: 1400 },
-  { month: "Mar", revenue: 4200, cost: 1600 },
-  { month: "Apr", revenue: 3800, cost: 1500 },
-  { month: "May", revenue: 5100, cost: 1800 },
-  { month: "Jun", revenue: 6200, cost: 2000 },
-];
+// --- Types ---
+interface DashboardStats {
+  totalClients: number
+  activeClients: number
+  totalIntegrations: number
+  activeIntegrations: number
+  totalActiveUsers: number
+  totalProjects: number
+}
 
-const usageData = [
-  { day: "Mon", calls: 320 },
-  { day: "Tue", calls: 450 },
-  { day: "Wed", calls: 380 },
-  { day: "Thu", calls: 520 },
-  { day: "Fri", calls: 610 },
-  { day: "Sat", calls: 280 },
-  { day: "Sun", calls: 190 },
-];
+interface IntegrationBreakdown {
+  name: string
+  category: string
+  clientCount: number
+  activeUsers: number
+  status: string
+}
 
-const integrations = [
-  { name: "AI Chatbot Pro", status: "active", usage: 87, icon: Bot },
-  { name: "Document Processor", status: "active", usage: 62, icon: Zap },
-  { name: "Analytics Engine", status: "active", usage: 45, icon: BarChart3 },
-  { name: "Lead Qualifier", status: "paused", usage: 0, icon: Users },
-];
+interface ClientRow {
+  id: string
+  name: string
+  status: string
+  contact_email: string | null
+  integrationCount: number
+}
 
-const recentActivity = [
-  { action: "Chatbot handled 142 conversations", time: "2 hours ago", type: "success" },
-  { action: "Document batch processed (38 files)", time: "5 hours ago", type: "success" },
-  { action: "Analytics report generated", time: "8 hours ago", type: "info" },
-  { action: "API rate limit warning", time: "1 day ago", type: "warning" },
-];
+// --- Pie chart colors ---
+const PIE_COLORS = ["#39FF14", "#0DB1B2", "#5FFF42", "#2BCC10", "#098F90", "#64748B"]
 
 // --- Sidebar ---
 const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", active: true },
-  { icon: Bot, label: "AI Integrations", active: false },
-  { icon: BarChart3, label: "Analytics", active: false },
-  { icon: Package, label: "Products", active: false },
-  { icon: Settings, label: "Settings", active: false },
-];
+  { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard", active: true },
+  { icon: Bot, label: "AI Integrations", href: "#", active: false },
+  { icon: BarChart3, label: "Analytics", href: "#", active: false },
+  { icon: FolderOpen, label: "Projects", href: "#", active: false },
+  { icon: Package, label: "Products", href: "#", active: false },
+  { icon: Settings, label: "Settings", href: "/dashboard/account", active: false },
+]
 
-function Sidebar() {
+function Sidebar({ onSignOut }: { onSignOut: () => void }) {
   return (
     <aside className="w-64 h-screen fixed left-0 top-0 bg-background/80 backdrop-blur-xl border-r border-primary/10 flex flex-col z-30">
-      {/* Logo */}
       <div className="p-6 flex items-center gap-2">
-        <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
-          <span className="text-background font-bold text-sm">O</span>
-        </div>
-        <span className="text-lg font-semibold text-foreground tracking-tight">
-          OphidianAI
-        </span>
+        <Link href="/" className="flex items-center gap-2">
+          <Image src="/images/logo_icon.png" alt="OphidianAI" width={32} height={32} className="h-8 w-8" />
+          <span className="text-lg font-semibold text-foreground tracking-tight">
+            OphidianAI
+          </span>
+        </Link>
       </div>
 
-      {/* Nav */}
       <nav className="flex-1 px-3 space-y-1">
         {navItems.map((item) => (
-          <button
+          <Link
             key={item.label}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+            href={item.href}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
               item.active
                 ? "bg-primary/10 text-primary"
                 : "text-foreground-muted hover:text-foreground hover:bg-white/5"
@@ -101,46 +104,49 @@ function Sidebar() {
           >
             <item.icon size={18} />
             {item.label}
-          </button>
+          </Link>
         ))}
       </nav>
 
-      {/* Footer */}
       <div className="p-3 border-t border-primary/10">
-        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-white/5 transition-colors cursor-pointer">
+        <button
+          onClick={onSignOut}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-white/5 transition-colors cursor-pointer"
+        >
           <LogOut size={18} />
           Sign Out
         </button>
       </div>
     </aside>
-  );
+  )
 }
 
-// --- Stat Card ---
+// --- Stat Card with float ---
 function StatCard({
   title,
   value,
   change,
   changeType,
   icon: Icon,
-  delay,
+  index,
 }: {
-  title: string;
-  value: string;
-  change: string;
-  changeType: "up" | "down";
-  icon: React.ElementType;
-  delay: number;
+  title: string
+  value: string
+  change: string
+  changeType: "up" | "down" | "neutral"
+  icon: React.ElementType
+  index: number
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 60 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
-        duration: 0.6,
-        delay,
+        duration: 0.7,
+        delay: 0.1 + index * 0.08,
         ease: [0.16, 1, 0.3, 1],
       }}
+      className="dashboard-card"
     >
       <GlowCard className="glass rounded-xl border border-primary/10 p-5 hover:border-primary/20 transition-colors">
         <div className="flex items-start justify-between mb-3">
@@ -149,14 +155,18 @@ function StatCard({
           </div>
           <div
             className={`flex items-center gap-1 text-xs font-medium ${
-              changeType === "up" ? "text-primary" : "text-red-400"
+              changeType === "up"
+                ? "text-primary"
+                : changeType === "down"
+                ? "text-red-400"
+                : "text-foreground-dim"
             }`}
           >
             {changeType === "up" ? (
               <TrendingUp size={14} />
-            ) : (
+            ) : changeType === "down" ? (
               <TrendingDown size={14} />
-            )}
+            ) : null}
             {change}
           </div>
         </div>
@@ -164,46 +174,179 @@ function StatCard({
         <div className="text-sm text-foreground-muted mt-1">{title}</div>
       </GlowCard>
     </motion.div>
-  );
+  )
 }
 
-// --- Chart Card ---
+// --- Chart Card with float ---
 function ChartCard({
   title,
   children,
-  delay,
+  index,
+  className = "",
 }: {
-  title: string;
-  children: React.ReactNode;
-  delay: number;
+  title: string
+  children: React.ReactNode
+  index: number
+  className?: string
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 60 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
-        duration: 0.6,
-        delay,
+        duration: 0.7,
+        delay: 0.3 + index * 0.1,
         ease: [0.16, 1, 0.3, 1],
       }}
+      className={`dashboard-card ${className}`}
     >
-      <GlowCard className="glass rounded-xl border border-primary/10 p-5">
+      <GlowCard className="glass rounded-xl border border-primary/10 p-5 h-full">
         <h3 className="text-sm font-medium text-foreground-muted mb-4">
           {title}
         </h3>
         {children}
       </GlowCard>
     </motion.div>
-  );
+  )
 }
 
 // --- Main Dashboard ---
 export default function DashboardPage() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("")
+  const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [integrations, setIntegrations] = useState<IntegrationBreakdown[]>([])
+  const [clients, setClients] = useState<ClientRow[]>([])
+  const [userName, setUserName] = useState("")
+  const [loading, setLoading] = useState(true)
+  const router = useRouter()
+  const supabase = createClient()
+
+  useEffect(() => {
+    async function loadDashboard() {
+      try {
+        // Get current user profile
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+          router.push("/sign-in")
+          return
+        }
+
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("full_name, role")
+          .eq("id", user.id)
+          .single()
+
+        setUserName(profile?.full_name || user.email?.split("@")[0] || "Admin")
+
+        // Fetch stats in parallel
+        const [
+          clientsRes,
+          integrationsRes,
+          clientIntegrationsRes,
+          projectsRes,
+          usageRes,
+        ] = await Promise.all([
+          supabase.from("clients").select("id, name, status, contact_email"),
+          supabase.from("integrations").select("id, name, category"),
+          supabase.from("client_integrations").select("id, client_id, integration_id, status"),
+          supabase.from("projects").select("id, status"),
+          supabase.from("usage_events").select("id, client_integration_id, user_identifier, created_at"),
+        ])
+
+        const allClients = clientsRes.data || []
+        const allIntegrations = integrationsRes.data || []
+        const allCI = clientIntegrationsRes.data || []
+        const allProjects = projectsRes.data || []
+        const allUsage = usageRes.data || []
+
+        // Compute stats
+        const activeClients = allClients.filter((c) => c.status === "active").length
+        const activeCI = allCI.filter((ci) => ci.status === "active").length
+
+        // Unique active users (distinct user_identifier across all usage events in last 30 days)
+        const thirtyDaysAgo = new Date()
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+        const recentUsage = allUsage.filter(
+          (u) => new Date(u.created_at) >= thirtyDaysAgo
+        )
+        const uniqueUsers = new Set(recentUsage.map((u) => u.user_identifier))
+
+        setStats({
+          totalClients: allClients.length,
+          activeClients,
+          totalIntegrations: allIntegrations.length,
+          activeIntegrations: activeCI,
+          totalActiveUsers: uniqueUsers.size,
+          totalProjects: allProjects.filter((p) => p.status === "active").length,
+        })
+
+        // Integration breakdown
+        const breakdown: IntegrationBreakdown[] = allIntegrations.map((int) => {
+          const ciForInt = allCI.filter((ci) => ci.integration_id === int.id)
+          const ciIds = new Set(ciForInt.map((ci) => ci.id))
+          const usageForInt = recentUsage.filter((u) => ciIds.has(u.client_integration_id))
+          const uniqueUsersForInt = new Set(usageForInt.map((u) => u.user_identifier))
+
+          return {
+            name: int.name,
+            category: int.category,
+            clientCount: ciForInt.filter((ci) => ci.status === "active").length,
+            activeUsers: uniqueUsersForInt.size,
+            status: ciForInt.some((ci) => ci.status === "active") ? "active" : "inactive",
+          }
+        })
+        setIntegrations(breakdown)
+
+        // Client rows
+        const clientRows: ClientRow[] = allClients.map((c) => ({
+          id: c.id,
+          name: c.name,
+          status: c.status,
+          contact_email: c.contact_email,
+          integrationCount: allCI.filter((ci) => ci.client_id === c.id && ci.status === "active").length,
+        }))
+        setClients(clientRows)
+      } catch (err) {
+        console.error("Dashboard load error:", err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadDashboard()
+  }, [router, supabase])
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+    router.push("/sign-in")
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-10 w-10 rounded-lg bg-primary/20 animate-pulse" />
+          <p className="text-foreground-muted text-sm">Loading dashboard...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Pie chart data from integration breakdown
+  const pieData = integrations
+    .filter((i) => i.clientCount > 0)
+    .map((i) => ({ name: i.name, value: i.clientCount }))
+
+  // If no data yet, show placeholder pie
+  const hasPieData = pieData.length > 0
+  const displayPieData = hasPieData
+    ? pieData
+    : [{ name: "No integrations yet", value: 1 }]
 
   return (
     <div className="min-h-screen bg-background">
-      <Sidebar />
+      <Sidebar onSignOut={handleSignOut} />
 
       <main className="ml-64">
         {/* Top Bar */}
@@ -215,7 +358,7 @@ export default function DashboardPage() {
             />
             <input
               type="text"
-              placeholder="Search integrations, reports..."
+              placeholder="Search integrations, clients..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-foreground placeholder-foreground-dim focus:outline-none focus:border-primary/40 transition-colors"
@@ -227,7 +370,9 @@ export default function DashboardPage() {
               <span className="absolute top-1 right-1 h-2 w-2 bg-primary rounded-full" />
             </button>
             <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-              <span className="text-background text-xs font-bold">JD</span>
+              <span className="text-background text-xs font-bold">
+                {userName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
+              </span>
             </div>
           </div>
         </header>
@@ -239,88 +384,74 @@ export default function DashboardPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+            <h1 className="text-2xl font-bold text-foreground">
+              Welcome back, {userName.split(" ")[0]}
+            </h1>
             <p className="text-foreground-muted text-sm mt-1">
-              Overview of your AI integrations and usage
+              Overview of your clients, AI integrations, and usage
             </p>
           </motion.div>
 
           {/* Stats Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard
-              title="Total Revenue"
-              value="$18,342.00"
-              change="+12.5%"
-              changeType="up"
-              icon={DollarSign}
-              delay={0.1}
-            />
-            <StatCard
-              title="AI API Calls"
-              value="52,240"
-              change="+8.2%"
-              changeType="up"
-              icon={Activity}
-              delay={0.15}
+              title="Total Clients"
+              value={String(stats?.totalClients ?? 0)}
+              change={stats?.activeClients ? `${stats.activeClients} active` : "0 active"}
+              changeType={stats?.activeClients ? "up" : "neutral"}
+              icon={Users}
+              index={0}
             />
             <StatCard
               title="Active Integrations"
-              value="3"
-              change="+1"
-              changeType="up"
+              value={String(stats?.activeIntegrations ?? 0)}
+              change={`${stats?.totalIntegrations ?? 0} total`}
+              changeType={stats?.activeIntegrations ? "up" : "neutral"}
               icon={Zap}
-              delay={0.2}
+              index={1}
             />
             <StatCard
-              title="End Users Served"
-              value="1,847"
-              change="-2.1%"
-              changeType="down"
-              icon={Users}
-              delay={0.25}
+              title="Active Users (30d)"
+              value={String(stats?.totalActiveUsers ?? 0)}
+              change="last 30 days"
+              changeType={stats?.totalActiveUsers ? "up" : "neutral"}
+              icon={Activity}
+              index={2}
+            />
+            <StatCard
+              title="Active Projects"
+              value={String(stats?.totalProjects ?? 0)}
+              change="in progress"
+              changeType={stats?.totalProjects ? "up" : "neutral"}
+              icon={FolderOpen}
+              index={3}
             />
           </div>
 
           {/* Charts Row */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <ChartCard title="Revenue Overview" delay={0.3}>
-              <div className="h-64">
+            {/* Integration Breakdown Pie */}
+            <ChartCard title="Integration Breakdown" index={0}>
+              <div className="h-64 flex items-center justify-center">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={revenueData}>
-                    <defs>
-                      <linearGradient
-                        id="revenueGradient"
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop
-                          offset="5%"
-                          stopColor="#39FF14"
-                          stopOpacity={0.3}
+                  <PieChart>
+                    <Pie
+                      data={displayPieData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={90}
+                      paddingAngle={hasPieData ? 4 : 0}
+                      dataKey="value"
+                      stroke="none"
+                    >
+                      {displayPieData.map((_, i) => (
+                        <Cell
+                          key={i}
+                          fill={hasPieData ? PIE_COLORS[i % PIE_COLORS.length] : "rgba(255,255,255,0.08)"}
                         />
-                        <stop
-                          offset="95%"
-                          stopColor="#39FF14"
-                          stopOpacity={0}
-                        />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      stroke="rgba(255,255,255,0.05)"
-                    />
-                    <XAxis
-                      dataKey="month"
-                      stroke="rgba(255,255,255,0.3)"
-                      fontSize={12}
-                    />
-                    <YAxis
-                      stroke="rgba(255,255,255,0.3)"
-                      fontSize={12}
-                      tickFormatter={(v) => `$${v}`}
-                    />
+                      ))}
+                    </Pie>
                     <Tooltip
                       contentStyle={{
                         background: "#162032",
@@ -330,172 +461,227 @@ export default function DashboardPage() {
                         fontSize: 12,
                       }}
                     />
-                    <Area
-                      type="monotone"
-                      dataKey="revenue"
-                      stroke="#39FF14"
-                      strokeWidth={2}
-                      fill="url(#revenueGradient)"
-                    />
-                  </AreaChart>
+                  </PieChart>
                 </ResponsiveContainer>
               </div>
+              {hasPieData && (
+                <div className="mt-2 space-y-1.5">
+                  {pieData.map((item, i) => (
+                    <div key={item.name} className="flex items-center gap-2 text-xs">
+                      <span
+                        className="h-2.5 w-2.5 rounded-full flex-shrink-0"
+                        style={{ background: PIE_COLORS[i % PIE_COLORS.length] }}
+                      />
+                      <span className="text-foreground-muted flex-1 truncate">{item.name}</span>
+                      <span className="text-foreground font-medium">{item.value} clients</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </ChartCard>
 
-            <ChartCard title="API Usage (This Week)" delay={0.35}>
+            {/* Active Users per Integration (Bar) */}
+            <ChartCard title="Active Users per Integration" index={1}>
               <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={usageData}>
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      stroke="rgba(255,255,255,0.05)"
-                    />
-                    <XAxis
-                      dataKey="day"
-                      stroke="rgba(255,255,255,0.3)"
-                      fontSize={12}
-                    />
-                    <YAxis
-                      stroke="rgba(255,255,255,0.3)"
-                      fontSize={12}
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        background: "#162032",
-                        border: "1px solid rgba(57,255,20,0.2)",
-                        borderRadius: "8px",
-                        color: "#F1F5F9",
-                        fontSize: 12,
-                      }}
-                    />
-                    <Bar
-                      dataKey="calls"
-                      fill="#39FF14"
-                      radius={[4, 4, 0, 0]}
-                      opacity={0.8}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
+                {integrations.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={integrations.map((i) => ({
+                        name: i.name.length > 12 ? i.name.slice(0, 12) + "..." : i.name,
+                        users: i.activeUsers,
+                      }))}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                      <XAxis dataKey="name" stroke="rgba(255,255,255,0.3)" fontSize={11} />
+                      <YAxis stroke="rgba(255,255,255,0.3)" fontSize={12} />
+                      <Tooltip
+                        contentStyle={{
+                          background: "#162032",
+                          border: "1px solid rgba(57,255,20,0.2)",
+                          borderRadius: "8px",
+                          color: "#F1F5F9",
+                          fontSize: 12,
+                        }}
+                      />
+                      <Bar dataKey="users" fill="#0DB1B2" radius={[4, 4, 0, 0]} opacity={0.85} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="h-full flex items-center justify-center text-foreground-dim text-sm">
+                    No integration data yet
+                  </div>
+                )}
               </div>
             </ChartCard>
 
-            {/* Integrations List */}
+            {/* AI Integrations List */}
             <motion.div
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 60 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
-                duration: 0.6,
-                delay: 0.4,
+                duration: 0.7,
+                delay: 0.5,
                 ease: [0.16, 1, 0.3, 1],
               }}
+              className="dashboard-card"
             >
-              <GlowCard className="glass rounded-xl border border-primary/10 p-5">
+              <GlowCard className="glass rounded-xl border border-primary/10 p-5 h-full">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-sm font-medium text-foreground-muted">
                     AI Integrations
                   </h3>
-                  <button className="text-xs text-primary hover:underline cursor-pointer">
-                    View all
-                  </button>
+                  <span className="text-xs text-foreground-dim">
+                    {integrations.length} total
+                  </span>
                 </div>
                 <div className="space-y-3">
-                  {integrations.map((item, i) => (
-                    <motion.div
-                      key={item.name}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{
-                        duration: 0.4,
-                        delay: 0.5 + i * 0.08,
-                        ease: [0.16, 1, 0.3, 1],
-                      }}
-                      className="flex items-center gap-3 p-3 rounded-lg bg-white/[0.03] border border-white/5 hover:border-primary/15 transition-colors cursor-pointer group"
-                    >
-                      <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <item.icon size={16} className="text-primary" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium text-foreground truncate">
-                          {item.name}
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={`inline-block h-1.5 w-1.5 rounded-full ${
-                              item.status === "active"
-                                ? "bg-primary"
-                                : "bg-foreground-dim"
-                            }`}
+                  {integrations.length > 0 ? (
+                    integrations.map((item, i) => {
+                      const IconMap: Record<string, React.ElementType> = {
+                        chatbot: Bot,
+                        automation: Zap,
+                        analytics: BarChart3,
+                        content: Package,
+                        search: Search,
+                        other: Zap,
+                      }
+                      const Icon = IconMap[item.category] || Zap
+
+                      return (
+                        <motion.div
+                          key={item.name}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{
+                            duration: 0.4,
+                            delay: 0.6 + i * 0.08,
+                            ease: [0.16, 1, 0.3, 1],
+                          }}
+                          className="flex items-center gap-3 p-3 rounded-lg bg-white/[0.03] border border-white/5 hover:border-primary/15 transition-colors cursor-pointer group"
+                        >
+                          <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                            <Icon size={16} className="text-primary" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-medium text-foreground truncate">
+                              {item.name}
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span
+                                className={`inline-block h-1.5 w-1.5 rounded-full ${
+                                  item.status === "active" ? "bg-primary" : "bg-foreground-dim"
+                                }`}
+                              />
+                              <span className="text-xs text-foreground-dim capitalize">
+                                {item.status}
+                              </span>
+                              <span className="text-xs text-foreground-dim">
+                                {item.clientCount} clients
+                              </span>
+                              <span className="text-xs text-foreground-dim">
+                                {item.activeUsers} users
+                              </span>
+                            </div>
+                          </div>
+                          <ChevronRight
+                            size={14}
+                            className="text-foreground-dim group-hover:text-primary transition-colors"
                           />
-                          <span className="text-xs text-foreground-dim capitalize">
-                            {item.status}
-                          </span>
-                          {item.usage > 0 && (
-                            <span className="text-xs text-foreground-dim">
-                              {item.usage}% capacity
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      <ChevronRight
-                        size={14}
-                        className="text-foreground-dim group-hover:text-primary transition-colors"
-                      />
-                    </motion.div>
-                  ))}
+                        </motion.div>
+                      )
+                    })
+                  ) : (
+                    <div className="py-8 text-center text-foreground-dim text-sm">
+                      No integrations configured yet
+                    </div>
+                  )}
                 </div>
               </GlowCard>
             </motion.div>
           </div>
 
-          {/* Activity Feed */}
+          {/* Clients Table */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
-              duration: 0.6,
-              delay: 0.5,
+              duration: 0.7,
+              delay: 0.6,
               ease: [0.16, 1, 0.3, 1],
             }}
+            className="dashboard-card"
           >
             <GlowCard className="glass rounded-xl border border-primary/10 p-5">
-              <h3 className="text-sm font-medium text-foreground-muted mb-4">
-                Recent Activity
-              </h3>
-              <div className="space-y-3">
-                {recentActivity.map((item, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{
-                      duration: 0.4,
-                      delay: 0.6 + i * 0.08,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                    className="flex items-center gap-3 py-2"
-                  >
-                    <span
-                      className={`h-2 w-2 rounded-full flex-shrink-0 ${
-                        item.type === "success"
-                          ? "bg-primary"
-                          : item.type === "warning"
-                          ? "bg-yellow-400"
-                          : "bg-accent"
-                      }`}
-                    />
-                    <span className="text-sm text-foreground flex-1">
-                      {item.action}
-                    </span>
-                    <span className="text-xs text-foreground-dim whitespace-nowrap">
-                      {item.time}
-                    </span>
-                  </motion.div>
-                ))}
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-medium text-foreground-muted">
+                  Clients
+                </h3>
+                <span className="text-xs text-foreground-dim">
+                  {clients.length} total
+                </span>
               </div>
+              {clients.length > 0 ? (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-white/5">
+                        <th className="text-left py-2 px-3 text-foreground-dim font-medium">Name</th>
+                        <th className="text-left py-2 px-3 text-foreground-dim font-medium">Email</th>
+                        <th className="text-left py-2 px-3 text-foreground-dim font-medium">Status</th>
+                        <th className="text-left py-2 px-3 text-foreground-dim font-medium">Integrations</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {clients.map((client, i) => (
+                        <motion.tr
+                          key={client.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{
+                            duration: 0.3,
+                            delay: 0.7 + i * 0.05,
+                          }}
+                          className="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors"
+                        >
+                          <td className="py-3 px-3 text-foreground font-medium">{client.name}</td>
+                          <td className="py-3 px-3 text-foreground-muted">{client.contact_email || "--"}</td>
+                          <td className="py-3 px-3">
+                            <span
+                              className={`inline-flex items-center gap-1.5 text-xs font-medium px-2 py-0.5 rounded-full ${
+                                client.status === "active"
+                                  ? "bg-primary/10 text-primary"
+                                  : client.status === "prospect"
+                                  ? "bg-accent/10 text-accent"
+                                  : "bg-white/5 text-foreground-dim"
+                              }`}
+                            >
+                              <span
+                                className={`h-1.5 w-1.5 rounded-full ${
+                                  client.status === "active"
+                                    ? "bg-primary"
+                                    : client.status === "prospect"
+                                    ? "bg-accent"
+                                    : "bg-foreground-dim"
+                                }`}
+                              />
+                              {client.status}
+                            </span>
+                          </td>
+                          <td className="py-3 px-3 text-foreground-muted">{client.integrationCount}</td>
+                        </motion.tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="py-8 text-center text-foreground-dim text-sm">
+                  No clients yet. Add your first client to get started.
+                </div>
+              )}
             </GlowCard>
           </motion.div>
         </div>
       </main>
     </div>
-  );
+  )
 }

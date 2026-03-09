@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { Eye, EyeOff, Mail, Lock, Chrome } from "lucide-react";
 import { GlassButton } from "@/components/ui/glass-button";
 
@@ -98,10 +99,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       {/* Header */}
       <div className="mb-8 text-center">
         <div className="flex items-center justify-center gap-2 mb-3">
-          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
-            <span className="text-background font-bold text-sm">O</span>
-          </div>
-          <span className="text-xl font-semibold text-foreground tracking-tight">
+          <Image
+            src="/images/logo_icon.png"
+            alt="OphidianAI"
+            width={32}
+            height={32}
+            className="h-8 w-8"
+          />
+          <span className="text-xl font-semibold tracking-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             OphidianAI
           </span>
         </div>
@@ -188,14 +193,15 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           </a>
         </div>
 
-        <GlassButton
-          type="submit"
-          disabled={isSubmitting}
-          size="default"
-          className="w-full"
-        >
-          {isSubmitting ? "Signing in..." : "Sign In"}
-        </GlassButton>
+        <div className="flex justify-center">
+          <GlassButton
+            type="submit"
+            disabled={isSubmitting}
+            size="default"
+          >
+            {isSubmitting ? "Signing in..." : "Sign In"}
+          </GlassButton>
+        </div>
       </form>
 
       <p className="mt-6 text-center text-sm text-foreground-dim">

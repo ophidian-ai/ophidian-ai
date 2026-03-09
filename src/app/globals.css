@@ -477,3 +477,29 @@ h4 { font-size: 1.25rem; }
 .glass-button-wrap:hover .glass-button-shadow {
   opacity: 0.6;
 }
+
+/* ============================================================
+   Dashboard Floating Cards
+   ============================================================ */
+
+@keyframes card-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.dashboard-card {
+  animation: card-float 6s ease-in-out infinite;
+  animation-play-state: running;
+}
+
+.dashboard-card:nth-child(2) { animation-delay: -1s; }
+.dashboard-card:nth-child(3) { animation-delay: -2s; }
+.dashboard-card:nth-child(4) { animation-delay: -3s; }
+.dashboard-card:nth-child(5) { animation-delay: -1.5s; }
+.dashboard-card:nth-child(6) { animation-delay: -2.5s; }
+.dashboard-card:nth-child(7) { animation-delay: -3.5s; }
+.dashboard-card:nth-child(8) { animation-delay: -0.5s; }

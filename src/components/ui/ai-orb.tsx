@@ -3,135 +3,7 @@
 import { cn } from "@/lib/utils"
 import { useState, useRef, useEffect } from "react"
 import { MessageSquare, X, Send } from "lucide-react"
-
-interface AIOrbProps {
-  size?: string
-  className?: string
-  animationDuration?: number
-}
-
-const AIOrb: React.FC<AIOrbProps> = ({
-  size = "48px",
-  className,
-  animationDuration = 20,
-}) => {
-  const sizeValue = parseInt(size.replace("px", ""), 10)
-  const blurAmount = Math.max(sizeValue * 0.08, 4)
-  const contrastAmount = Math.max(sizeValue * 0.003, 1.8)
-
-  return (
-    <div
-      className={cn("ai-orb", className)}
-      style={
-        {
-          width: size,
-          height: size,
-          "--animation-duration": `${animationDuration}s`,
-          "--blur-amount": `${blurAmount}px`,
-          "--contrast-amount": contrastAmount,
-        } as React.CSSProperties
-      }
-    >
-      <style jsx>{`
-        @property --angle {
-          syntax: "<angle>";
-          inherits: false;
-          initial-value: 0deg;
-        }
-
-        .ai-orb {
-          display: grid;
-          grid-template-areas: "stack";
-          overflow: hidden;
-          border-radius: 50%;
-          position: relative;
-          background: radial-gradient(
-            circle,
-            rgba(57, 255, 20, 0.08) 0%,
-            rgba(13, 177, 178, 0.04) 30%,
-            transparent 70%
-          );
-        }
-
-        .ai-orb::before {
-          content: "";
-          display: block;
-          grid-area: stack;
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          background:
-            conic-gradient(
-              from calc(var(--angle) * 1.2) at 30% 65%,
-              #0DB1B2 0deg,
-              transparent 45deg 315deg,
-              #0DB1B2 360deg
-            ),
-            conic-gradient(
-              from calc(var(--angle) * 0.8) at 70% 35%,
-              #39FF14 0deg,
-              transparent 60deg 300deg,
-              #39FF14 360deg
-            ),
-            conic-gradient(
-              from calc(var(--angle) * -1.5) at 65% 75%,
-              #5FFF42 0deg,
-              transparent 90deg 270deg,
-              #5FFF42 360deg
-            ),
-            conic-gradient(
-              from calc(var(--angle) * 2.1) at 25% 25%,
-              #0DB1B2 0deg,
-              transparent 30deg 330deg,
-              #0DB1B2 360deg
-            ),
-            conic-gradient(
-              from calc(var(--angle) * -0.7) at 80% 80%,
-              #39FF14 0deg,
-              transparent 45deg 315deg,
-              #39FF14 360deg
-            ),
-            radial-gradient(
-              ellipse 120% 80% at 40% 60%,
-              #2BCC10 0%,
-              transparent 50%
-            );
-          filter: blur(var(--blur-amount)) contrast(var(--contrast-amount)) saturate(1.2);
-          animation: ai-orb-rotate var(--animation-duration) linear infinite;
-          transform: translateZ(0);
-          will-change: transform;
-        }
-
-        .ai-orb::after {
-          content: "";
-          display: block;
-          grid-area: stack;
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          background: radial-gradient(
-            circle at 45% 55%,
-            rgba(57, 255, 20, 0.15) 0%,
-            rgba(13, 177, 178, 0.08) 30%,
-            transparent 60%
-          );
-          mix-blend-mode: overlay;
-        }
-
-        @keyframes ai-orb-rotate {
-          from { --angle: 0deg; }
-          to { --angle: 360deg; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .ai-orb::before {
-            animation: none;
-          }
-        }
-      `}</style>
-    </div>
-  )
-}
+import { SiriOrb } from "@/components/ui/siri-orb"
 
 interface ChatMessage {
   role: "user" | "assistant"
@@ -180,7 +52,7 @@ export function AIChatWidget() {
           {/* Header */}
           <div className="flex items-center justify-between border-b border-surface-border px-4 py-3">
             <div className="flex items-center gap-2">
-              <AIOrb size="24px" animationDuration={15} />
+              <SiriOrb size="24px" animationDuration={15} />
               <span className="font-semibold text-sm text-foreground">
                 OphidianAI Assistant
               </span>
@@ -248,7 +120,7 @@ export function AIChatWidget() {
           <X className="h-5 w-5 text-primary" />
         ) : (
           <>
-            <AIOrb
+            <SiriOrb
               size="40px"
               animationDuration={15}
               className="absolute inset-0 m-auto opacity-60 group-hover:opacity-100 transition-opacity"
@@ -261,5 +133,4 @@ export function AIChatWidget() {
   )
 }
 
-export { AIOrb }
 export default AIChatWidget

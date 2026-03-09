@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { GlassButton } from "@/components/ui/glass-button";
 import { AccountPopover } from "@/components/ui/account-popover";
+import { createClient } from "@/lib/supabase/client";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -16,22 +17,62 @@ const navLinks = [
   { href: "/contact", label: "Contact" },
 ] as const;
 
-// TODO: Replace with real auth state (e.g. from Supabase/NextAuth)
-const mockUser = null as {
-  name: string;
-  email: string;
-  avatarUrl?: string;
-  initials: string;
-} | null;
-
 export function NavMain() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [authUser, setAuthUser] = useState<{
+    name: string;
+    email: string;
+    avatarUrl?: string;
+    initials: string;
+  } | null>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Fetch auth state from Supabase
+  useEffect(() => {
+    const supabase = createClient();
+
+    async function getUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        setAuthUser(null);
+        return;
+      }
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("full_name, avatar_url")
+        .eq("id", user.id)
+        .single();
+
+      const name = profile?.full_name || user.email?.split("@")[0] || "User";
+      const initials = name
+        .split(" ")
+        .map((n: string) => n[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase();
+
+      setAuthUser({
+        name,
+        email: user.email || "",
+        avatarUrl: profile?.avatar_url || undefined,
+        initials,
+      });
+    }
+
+    getUser();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+      getUser();
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   // Lock body scroll when mobile menu is open
@@ -90,7 +131,7 @@ export function NavMain() {
               <GlassButton size="sm" href="/contact">
                 Get Started
               </GlassButton>
-              <AccountPopover user={mockUser} />
+              <AccountPopover user={authUser} />
             </div>
 
             {/* Mobile menu button */}
@@ -153,9 +194,15 @@ export function NavMain() {
             <GlassButton size="default" href="/contact" onClick={closeMenu} className="w-full">
               Get Started
             </GlassButton>
-            <GlassButton size="default" href="/sign-in" onClick={closeMenu} className="w-full">
-              Sign In
-            </GlassButton>
+            {authUser ? (
+              <GlassButton size="default" href="/dashboard" onClick={closeMenu} className="w-full">
+                Dashboard
+              </GlassButton>
+            ) : (
+              <GlassButton size="default" href="/sign-in" onClick={closeMenu} className="w-full">
+                Sign In
+              </GlassButton>
+            )}
           </div>
         </div>
       </div>

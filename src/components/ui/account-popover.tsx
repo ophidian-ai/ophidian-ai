@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { User, Settings, LogOut, LayoutDashboard } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -14,6 +15,7 @@ import {
   PopoverFooter,
 } from "@/components/ui/popover"
 import { GlassButton } from "@/components/ui/glass-button"
+import { createClient } from "@/lib/supabase/client"
 
 interface AccountPopoverProps {
   user?: {
@@ -25,6 +27,14 @@ interface AccountPopoverProps {
 }
 
 export function AccountPopover({ user }: AccountPopoverProps) {
+  const router = useRouter()
+
+  const handleSignOut = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push("/")
+    router.refresh()
+  }
   // Not signed in -- show sign in button
   if (!user) {
     return (
@@ -86,7 +96,10 @@ export function AccountPopover({ user }: AccountPopoverProps) {
           </Link>
         </PopoverBody>
         <PopoverFooter>
-          <button className="flex w-full items-center justify-center gap-2 rounded-md border border-surface-border px-3 py-1.5 text-sm text-foreground-muted hover:bg-surface-hover hover:text-foreground transition-colors">
+          <button
+            onClick={handleSignOut}
+            className="flex w-full items-center justify-center gap-2 rounded-md border border-surface-border px-3 py-1.5 text-sm text-foreground-muted hover:bg-surface-hover hover:text-foreground transition-colors cursor-pointer"
+          >
             <LogOut className="h-4 w-4" />
             Sign Out
           </button>
