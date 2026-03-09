@@ -41,42 +41,20 @@ const FRAGMENT_SHADER = `
   uniform vec3 u_c2;
   uniform vec3 u_c3;
 
-  // Hash for noise
-  float hash(vec2 p) {
-    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
-  }
-
-  // Smooth value noise
-  float noise(vec2 p) {
-    vec2 i = floor(p);
-    vec2 f = fract(p);
-    f = f * f * (3.0 - 2.0 * f);
-    float a = hash(i);
-    float b = hash(i + vec2(1.0, 0.0));
-    float c = hash(i + vec2(0.0, 1.0));
-    float d = hash(i + vec2(1.0, 1.0));
-    return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
-  }
-
-  // Layered noise for wave detail
-  float fbm(vec2 p) {
-    float v = 0.0;
-    float a = 0.5;
-    for (int i = 0; i < 4; i++) {
-      v += a * noise(p);
-      p *= 2.1;
-      a *= 0.5;
-    }
-    return v;
+  // Flowing ribbon wave -- returns distance to a sine ribbon
+  float ribbon(vec2 p, float freq, float amp, float phase, float thickness) {
+    float wave = sin(p.x * freq + phase) * amp;
+    wave += sin(p.x * freq * 0.6 + phase * 1.3) * amp * 0.4;
+    float d = abs(p.y - wave);
+    return smoothstep(thickness, thickness * 0.1, d);
   }
 
   void main() {
     vec2 uv = gl_FragCoord.xy / u_resolution;
     vec2 p = (uv - 0.5) * 2.0;
 
-    // Sphere geometry
     float dist = length(p);
-    float sphereMask = smoothstep(1.0, 0.93, dist);
+    float sphereMask = smoothstep(1.0, 0.94, dist);
 
     if (sphereMask < 0.001) {
       gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
@@ -85,110 +63,100 @@ const FRAGMENT_SHADER = `
 
     float t = u_time * u_speed;
 
-    // Sphere interior radius at this x position (circle equation)
-    float sphereR = sqrt(max(0.0, 1.0 - p.x * p.x));
+    // ---- Glass sphere base ----
+    // Fake 3D normal from 2D circle for lighting
+    float z = sqrt(max(0.0, 1.0 - dist * dist));
+    vec3 normal = vec3(p, z);
 
-    // Water fill level -- base at ~50%, with slow tilt/slosh
-    float tiltAngle = sin(t * 0.4) * 0.15 + sin(t * 0.25) * 0.1;
-    float baseLevel = -0.05 + sin(t * 0.3) * 0.08;
-    float waterLevel = baseLevel + p.x * tiltAngle;
+    // Environment-like reflection (faked with position-based gradient)
+    vec3 envColor = mix(
+      vec3(0.03, 0.06, 0.1),
+      vec3(0.08, 0.12, 0.18),
+      smoothstep(-1.0, 1.0, p.y)
+    );
 
-    // Wave surface -- layered waves at different scales
-    float wave = 0.0;
-    wave += sin(p.x * 6.0 + t * 2.0) * 0.04;
-    wave += sin(p.x * 10.0 - t * 2.8 + 1.0) * 0.025;
-    wave += sin(p.x * 15.0 + t * 1.5 + 2.5) * 0.015;
-    wave += fbm(vec2(p.x * 3.0 + t * 0.8, t * 0.5)) * 0.06 - 0.03;
+    // Fresnel -- glass is more reflective at edges
+    float fresnel = pow(1.0 - z, 3.0);
 
-    float surfaceY = waterLevel + wave;
+    // Glass base color -- mostly transparent with subtle tint
+    vec3 glassColor = envColor + fresnel * 0.15;
 
-    // Is this pixel below the water surface?
-    float inWater = smoothstep(surfaceY + 0.02, surfaceY - 0.02, p.y);
+    // ---- Flowing ribbon waves inside the sphere ----
 
-    // Also clip to sphere interior
-    float inSphere = step(abs(p.y), sphereR);
-    inWater *= inSphere;
+    // Ribbon 1: main wave, flows right
+    float r1y = sin(t * 0.5) * 0.1; // vertical drift
+    vec2 rp1 = vec2(p.x, p.y - r1y);
+    float r1 = ribbon(rp1, 4.0 + sin(t * 0.2) * 0.5, 0.25 + sin(t * 0.3) * 0.08, t * 1.2, 0.12);
 
-    // ---- Water color and depth ----
+    // Ribbon 2: counter-wave, flows left
+    float r2y = cos(t * 0.4) * 0.12;
+    vec2 rp2 = vec2(p.x, p.y - r2y + 0.05);
+    float r2 = ribbon(rp2, 3.5 - sin(t * 0.25) * 0.4, 0.22 + cos(t * 0.35) * 0.06, -t * 0.9 + 1.5, 0.10);
 
-    // Depth below surface (for color gradient)
-    float depth = max(0.0, surfaceY - p.y);
+    // Ribbon 3: thinner accent wave
+    float r3y = sin(t * 0.6 + 2.0) * 0.08;
+    vec2 rp3 = vec2(p.x, p.y - r3y - 0.08);
+    float r3 = ribbon(rp3, 5.5, 0.18 + sin(t * 0.4) * 0.05, t * 1.5 + 3.0, 0.06);
 
-    // Color gradient: lighter near surface, deeper = richer
-    vec3 shallowColor = u_c1 * 0.9 + vec3(0.1);
-    vec3 midColor = mix(u_c1, u_c2, 0.5);
-    vec3 deepColor = u_c2 * 0.6;
+    // Clip ribbons to sphere interior (with soft edge)
+    float innerMask = smoothstep(0.95, 0.75, dist);
+    r1 *= innerMask;
+    r2 *= innerMask;
+    r3 *= innerMask;
 
-    float depthNorm = clamp(depth / 1.2, 0.0, 1.0);
-    vec3 waterColor = mix(shallowColor, midColor, smoothstep(0.0, 0.3, depthNorm));
-    waterColor = mix(waterColor, deepColor, smoothstep(0.3, 1.0, depthNorm));
+    // Color each ribbon
+    vec3 ribbon1Color = mix(u_c1, u_c3, smoothstep(-0.8, 0.8, p.x + sin(t * 0.3)));
+    vec3 ribbon2Color = mix(u_c2, u_c1, smoothstep(-0.6, 0.6, p.x - cos(t * 0.4)));
+    vec3 ribbon3Color = mix(u_c3, u_c2, smoothstep(-0.5, 0.5, p.x));
 
-    // Caustic-like light patterns in the water
-    float caustic = fbm(vec2(p.x * 5.0 + t * 0.6, p.y * 5.0 + t * 0.4)) * 0.5 + 0.5;
-    caustic = pow(caustic, 2.0) * 0.3;
-    waterColor += u_c3 * caustic * (1.0 - depthNorm * 0.7);
-
-    // Subtle internal flow/current patterns
-    float flow = noise(vec2(p.x * 3.0 + t * 0.5, p.y * 3.0 - t * 0.3));
-    waterColor = mix(waterColor, u_c3 * 0.8, flow * 0.15 * (1.0 - depthNorm));
-
-    // Water opacity: more opaque deeper, slightly transparent at surface
-    float waterAlpha = mix(0.7, 0.95, smoothstep(0.0, 0.4, depthNorm));
-
-    // Surface highlight -- bright line right at the water surface
-    float surfaceDist = abs(p.y - surfaceY);
-    float surfaceHighlight = exp(-surfaceDist * 40.0) * 0.6;
-    vec3 highlightColor = mix(u_c1, vec3(1.0), 0.4);
-
-    // Meniscus -- water curves up at sphere walls
-    float wallDist = abs(dist - 0.92);
-    float meniscus = exp(-wallDist * 15.0) * 0.15 * inWater;
-
-    // ---- Glass sphere ----
-
-    // Dark interior (air above water)
-    vec3 airColor = vec3(0.015, 0.04, 0.07);
-
-    // Faint reflection of water on the glass above
-    float reflectionY = 2.0 * surfaceY - p.y;
-    float reflectionStrength = smoothstep(0.5, 0.0, p.y - surfaceY) * 0.08;
-
-    // Glass specular highlights
-    float spec1 = pow(max(0.0, 1.0 - length(p - vec2(-0.35, 0.35)) * 2.0), 4.0) * 0.25;
-    float spec2 = pow(max(0.0, 1.0 - length(p - vec2(0.2, 0.5)) * 3.0), 5.0) * 0.1;
-
-    // Glass rim / edge highlight
-    float rimGlow = pow(smoothstep(0.6, 0.95, dist), 3.0) * 0.12;
+    // Ribbon glow -- soft light around each ribbon
+    float glow1 = ribbon(rp1, 4.0 + sin(t * 0.2) * 0.5, 0.25 + sin(t * 0.3) * 0.08, t * 1.2, 0.35) * 0.25 * innerMask;
+    float glow2 = ribbon(rp2, 3.5 - sin(t * 0.25) * 0.4, 0.22 + cos(t * 0.35) * 0.06, -t * 0.9 + 1.5, 0.30) * 0.2 * innerMask;
+    float glow3 = ribbon(rp3, 5.5, 0.18 + sin(t * 0.4) * 0.05, t * 1.5 + 3.0, 0.20) * 0.15 * innerMask;
 
     // ---- Compose ----
 
-    vec3 color = airColor;
+    vec3 color = glassColor;
 
-    // Water reflection in the air region
-    vec3 reflColor = mix(u_c1, u_c2, 0.5) * 0.3;
-    color = mix(color, reflColor, reflectionStrength * (1.0 - inWater));
+    // Add ribbon glows first (behind the ribbons)
+    color += ribbon1Color * glow1 * 0.4;
+    color += ribbon2Color * glow2 * 0.35;
+    color += ribbon3Color * glow3 * 0.3;
 
-    // Water body
-    color = mix(color, waterColor, inWater * waterAlpha);
+    // Add solid ribbons on top
+    color = mix(color, ribbon1Color * 1.1, r1 * 0.85);
+    color = mix(color, ribbon2Color * 1.0, r2 * 0.75);
+    color = mix(color, ribbon3Color * 0.9, r3 * 0.65);
 
-    // Surface highlight
-    color += highlightColor * surfaceHighlight * step(0.01, inWater + 0.5);
+    // Where ribbons overlap, brighten
+    float overlap = min(1.0, r1 * r2 + r1 * r3 + r2 * r3);
+    color += vec3(1.0) * overlap * 0.15;
 
-    // Meniscus glow at walls
-    color += u_c1 * meniscus;
+    // ---- Glass surface effects (on top of everything) ----
 
-    // Glass specular
+    // Main specular highlight (top-left, like a light source)
+    float spec1 = pow(max(0.0, 1.0 - length(p - vec2(-0.3, 0.35)) * 1.8), 5.0) * 0.35;
+    // Secondary smaller highlight
+    float spec2 = pow(max(0.0, 1.0 - length(p - vec2(0.25, 0.55)) * 3.0), 6.0) * 0.15;
+
+    // Rim highlight -- bright edge of the glass
+    float rim = pow(smoothstep(0.5, 0.95, dist), 2.5) * 0.2;
+    vec3 rimColor = mix(u_c1, vec3(1.0), 0.6);
+
     color += vec3(1.0) * spec1;
-    color += vec3(0.8, 1.0, 0.9) * spec2;
+    color += vec3(0.9, 1.0, 0.95) * spec2;
+    color += rimColor * rim * fresnel;
 
-    // Glass rim
-    color += mix(u_c1, u_c2, 0.5) * rimGlow;
+    // Subtle iridescence at the glass edge
+    vec3 iridescentColor = vec3(
+      0.5 + 0.5 * sin(dist * 8.0 + t * 0.5),
+      0.5 + 0.5 * sin(dist * 8.0 + t * 0.5 + 2.094),
+      0.5 + 0.5 * sin(dist * 8.0 + t * 0.5 + 4.189)
+    );
+    color += iridescentColor * fresnel * 0.08;
 
-    // Subtle glass refraction tint
-    color += airColor * 0.1 * (1.0 - inWater);
-
-    // Edge darkening
-    float vignette = 1.0 - pow(dist, 4.0) * 0.4;
+    // Edge vignette
+    float vignette = 1.0 - pow(dist, 5.0) * 0.3;
     color *= vignette;
 
     float alpha = sphereMask;
