@@ -113,20 +113,19 @@ export function AIChatWidget() {
       {/* Floating orb trigger */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="group relative flex h-14 w-14 items-center justify-center rounded-full border border-primary/20 bg-surface/80 backdrop-blur-xl shadow-glow hover:shadow-[0_0_30px_rgba(57,255,20,0.4)] transition-all duration-300"
+        className="group relative flex h-14 w-14 items-center justify-center rounded-full overflow-hidden shadow-glow hover:shadow-[0_0_30px_rgba(57,255,20,0.4)] transition-all duration-300"
         aria-label={isOpen ? "Close chat" : "Open chat"}
       >
         {isOpen ? (
-          <X className="h-5 w-5 text-primary" />
+          <div className="flex h-full w-full items-center justify-center border border-primary/20 bg-surface/80 backdrop-blur-xl rounded-full">
+            <X className="h-5 w-5 text-primary" />
+          </div>
         ) : (
-          <>
-            <SiriOrb
-              size="40px"
-              animationDuration={15}
-              className="absolute inset-0 m-auto opacity-60 group-hover:opacity-100 transition-opacity"
-            />
-            <MessageSquare className="relative z-10 h-5 w-5 text-primary drop-shadow-[0_0_4px_rgba(57,255,20,0.5)]" />
-          </>
+          <SiriOrb
+            size="56px"
+            animationDuration={15}
+            className="group-hover:scale-110 transition-transform duration-300"
+          />
         )}
       </button>
     </div>
