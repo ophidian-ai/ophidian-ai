@@ -2,8 +2,7 @@
 
 import { cn } from "@/lib/utils"
 import { useState, useRef, useEffect } from "react"
-import { MessageSquare, X, Send } from "lucide-react"
-import { SiriOrb } from "@/components/ui/siri-orb"
+import { X, Send } from "lucide-react"
 import { GlassOrb3D } from "@/components/ui/glass-orb-3d"
 
 interface ChatMessage {
@@ -16,7 +15,7 @@ export function AIChatWidget() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
-      content: "Hi! I'm the OphidianAI assistant. How can I help you today?",
+      content: "Hi! I'm Iris, your OphidianAI assistant. How can I help you today?",
     },
   ])
   const [input, setInput] = useState("")
@@ -32,7 +31,6 @@ export function AIChatWidget() {
     setMessages((prev) => [...prev, userMsg])
     setInput("")
 
-    // Simulated response -- replace with actual API call
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
@@ -49,13 +47,13 @@ export function AIChatWidget() {
     <div className="fixed bottom-6 right-6 z-50">
       {/* Chat panel */}
       {isOpen && (
-        <div className="absolute bottom-16 right-0 w-80 sm:w-96 rounded-xl border border-surface-border bg-surface/95 backdrop-blur-xl shadow-card-hover overflow-hidden animate-fade-up">
+        <div className="absolute bottom-16 right-0 w-80 sm:w-96 rounded-xl border border-primary/15 bg-surface/60 backdrop-blur-2xl shadow-[0_0_30px_rgba(13,177,178,0.1),0_0_60px_rgba(57,255,20,0.05)] overflow-hidden animate-fade-up">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-surface-border px-4 py-3">
+          <div className="flex items-center justify-between border-b border-primary/10 px-4 py-3">
             <div className="flex items-center gap-2">
               <GlassOrb3D size="24px" />
               <span className="font-semibold text-sm text-foreground">
-                OphidianAI Assistant
+                Iris
               </span>
             </div>
             <button
@@ -87,7 +85,7 @@ export function AIChatWidget() {
           </div>
 
           {/* Input */}
-          <div className="border-t border-surface-border p-3">
+          <div className="border-t border-primary/10 p-3">
             <form
               onSubmit={(e) => {
                 e.preventDefault()
@@ -100,7 +98,7 @@ export function AIChatWidget() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Type a message..."
-                className="flex-1 rounded-lg border border-surface-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-foreground-dim focus:outline-none focus:ring-1 focus:ring-primary"
+                className="flex-1 rounded-lg border border-primary/10 bg-background/50 px-3 py-2 text-sm text-foreground placeholder:text-foreground-dim focus:outline-none focus:ring-1 focus:ring-primary"
               />
               <button
                 type="submit"
