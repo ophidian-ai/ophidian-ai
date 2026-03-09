@@ -2,12 +2,10 @@
 
 import React, { useEffect, useRef, forwardRef } from "react";
 
-export interface GlowCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  as?: React.ElementType;
-}
+export interface GlowCardProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const GlowCard = forwardRef<HTMLDivElement, GlowCardProps>(
-  ({ children, className = "", as: Tag = "div", ...props }, ref) => {
+  ({ children, className = "", ...props }, ref) => {
     const internalRef = useRef<HTMLDivElement>(null);
 
     // Merge forwarded ref with internal ref
@@ -41,7 +39,7 @@ const GlowCard = forwardRef<HTMLDivElement, GlowCardProps>(
     }, [ref]);
 
     return (
-      <Tag
+      <div
         ref={cardRef}
         data-glow
         className={`glow-card ${className}`}
@@ -49,7 +47,7 @@ const GlowCard = forwardRef<HTMLDivElement, GlowCardProps>(
       >
         <div data-glow aria-hidden="true" />
         {children}
-      </Tag>
+      </div>
     );
   }
 );

@@ -24,6 +24,7 @@ import {
   Bell,
   Search,
   FolderOpen,
+  type LucideIcon,
 } from "lucide-react"
 import {
   AreaChart,
@@ -134,7 +135,7 @@ function StatCard({
   value: string
   change: string
   changeType: "up" | "down" | "neutral"
-  icon: React.ElementType
+  icon: LucideIcon
   index: number
 }) {
   return (
@@ -540,7 +541,7 @@ export default function DashboardPage() {
                 <div className="space-y-3">
                   {integrations.length > 0 ? (
                     integrations.map((item, i) => {
-                      const IconMap: Record<string, React.ElementType> = {
+                      const IconMap: Record<string, LucideIcon> = {
                         chatbot: Bot,
                         automation: Zap,
                         analytics: BarChart3,
