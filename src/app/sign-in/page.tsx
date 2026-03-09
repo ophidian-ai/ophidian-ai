@@ -9,10 +9,10 @@ import { MeshGradientBg } from "@/components/ui/mesh-gradient-bg"
 export default function SignInPage() {
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
-  const supabase = createClient()
 
   const handleSignIn = async (email: string, password: string) => {
     setError(null)
+    const supabase = createClient()
     const { error } = await supabase.auth.signInWithPassword({ email, password })
 
     if (error) {
@@ -26,6 +26,7 @@ export default function SignInPage() {
 
   const handleGoogleSignIn = async () => {
     setError(null)
+    const supabase = createClient()
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
