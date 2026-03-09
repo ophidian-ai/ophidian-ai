@@ -41,17 +41,12 @@ const FRAGMENT_SHADER = `
   uniform vec3 u_c2;
   uniform vec3 u_c3;
 
-  // Smooth metaball field function
-  float metaball(vec2 p, vec2 center, float radius) {
-    float d = length(p - center);
-    return radius * radius / (d * d + 0.001);
-  }
-
-  // Simplex-like noise for organic movement
+  // Hash for noise
   float hash(vec2 p) {
     return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
   }
 
+  // Smooth value noise
   float noise(vec2 p) {
     vec2 i = floor(p);
     vec2 f = fract(p);
@@ -63,13 +58,25 @@ const FRAGMENT_SHADER = `
     return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
   }
 
+  // Layered noise for wave detail
+  float fbm(vec2 p) {
+    float v = 0.0;
+    float a = 0.5;
+    for (int i = 0; i < 4; i++) {
+      v += a * noise(p);
+      p *= 2.1;
+      a *= 0.5;
+    }
+    return v;
+  }
+
   void main() {
     vec2 uv = gl_FragCoord.xy / u_resolution;
     vec2 p = (uv - 0.5) * 2.0;
 
-    // Circular mask -- sphere shape
+    // Sphere geometry
     float dist = length(p);
-    float sphereMask = smoothstep(1.0, 0.92, dist);
+    float sphereMask = smoothstep(1.0, 0.93, dist);
 
     if (sphereMask < 0.001) {
       gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
@@ -78,77 +85,113 @@ const FRAGMENT_SHADER = `
 
     float t = u_time * u_speed;
 
-    // 5 metaball blobs orbiting with organic paths
-    vec2 b1 = vec2(
-      sin(t * 0.7 + 0.0) * 0.35 + cos(t * 0.3) * 0.15,
-      cos(t * 0.5 + 1.0) * 0.3 + sin(t * 0.4) * 0.1
-    );
-    vec2 b2 = vec2(
-      cos(t * 0.6 + 2.0) * 0.3 + sin(t * 0.35) * 0.2,
-      sin(t * 0.8 + 0.5) * 0.35 + cos(t * 0.25) * 0.1
-    );
-    vec2 b3 = vec2(
-      sin(t * 0.5 + 4.0) * 0.4 + cos(t * 0.45) * 0.1,
-      cos(t * 0.7 + 3.0) * 0.25 + sin(t * 0.55) * 0.15
-    );
-    vec2 b4 = vec2(
-      cos(t * 0.9 + 1.5) * 0.25 + sin(t * 0.2) * 0.15,
-      sin(t * 0.4 + 2.5) * 0.4 + cos(t * 0.6) * 0.1
-    );
-    vec2 b5 = vec2(
-      sin(t * 0.35 + 5.0) * 0.3,
-      cos(t * 0.55 + 4.0) * 0.3
-    );
+    // Sphere interior radius at this x position (circle equation)
+    float sphereR = sqrt(max(0.0, 1.0 - p.x * p.x));
 
-    // Metaball field -- accumulate influence
-    float field = 0.0;
-    field += metaball(p, b1, 0.32);
-    field += metaball(p, b2, 0.28);
-    field += metaball(p, b3, 0.25);
-    field += metaball(p, b4, 0.22);
-    field += metaball(p, b5, 0.20);
+    // Water fill level -- base at ~50%, with slow tilt/slosh
+    float tiltAngle = sin(t * 0.4) * 0.15 + sin(t * 0.25) * 0.1;
+    float baseLevel = -0.05 + sin(t * 0.3) * 0.08;
+    float waterLevel = baseLevel + p.x * tiltAngle;
 
-    // Threshold the field to get fluid-like shapes
-    float fluid = smoothstep(1.2, 2.8, field);
+    // Wave surface -- layered waves at different scales
+    float wave = 0.0;
+    wave += sin(p.x * 6.0 + t * 2.0) * 0.04;
+    wave += sin(p.x * 10.0 - t * 2.8 + 1.0) * 0.025;
+    wave += sin(p.x * 15.0 + t * 1.5 + 2.5) * 0.015;
+    wave += fbm(vec2(p.x * 3.0 + t * 0.8, t * 0.5)) * 0.06 - 0.03;
 
-    // Color mixing based on blob proximity
-    float w1 = metaball(p, b1, 0.32) + metaball(p, b4, 0.22);
-    float w2 = metaball(p, b2, 0.28) + metaball(p, b5, 0.20);
-    float w3 = metaball(p, b3, 0.25);
-    float totalW = w1 + w2 + w3 + 0.001;
+    float surfaceY = waterLevel + wave;
 
-    vec3 fluidColor = (u_c1 * w1 + u_c2 * w2 + u_c3 * w3) / totalW;
+    // Is this pixel below the water surface?
+    float inWater = smoothstep(surfaceY + 0.02, surfaceY - 0.02, p.y);
 
-    // Add subtle noise texture for liquid realism
-    float n = noise(p * 4.0 + t * 0.5) * 0.15;
-    fluidColor += n * 0.1;
+    // Also clip to sphere interior
+    float inSphere = step(abs(p.y), sphereR);
+    inWater *= inSphere;
 
-    // Fluid with glow falloff at edges
-    float fluidGlow = smoothstep(0.8, 3.5, field) * 0.4;
+    // ---- Water color and depth ----
 
-    // Dark background of the sphere interior
-    vec3 bgColor = vec3(0.02, 0.06, 0.1);
+    // Depth below surface (for color gradient)
+    float depth = max(0.0, surfaceY - p.y);
 
-    // Combine: background + fluid glow + sharp fluid
-    vec3 color = bgColor;
-    color = mix(color, fluidColor * 0.3, fluidGlow);
-    color = mix(color, fluidColor * 1.1, fluid);
+    // Color gradient: lighter near surface, deeper = richer
+    vec3 shallowColor = u_c1 * 0.9 + vec3(0.1);
+    vec3 midColor = mix(u_c1, u_c2, 0.5);
+    vec3 deepColor = u_c2 * 0.6;
 
-    // Glass specular highlight
-    float spec = pow(max(0.0, 1.0 - length(p - vec2(-0.3, -0.3)) * 1.5), 3.0) * 0.2;
-    color += vec3(spec);
+    float depthNorm = clamp(depth / 1.2, 0.0, 1.0);
+    vec3 waterColor = mix(shallowColor, midColor, smoothstep(0.0, 0.3, depthNorm));
+    waterColor = mix(waterColor, deepColor, smoothstep(0.3, 1.0, depthNorm));
 
-    // Rim lighting on the sphere edge
-    float rim = pow(smoothstep(0.5, 1.0, dist), 2.0) * 0.15;
-    color += fluidColor * rim * fluid;
+    // Caustic-like light patterns in the water
+    float caustic = fbm(vec2(p.x * 5.0 + t * 0.6, p.y * 5.0 + t * 0.4)) * 0.5 + 0.5;
+    caustic = pow(caustic, 2.0) * 0.3;
+    waterColor += u_c3 * caustic * (1.0 - depthNorm * 0.7);
 
-    // Edge darkening for depth
-    float vignette = 1.0 - pow(dist, 3.0) * 0.5;
+    // Subtle internal flow/current patterns
+    float flow = noise(vec2(p.x * 3.0 + t * 0.5, p.y * 3.0 - t * 0.3));
+    waterColor = mix(waterColor, u_c3 * 0.8, flow * 0.15 * (1.0 - depthNorm));
+
+    // Water opacity: more opaque deeper, slightly transparent at surface
+    float waterAlpha = mix(0.7, 0.95, smoothstep(0.0, 0.4, depthNorm));
+
+    // Surface highlight -- bright line right at the water surface
+    float surfaceDist = abs(p.y - surfaceY);
+    float surfaceHighlight = exp(-surfaceDist * 40.0) * 0.6;
+    vec3 highlightColor = mix(u_c1, vec3(1.0), 0.4);
+
+    // Meniscus -- water curves up at sphere walls
+    float wallDist = abs(dist - 0.92);
+    float meniscus = exp(-wallDist * 15.0) * 0.15 * inWater;
+
+    // ---- Glass sphere ----
+
+    // Dark interior (air above water)
+    vec3 airColor = vec3(0.015, 0.04, 0.07);
+
+    // Faint reflection of water on the glass above
+    float reflectionY = 2.0 * surfaceY - p.y;
+    float reflectionStrength = smoothstep(0.5, 0.0, p.y - surfaceY) * 0.08;
+
+    // Glass specular highlights
+    float spec1 = pow(max(0.0, 1.0 - length(p - vec2(-0.35, 0.35)) * 2.0), 4.0) * 0.25;
+    float spec2 = pow(max(0.0, 1.0 - length(p - vec2(0.2, 0.5)) * 3.0), 5.0) * 0.1;
+
+    // Glass rim / edge highlight
+    float rimGlow = pow(smoothstep(0.6, 0.95, dist), 3.0) * 0.12;
+
+    // ---- Compose ----
+
+    vec3 color = airColor;
+
+    // Water reflection in the air region
+    vec3 reflColor = mix(u_c1, u_c2, 0.5) * 0.3;
+    color = mix(color, reflColor, reflectionStrength * (1.0 - inWater));
+
+    // Water body
+    color = mix(color, waterColor, inWater * waterAlpha);
+
+    // Surface highlight
+    color += highlightColor * surfaceHighlight * step(0.01, inWater + 0.5);
+
+    // Meniscus glow at walls
+    color += u_c1 * meniscus;
+
+    // Glass specular
+    color += vec3(1.0) * spec1;
+    color += vec3(0.8, 1.0, 0.9) * spec2;
+
+    // Glass rim
+    color += mix(u_c1, u_c2, 0.5) * rimGlow;
+
+    // Subtle glass refraction tint
+    color += airColor * 0.1 * (1.0 - inWater);
+
+    // Edge darkening
+    float vignette = 1.0 - pow(dist, 4.0) * 0.4;
     color *= vignette;
 
-    // Apply sphere mask with smooth edge
     float alpha = sphereMask;
-
     gl_FragColor = vec4(color * alpha, alpha);
   }
 `
