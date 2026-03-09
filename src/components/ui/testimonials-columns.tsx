@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "motion/react";
+import { GlowCard } from "@/components/ui/spotlight-card";
 
 export interface Testimonial {
   text: string;
@@ -33,7 +34,7 @@ export const TestimonialsColumn = (props: {
           ...new Array(2).fill(0).map((_, index) => (
             <React.Fragment key={index}>
               {props.testimonials.map(({ text, image, name, role }, i) => (
-                <div
+                <GlowCard
                   className="p-10 rounded-3xl border border-primary/10 shadow-lg shadow-primary/10 max-w-xs w-full bg-background glass"
                   key={i}
                 >
@@ -55,7 +56,7 @@ export const TestimonialsColumn = (props: {
                       </div>
                     </div>
                   </div>
-                </div>
+                </GlowCard>
               ))}
             </React.Fragment>
           )),

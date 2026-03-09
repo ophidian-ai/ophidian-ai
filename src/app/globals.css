@@ -280,19 +280,45 @@ h4 { font-size: 1.25rem; }
 }
 
 /* ============================================================
-   Spotlight Card Glow
+   Glow Card Effect (Brand Color Shifting)
+   Cycles through: Venom Green (#39FF14), Teal (#0DB1B2), Navy (#0D1B2A)
    ============================================================ */
 
-.spotlight-card::before,
-.spotlight-card::after {
+.glow-card {
+  --border-size: 2px;
+  --spotlight-size: 250px;
+  --radius: 12;
+  --base: 110;
+  --spread: 80;
+  --hue: calc(var(--base) + (var(--xp, 0) * var(--spread, 0)));
+  --saturation: 100;
+  --lightness: 55;
+  --bg-spot-opacity: 0.08;
+  --border-spot-opacity: 0.8;
+  --border-light-opacity: 0.4;
+  position: relative;
+  background-image: radial-gradient(
+    var(--spotlight-size) var(--spotlight-size) at
+    calc(var(--x, 0) * 1px)
+    calc(var(--y, 0) * 1px),
+    hsl(var(--hue) calc(var(--saturation) * 1%) calc(var(--lightness) * 1%) / var(--bg-spot-opacity)),
+    transparent
+  );
+  background-size: calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)));
+  background-position: 50% 50%;
+  background-attachment: fixed;
+}
+
+[data-glow]::before,
+[data-glow]::after {
   pointer-events: none;
   content: "";
   position: absolute;
-  inset: calc(var(--border-size, 3px) * -1);
-  border: var(--border-size, 3px) solid transparent;
-  border-radius: calc(var(--radius, 14) * 1px);
+  inset: calc(var(--border-size, 2px) * -1);
+  border: var(--border-size, 2px) solid transparent;
+  border-radius: calc(var(--radius, 12) * 1px);
   background-attachment: fixed;
-  background-size: calc(100% + (2 * var(--border-size, 3px))) calc(100% + (2 * var(--border-size, 3px)));
+  background-size: calc(100% + (2 * var(--border-size, 2px))) calc(100% + (2 * var(--border-size, 2px)));
   background-repeat: no-repeat;
   background-position: 50% 50%;
   mask: linear-gradient(transparent, transparent), linear-gradient(white, white);
@@ -300,23 +326,44 @@ h4 { font-size: 1.25rem; }
   mask-composite: intersect;
 }
 
-.spotlight-card::before {
+[data-glow]::before {
   background-image: radial-gradient(
-    calc(var(--spotlight-size, 150px) * 0.75) calc(var(--spotlight-size, 150px) * 0.75) at
+    calc(var(--spotlight-size, 250px) * 0.75) calc(var(--spotlight-size, 250px) * 0.75) at
     calc(var(--x, 0) * 1px)
     calc(var(--y, 0) * 1px),
-    hsl(var(--hue, 174) calc(var(--saturation, 100) * 1%) calc(var(--lightness, 50) * 1%) / var(--border-spot-opacity, 1)), transparent 100%
+    hsl(var(--hue, 110) calc(var(--saturation, 100) * 1%) calc(var(--lightness, 55) * 1%) / var(--border-spot-opacity, 0.8)),
+    transparent 100%
   );
   filter: brightness(2);
 }
 
-.spotlight-card::after {
+[data-glow]::after {
   background-image: radial-gradient(
-    calc(var(--spotlight-size, 150px) * 0.5) calc(var(--spotlight-size, 150px) * 0.5) at
+    calc(var(--spotlight-size, 250px) * 0.5) calc(var(--spotlight-size, 250px) * 0.5) at
     calc(var(--x, 0) * 1px)
     calc(var(--y, 0) * 1px),
-    hsl(0 100% 100% / var(--border-light-opacity, 1)), transparent 100%
+    hsl(0 100% 100% / var(--border-light-opacity, 0.4)),
+    transparent 100%
   );
+}
+
+/* Inner glow element (outer soft blur) */
+[data-glow] > [data-glow] {
+  position: absolute;
+  inset: 0;
+  will-change: filter;
+  opacity: 1;
+  border-radius: calc(var(--radius, 12) * 1px);
+  border-width: calc(var(--border-size, 2px) * 20);
+  filter: blur(calc(var(--border-size, 2px) * 10));
+  background: none;
+  pointer-events: none;
+  border: none;
+}
+
+[data-glow] > [data-glow]::before {
+  inset: -10px;
+  border-width: 10px;
 }
 
 /* ============================================================

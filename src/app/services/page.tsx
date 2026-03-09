@@ -6,6 +6,7 @@ import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
 import { GlassButton } from "@/components/ui/glass-button";
 import { JsonLd } from "@/components/JsonLd";
+import { GlowCard } from "@/components/ui/spotlight-card";
 
 const serviceSchema = {
   "@context": "https://schema.org",
@@ -143,10 +144,10 @@ export default function ServicesPage() {
                   >
                     {/* Image placeholder */}
                     <div className="w-full lg:w-1/2 shrink-0">
-                      <div className="glass relative aspect-[4/3] rounded-2xl overflow-hidden flex items-center justify-center border border-primary/10">
+                      <GlowCard className="glass relative aspect-[4/3] rounded-2xl overflow-hidden flex items-center justify-center border border-primary/10">
                         <div className="text-primary/30">{service.icon}</div>
                         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
-                      </div>
+                      </GlowCard>
                     </div>
 
                     {/* Content */}

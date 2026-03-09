@@ -1,6 +1,7 @@
 import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
+import { GlowCard } from "@/components/ui/spotlight-card";
 
 export type Step = {
   title: string;
@@ -34,9 +35,9 @@ export function ProcessSteps({ heading, subtitle, steps }: ProcessStepsProps) {
 
           <div className="space-y-12">
             {steps.map((step, i) => (
-              <div
+              <GlowCard
                 key={step.title}
-                className={`relative flex gap-6 animate-fade-up delay-${(i + 1) * 100}`}
+                className={`relative flex gap-6 animate-fade-up delay-${(i + 1) * 100} rounded-xl p-4 border border-primary/10`}
               >
                 {/* Step number badge */}
                 <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 border border-primary/30 text-primary font-mono font-bold text-sm md:h-12 md:w-12">
@@ -49,7 +50,7 @@ export function ProcessSteps({ heading, subtitle, steps }: ProcessStepsProps) {
                   </Heading>
                   <Text>{step.description}</Text>
                 </div>
-              </div>
+              </GlowCard>
             ))}
           </div>
         </div>

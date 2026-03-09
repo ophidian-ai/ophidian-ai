@@ -1,11 +1,14 @@
+"use client";
+
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { GlowCard } from "@/components/ui/spotlight-card";
 
 const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div
+  <GlowCard
     ref={ref}
     className={cn(
       "rounded-lg border border-primary/10 bg-surface text-foreground shadow-sm",

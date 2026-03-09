@@ -5,6 +5,7 @@ import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
 import { Badge } from "@/components/ui/Badge";
 import { GlassButton } from "@/components/ui/glass-button";
+import { GlowCard } from "@/components/ui/spotlight-card";
 
 export default function PortfolioPage() {
   return (
@@ -12,7 +13,7 @@ export default function PortfolioPage() {
       <div className="grain">
         <section className="py-24 md:py-32">
           <Container width="default">
-            <div className="glass rounded-2xl overflow-hidden border border-primary/10 animate-fade-up">
+            <GlowCard className="glass rounded-2xl overflow-hidden border border-primary/10 animate-fade-up">
               <div className="relative aspect-video bg-surface border-b border-primary/10 overflow-hidden">
                 <img
                   src="/images/portfolio/bloomin-acres-homepage.png"
@@ -48,7 +49,7 @@ export default function PortfolioPage() {
                     },
                     { metric: "100%", label: "Mobile-responsive" },
                   ].map((item) => (
-                    <div
+                    <GlowCard
                       key={item.label}
                       className="rounded-lg bg-surface-hover/50 border border-primary/5 p-4 text-center"
                     >
@@ -56,11 +57,11 @@ export default function PortfolioPage() {
                         {item.metric}
                       </div>
                       <Text variant="small">{item.label}</Text>
-                    </div>
+                    </GlowCard>
                   ))}
                 </div>
               </div>
-            </div>
+            </GlowCard>
           </Container>
         </section>
 

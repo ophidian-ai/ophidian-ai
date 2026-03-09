@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "motion/react";
+import { GlowCard } from "@/components/ui/spotlight-card";
 import {
   LayoutDashboard,
   Bot,
@@ -140,27 +141,28 @@ function StatCard({
         delay,
         ease: [0.16, 1, 0.3, 1],
       }}
-      className="glass rounded-xl border border-primary/10 p-5 hover:border-primary/20 transition-colors"
     >
-      <div className="flex items-start justify-between mb-3">
-        <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
-          <Icon size={20} className="text-primary" />
+      <GlowCard className="glass rounded-xl border border-primary/10 p-5 hover:border-primary/20 transition-colors">
+        <div className="flex items-start justify-between mb-3">
+          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Icon size={20} className="text-primary" />
+          </div>
+          <div
+            className={`flex items-center gap-1 text-xs font-medium ${
+              changeType === "up" ? "text-primary" : "text-red-400"
+            }`}
+          >
+            {changeType === "up" ? (
+              <TrendingUp size={14} />
+            ) : (
+              <TrendingDown size={14} />
+            )}
+            {change}
+          </div>
         </div>
-        <div
-          className={`flex items-center gap-1 text-xs font-medium ${
-            changeType === "up" ? "text-primary" : "text-red-400"
-          }`}
-        >
-          {changeType === "up" ? (
-            <TrendingUp size={14} />
-          ) : (
-            <TrendingDown size={14} />
-          )}
-          {change}
-        </div>
-      </div>
-      <div className="text-2xl font-bold text-foreground">{value}</div>
-      <div className="text-sm text-foreground-muted mt-1">{title}</div>
+        <div className="text-2xl font-bold text-foreground">{value}</div>
+        <div className="text-sm text-foreground-muted mt-1">{title}</div>
+      </GlowCard>
     </motion.div>
   );
 }
@@ -184,12 +186,13 @@ function ChartCard({
         delay,
         ease: [0.16, 1, 0.3, 1],
       }}
-      className="glass rounded-xl border border-primary/10 p-5"
     >
-      <h3 className="text-sm font-medium text-foreground-muted mb-4">
-        {title}
-      </h3>
-      {children}
+      <GlowCard className="glass rounded-xl border border-primary/10 p-5">
+        <h3 className="text-sm font-medium text-foreground-muted mb-4">
+          {title}
+        </h3>
+        {children}
+      </GlowCard>
     </motion.div>
   );
 }
@@ -385,61 +388,62 @@ export default function DashboardPage() {
                 delay: 0.4,
                 ease: [0.16, 1, 0.3, 1],
               }}
-              className="glass rounded-xl border border-primary/10 p-5"
             >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-medium text-foreground-muted">
-                  AI Integrations
-                </h3>
-                <button className="text-xs text-primary hover:underline cursor-pointer">
-                  View all
-                </button>
-              </div>
-              <div className="space-y-3">
-                {integrations.map((item, i) => (
-                  <motion.div
-                    key={item.name}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.4,
-                      delay: 0.5 + i * 0.08,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                    className="flex items-center gap-3 p-3 rounded-lg bg-white/[0.03] border border-white/5 hover:border-primary/15 transition-colors cursor-pointer group"
-                  >
-                    <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <item.icon size={16} className="text-primary" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium text-foreground truncate">
-                        {item.name}
+              <GlowCard className="glass rounded-xl border border-primary/10 p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-medium text-foreground-muted">
+                    AI Integrations
+                  </h3>
+                  <button className="text-xs text-primary hover:underline cursor-pointer">
+                    View all
+                  </button>
+                </div>
+                <div className="space-y-3">
+                  {integrations.map((item, i) => (
+                    <motion.div
+                      key={item.name}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: 0.4,
+                        delay: 0.5 + i * 0.08,
+                        ease: [0.16, 1, 0.3, 1],
+                      }}
+                      className="flex items-center gap-3 p-3 rounded-lg bg-white/[0.03] border border-white/5 hover:border-primary/15 transition-colors cursor-pointer group"
+                    >
+                      <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <item.icon size={16} className="text-primary" />
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={`inline-block h-1.5 w-1.5 rounded-full ${
-                            item.status === "active"
-                              ? "bg-primary"
-                              : "bg-foreground-dim"
-                          }`}
-                        />
-                        <span className="text-xs text-foreground-dim capitalize">
-                          {item.status}
-                        </span>
-                        {item.usage > 0 && (
-                          <span className="text-xs text-foreground-dim">
-                            {item.usage}% capacity
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium text-foreground truncate">
+                          {item.name}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`inline-block h-1.5 w-1.5 rounded-full ${
+                              item.status === "active"
+                                ? "bg-primary"
+                                : "bg-foreground-dim"
+                            }`}
+                          />
+                          <span className="text-xs text-foreground-dim capitalize">
+                            {item.status}
                           </span>
-                        )}
+                          {item.usage > 0 && (
+                            <span className="text-xs text-foreground-dim">
+                              {item.usage}% capacity
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                    <ChevronRight
-                      size={14}
-                      className="text-foreground-dim group-hover:text-primary transition-colors"
-                    />
-                  </motion.div>
-                ))}
-              </div>
+                      <ChevronRight
+                        size={14}
+                        className="text-foreground-dim group-hover:text-primary transition-colors"
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+              </GlowCard>
             </motion.div>
           </div>
 
@@ -452,42 +456,43 @@ export default function DashboardPage() {
               delay: 0.5,
               ease: [0.16, 1, 0.3, 1],
             }}
-            className="glass rounded-xl border border-primary/10 p-5"
           >
-            <h3 className="text-sm font-medium text-foreground-muted mb-4">
-              Recent Activity
-            </h3>
-            <div className="space-y-3">
-              {recentActivity.map((item, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{
-                    duration: 0.4,
-                    delay: 0.6 + i * 0.08,
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
-                  className="flex items-center gap-3 py-2"
-                >
-                  <span
-                    className={`h-2 w-2 rounded-full flex-shrink-0 ${
-                      item.type === "success"
-                        ? "bg-primary"
-                        : item.type === "warning"
-                        ? "bg-yellow-400"
-                        : "bg-accent"
-                    }`}
-                  />
-                  <span className="text-sm text-foreground flex-1">
-                    {item.action}
-                  </span>
-                  <span className="text-xs text-foreground-dim whitespace-nowrap">
-                    {item.time}
-                  </span>
-                </motion.div>
-              ))}
-            </div>
+            <GlowCard className="glass rounded-xl border border-primary/10 p-5">
+              <h3 className="text-sm font-medium text-foreground-muted mb-4">
+                Recent Activity
+              </h3>
+              <div className="space-y-3">
+                {recentActivity.map((item, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      duration: 0.4,
+                      delay: 0.6 + i * 0.08,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className="flex items-center gap-3 py-2"
+                  >
+                    <span
+                      className={`h-2 w-2 rounded-full flex-shrink-0 ${
+                        item.type === "success"
+                          ? "bg-primary"
+                          : item.type === "warning"
+                          ? "bg-yellow-400"
+                          : "bg-accent"
+                      }`}
+                    />
+                    <span className="text-sm text-foreground flex-1">
+                      {item.action}
+                    </span>
+                    <span className="text-xs text-foreground-dim whitespace-nowrap">
+                      {item.time}
+                    </span>
+                  </motion.div>
+                ))}
+              </div>
+            </GlowCard>
           </motion.div>
         </div>
       </main>

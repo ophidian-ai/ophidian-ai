@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
+import { GlowCard } from "@/components/ui/spotlight-card";
 
 export type FAQItem = {
   question: string;
@@ -42,7 +43,7 @@ export function FAQAccordion({ heading, subtitle, items }: FAQAccordionProps) {
             const isOpen = openIndex === i;
 
             return (
-              <div
+              <GlowCard
                 key={item.question}
                 className="glass rounded-xl overflow-hidden transition-all duration-300"
               >
@@ -86,7 +87,7 @@ export function FAQAccordion({ heading, subtitle, items }: FAQAccordionProps) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </GlowCard>
             );
           })}
         </div>

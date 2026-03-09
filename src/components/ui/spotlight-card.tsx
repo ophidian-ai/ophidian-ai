@@ -1,99 +1,57 @@
 "use client";
 
-import React, { useEffect, useRef, ReactNode } from "react";
+import React, { useEffect, useRef, forwardRef } from "react";
 
-interface SpotlightCardProps {
-  children: ReactNode;
-  className?: string;
-  glowColor?: "teal" | "lime" | "blue" | "purple";
-  width?: string | number;
-  height?: string | number;
+export interface GlowCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  as?: React.ElementType;
 }
 
-const glowColorMap = {
-  teal: { base: 174, spread: 200 },
-  lime: { base: 110, spread: 200 },
-  blue: { base: 220, spread: 200 },
-  purple: { base: 280, spread: 300 },
-};
+const GlowCard = forwardRef<HTMLDivElement, GlowCardProps>(
+  ({ children, className = "", as: Tag = "div", ...props }, ref) => {
+    const internalRef = useRef<HTMLDivElement>(null);
 
-const SpotlightCard: React.FC<SpotlightCardProps> = ({
-  children,
-  className = "",
-  glowColor = "teal",
-  width,
-  height,
-}) => {
-  const cardRef = useRef<HTMLDivElement>(null);
+    // Merge forwarded ref with internal ref
+    const cardRef = (ref as React.RefObject<HTMLDivElement>) || internalRef;
 
-  useEffect(() => {
-    const syncPointer = (e: PointerEvent) => {
-      const { clientX: x, clientY: y } = e;
+    useEffect(() => {
+      const syncPointer = (e: PointerEvent) => {
+        const { clientX: x, clientY: y } = e;
+        const el =
+          (ref as React.RefObject<HTMLDivElement>)?.current ??
+          internalRef.current;
 
-      if (cardRef.current) {
-        cardRef.current.style.setProperty("--x", x.toFixed(2));
-        cardRef.current.style.setProperty(
-          "--xp",
-          (x / window.innerWidth).toFixed(2)
-        );
-        cardRef.current.style.setProperty("--y", y.toFixed(2));
-        cardRef.current.style.setProperty(
-          "--yp",
-          (y / window.innerHeight).toFixed(2)
-        );
-      }
-    };
+        if (el) {
+          el.style.setProperty("--x", x.toFixed(2));
+          el.style.setProperty(
+            "--xp",
+            (x / window.innerWidth).toFixed(2)
+          );
+          el.style.setProperty("--y", y.toFixed(2));
+          el.style.setProperty(
+            "--yp",
+            (y / window.innerHeight).toFixed(2)
+          );
+        }
+      };
 
-    document.addEventListener("pointermove", syncPointer);
-    return () => document.removeEventListener("pointermove", syncPointer);
-  }, []);
+      document.addEventListener("pointermove", syncPointer);
+      return () => document.removeEventListener("pointermove", syncPointer);
+    }, [ref]);
 
-  const { base, spread } = glowColorMap[glowColor];
-
-  const inlineStyles: Record<string, string | number | undefined> = {
-    "--base": base,
-    "--spread": spread,
-    "--radius": "14",
-    "--border": "3",
-    "--backdrop": "rgba(22, 32, 50, 0.6)",
-    "--backup-border": "rgba(255, 255, 255, 0.08)",
-    "--size": "200",
-    "--outer": "1",
-    "--border-size": "calc(var(--border, 2) * 1px)",
-    "--spotlight-size": "calc(var(--size, 150) * 1px)",
-    "--hue": "calc(var(--base) + (var(--xp, 0) * var(--spread, 0)))",
-    backgroundImage: `radial-gradient(
-      var(--spotlight-size) var(--spotlight-size) at
-      calc(var(--x, 0) * 1px)
-      calc(var(--y, 0) * 1px),
-      hsl(var(--hue, 174) calc(var(--saturation, 100) * 1%) calc(var(--lightness, 70) * 1%) / var(--bg-spot-opacity, 0.1)), transparent
-    )`,
-    backgroundColor: "var(--backdrop, transparent)",
-    backgroundSize:
-      "calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)))",
-    backgroundPosition: "50% 50%",
-    backgroundAttachment: "fixed",
-    border: "var(--border-size) solid var(--backup-border)",
-    position: "relative" as const,
-    touchAction: "none" as const,
-  };
-
-  if (width !== undefined) {
-    inlineStyles.width = typeof width === "number" ? `${width}px` : width;
+    return (
+      <Tag
+        ref={cardRef}
+        data-glow
+        className={`glow-card ${className}`}
+        {...props}
+      >
+        <div data-glow aria-hidden="true" />
+        {children}
+      </Tag>
+    );
   }
-  if (height !== undefined) {
-    inlineStyles.height = typeof height === "number" ? `${height}px` : height;
-  }
+);
 
-  return (
-    <div
-      ref={cardRef}
-      style={inlineStyles as React.CSSProperties}
-      className={`spotlight-card rounded-2xl relative grid grid-rows-[1fr_auto] shadow-[0_1rem_2rem_-1rem_black] p-4 gap-4 backdrop-blur-[5px] ${className}`}
-    >
-      {children}
-    </div>
-  );
-};
+GlowCard.displayName = "GlowCard";
 
-export { SpotlightCard };
+export { GlowCard };
