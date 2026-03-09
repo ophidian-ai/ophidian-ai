@@ -219,11 +219,12 @@ export default function DashboardPage() {
   const [userName, setUserName] = useState("")
   const [loading, setLoading] = useState(true)
   const router = useRouter()
-  const supabase = createClient()
 
   useEffect(() => {
     async function loadDashboard() {
       try {
+        const supabase = createClient()
+
         // Get current user profile
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) {
@@ -315,11 +316,13 @@ export default function DashboardPage() {
     }
 
     loadDashboard()
-  }, [router, supabase])
+  }, [router])
 
   const handleSignOut = async () => {
+    const supabase = createClient()
     await supabase.auth.signOut()
-    router.push("/sign-in")
+    router.push("/")
+    router.refresh()
   }
 
   if (loading) {

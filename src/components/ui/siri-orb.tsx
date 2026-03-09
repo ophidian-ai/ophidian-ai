@@ -30,8 +30,8 @@ const SiriOrb: React.FC<SiriOrbProps> = ({
   const finalColors = { ...defaultColors, ...colors }
   const sizeValue = parseInt(size.replace("px", ""), 10)
 
-  const blurAmount = Math.max(sizeValue * 0.08, 8)
-  const contrastAmount = Math.max(sizeValue * 0.003, 1.8)
+  const blurAmount = sizeValue <= 80 ? Math.max(sizeValue * 0.05, 3) : Math.max(sizeValue * 0.06, 6)
+  const contrastAmount = sizeValue <= 80 ? 3.5 : 2.5
 
   return (
     <div
@@ -65,10 +65,13 @@ const SiriOrb: React.FC<SiriOrbProps> = ({
           position: relative;
           background: radial-gradient(
             circle,
-            rgba(57, 255, 20, 0.08) 0%,
-            rgba(13, 177, 178, 0.04) 30%,
-            transparent 70%
+            rgba(5, 20, 30, 0.95) 0%,
+            rgba(5, 15, 25, 1) 100%
           );
+          box-shadow:
+            inset 0 0 20% rgba(57, 255, 20, 0.05),
+            0 0 15px rgba(57, 255, 20, 0.15),
+            0 0 30px rgba(13, 177, 178, 0.08);
         }
 
         .siri-orb::before {
@@ -79,42 +82,32 @@ const SiriOrb: React.FC<SiriOrbProps> = ({
           height: 100%;
           border-radius: 50%;
           background:
-            conic-gradient(
-              from calc(var(--angle) * 1.2) at 30% 65%,
-              var(--c3) 0deg,
-              transparent 45deg 315deg,
-              var(--c3) 360deg
-            ),
-            conic-gradient(
-              from calc(var(--angle) * 0.8) at 70% 35%,
-              var(--c2) 0deg,
-              transparent 60deg 300deg,
-              var(--c2) 360deg
-            ),
-            conic-gradient(
-              from calc(var(--angle) * -1.5) at 65% 75%,
-              var(--c1) 0deg,
-              transparent 90deg 270deg,
-              var(--c1) 360deg
-            ),
-            conic-gradient(
-              from calc(var(--angle) * 2.1) at 25% 25%,
-              var(--c2) 0deg,
-              transparent 30deg 330deg,
-              var(--c2) 360deg
-            ),
-            conic-gradient(
-              from calc(var(--angle) * -0.7) at 80% 80%,
-              var(--c1) 0deg,
-              transparent 45deg 315deg,
-              var(--c1) 360deg
+            radial-gradient(
+              ellipse 60% 50% at calc(35% + sin(var(--angle)) * 10%) calc(60% + cos(var(--angle)) * 8%),
+              var(--c1) 0%,
+              transparent 70%
             ),
             radial-gradient(
-              ellipse 120% 80% at 40% 60%,
+              ellipse 50% 60% at calc(65% + cos(var(--angle)) * 12%) calc(35% + sin(var(--angle)) * 10%),
+              var(--c2) 0%,
+              transparent 65%
+            ),
+            radial-gradient(
+              ellipse 55% 45% at calc(50% + sin(var(--angle) * 1.3) * 15%) calc(70% + cos(var(--angle) * 0.7) * 12%),
               var(--c3) 0%,
-              transparent 50%
+              transparent 60%
+            ),
+            radial-gradient(
+              ellipse 40% 55% at calc(25% + cos(var(--angle) * 0.6) * 8%) calc(30% + sin(var(--angle) * 1.1) * 10%),
+              var(--c2) 0%,
+              transparent 70%
+            ),
+            radial-gradient(
+              ellipse 45% 40% at calc(75% + sin(var(--angle) * 0.9) * 10%) calc(75% + cos(var(--angle) * 1.4) * 8%),
+              var(--c1) 0%,
+              transparent 65%
             );
-          filter: blur(var(--blur-amount)) contrast(var(--contrast-amount)) saturate(1.2);
+          filter: blur(var(--blur-amount)) contrast(var(--contrast-amount)) saturate(1.6) brightness(1.1);
           animation: siri-orb-rotate var(--animation-duration) linear infinite;
           transform: translateZ(0);
           will-change: transform;
@@ -127,13 +120,20 @@ const SiriOrb: React.FC<SiriOrbProps> = ({
           width: 100%;
           height: 100%;
           border-radius: 50%;
-          background: radial-gradient(
-            circle at 45% 55%,
-            rgba(255, 255, 255, 0.1) 0%,
-            rgba(255, 255, 255, 0.05) 30%,
-            transparent 60%
-          );
+          background:
+            radial-gradient(
+              circle at 35% 35%,
+              rgba(255, 255, 255, 0.15) 0%,
+              rgba(255, 255, 255, 0.05) 20%,
+              transparent 50%
+            ),
+            radial-gradient(
+              circle at 65% 70%,
+              rgba(255, 255, 255, 0.03) 0%,
+              transparent 40%
+            );
           mix-blend-mode: overlay;
+          pointer-events: none;
         }
 
         @keyframes siri-orb-rotate {

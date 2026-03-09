@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { User, Settings, LogOut, LayoutDashboard } from "lucide-react"
+import { Settings, LogOut, LayoutDashboard } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Popover,
@@ -81,18 +81,11 @@ export function AccountPopover({ user }: AccountPopoverProps) {
             Dashboard
           </Link>
           <Link
-            href="/account-setup"
-            className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-foreground-muted hover:bg-surface-hover hover:text-foreground transition-colors"
-          >
-            <User className="h-4 w-4" />
-            Account
-          </Link>
-          <Link
-            href="/settings"
+            href="/dashboard/account"
             className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-foreground-muted hover:bg-surface-hover hover:text-foreground transition-colors"
           >
             <Settings className="h-4 w-4" />
-            Settings
+            Account Settings
           </Link>
         </PopoverBody>
         <PopoverFooter>
