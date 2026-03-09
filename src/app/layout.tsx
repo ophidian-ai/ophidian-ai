@@ -4,6 +4,8 @@ import { Analytics } from "@vercel/analytics/next";
 import { JsonLd } from "@/components/JsonLd";
 import { GlobalBackground } from "@/components/layout/GlobalBackground";
 import AIChatWidget from "@/components/ui/ai-orb";
+import { EditModeProvider } from "@/lib/edit-mode-context";
+import { EditModeToolbar } from "@/components/editable/edit-mode-toolbar";
 import "./globals.css";
 
 const inter = Inter({
@@ -81,10 +83,13 @@ export default function RootLayout({
       >
         <JsonLd data={organizationSchema} />
         <GlobalBackground />
-        <div className="relative z-10">
-          {children}
-        </div>
-        <AIChatWidget />
+        <EditModeProvider>
+          <div className="relative z-10">
+            {children}
+          </div>
+          <AIChatWidget />
+          <EditModeToolbar />
+        </EditModeProvider>
         <Analytics />
       </body>
     </html>
