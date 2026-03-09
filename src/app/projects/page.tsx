@@ -4,6 +4,7 @@ import { PageWrapper } from "@/components/layout/PageWrapper";
 import { CircularGallery, type GalleryItem } from "@/components/ui/circular-gallery";
 import { usePageContent } from "@/lib/use-page-content";
 import { EditableText } from "@/components/editable/editable-text";
+import { EditableImage } from "@/components/editable/editable-image";
 import { useEditMode } from "@/lib/edit-mode-context";
 
 const defaultProjects = [
@@ -23,6 +24,10 @@ export default function ProjectsPage() {
     ...p,
     title: content[`project_${i + 1}_title`] || p.title,
     subtitle: content[`project_${i + 1}_subtitle`] || p.subtitle,
+    photo: {
+      ...p.photo,
+      url: content[`project_${i + 1}_image`] || p.photo.url,
+    },
   }));
 
   return (
@@ -54,9 +59,22 @@ export default function ProjectsPage() {
           {isEditMode ? (
             <div className="w-full max-w-4xl mx-auto px-4 mt-32 grid grid-cols-2 md:grid-cols-3 gap-4">
               {defaultProjects.map((p, i) => (
-                <div key={i} className="glass rounded-xl border border-primary/10 p-4 text-center">
-                  <EditableText page="projects" contentKey={`project_${i + 1}_title`} defaultValue={p.title} dbValue={content[`project_${i + 1}_title`]} as="h3" className="text-sm font-semibold text-foreground mb-1" />
-                  <EditableText page="projects" contentKey={`project_${i + 1}_subtitle`} defaultValue={p.subtitle} dbValue={content[`project_${i + 1}_subtitle`]} as="p" className="text-xs text-foreground-muted" />
+                <div key={i} className="glass rounded-xl border border-primary/10 overflow-hidden text-center">
+                  <div className="relative aspect-video">
+                    <EditableImage
+                      page="projects"
+                      contentKey={`project_${i + 1}_image`}
+                      defaultSrc={p.photo.url}
+                      dbValue={content[`project_${i + 1}_image`]}
+                      alt={p.photo.text}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <EditableText page="projects" contentKey={`project_${i + 1}_title`} defaultValue={p.title} dbValue={content[`project_${i + 1}_title`]} as="h3" className="text-sm font-semibold text-foreground mb-1" />
+                    <EditableText page="projects" contentKey={`project_${i + 1}_subtitle`} defaultValue={p.subtitle} dbValue={content[`project_${i + 1}_subtitle`]} as="p" className="text-xs text-foreground-muted" />
+                  </div>
                 </div>
               ))}
             </div>
