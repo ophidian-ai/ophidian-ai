@@ -6,7 +6,7 @@ import { Eye, EyeOff, Mail, Lock, Chrome } from "lucide-react";
 import { GlassButton } from "@/components/ui/glass-button";
 
 interface LoginFormProps {
-  onSubmit: (email: string, password: string, remember: boolean) => void;
+  onSubmit: (email: string, password: string, remember: boolean) => void | Promise<void>;
   onGoogleSignIn?: () => void;
   signUpHref?: string;
 }
@@ -89,9 +89,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    onSubmit(email, password, remember);
-    setIsSubmitting(false);
+    try {
+      await onSubmit(email, password, remember);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
