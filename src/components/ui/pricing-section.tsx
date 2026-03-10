@@ -27,7 +27,7 @@ interface PricingSectionProps {
   plans?: PricingPlan[];
   title?: string;
   subtitle?: string;
-  onPlanSelect?: (plan: PricingPlan) => void;
+  onPlanSelect?: (plan: PricingPlan, interval: "monthly" | "yearly") => void;
 }
 
 const defaultPlans: PricingPlan[] = [
@@ -228,7 +228,7 @@ export default function PricingSection({
               <CardContent className="pt-0">
                 <GlassButton
                   size="lg"
-                  onClick={() => onPlanSelect?.(plan)}
+                  onClick={() => onPlanSelect?.(plan, isYearly ? "yearly" : "monthly")}
                   className="w-full mb-6"
                 >
                   {plan.buttonText}

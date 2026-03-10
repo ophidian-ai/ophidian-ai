@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { PageWrapper } from "@/components/layout/PageWrapper";
 import { FAQAccordion } from "@/components/sections/FAQAccordion";
 import PricingSection from "@/components/ui/pricing-section";
@@ -19,6 +20,7 @@ const defaultFaqItems = [
 export default function PricingPage() {
   const content = usePageContent("pricing");
   const { isEditMode } = useEditMode();
+  const router = useRouter();
 
   const resolvedFaqItems = defaultFaqItems.map((item, i) => ({
     question: content[`pricing_faq_${i + 1}_q`] || item.question,
@@ -28,7 +30,14 @@ export default function PricingPage() {
   return (
     <PageWrapper>
       <div className="grain">
-        <PricingSection onPlanSelect={() => { window.location.href = "/contact"; }} />
+        <PricingSection onPlanSelect={(plan, interval) => {
+          const planId = plan.name.toLowerCase();
+          if (planId === "enterprise") {
+            router.push("/contact");
+          } else {
+            router.push(`/checkout?plan=${planId}&interval=${interval}`);
+          }
+        }} />
 
         {isEditMode ? (
           <section className="py-24 md:py-32">
