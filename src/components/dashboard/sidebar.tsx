@@ -64,6 +64,11 @@ const adminNavItems: NavItem[] = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
   { icon: Users, label: "Clients", href: "/dashboard/admin/clients" },
   {
+    icon: FolderKanban,
+    label: "Projects",
+    href: "/dashboard/admin/projects",
+  },
+  {
     icon: FileSignature,
     label: "Proposals",
     href: "/dashboard/admin/proposals",
