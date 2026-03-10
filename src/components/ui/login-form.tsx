@@ -195,13 +195,15 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           </a>
         </div>
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full py-3 rounded-lg bg-primary/20 border border-primary/30 text-foreground font-medium hover:bg-primary/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isSubmitting ? "Signing in..." : "Sign In"}
-        </button>
+        <div className="flex justify-center">
+          <GlassButton
+            type="submit"
+            disabled={isSubmitting}
+            size="default"
+          >
+            {isSubmitting ? "Signing in..." : "Sign In"}
+          </GlassButton>
+        </div>
       </form>
 
       <p className="mt-6 text-center text-sm text-foreground-dim">

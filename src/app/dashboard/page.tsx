@@ -328,7 +328,7 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center animate-fade-in">
         <div className="flex flex-col items-center gap-4">
           <div className="h-10 w-10 rounded-lg bg-primary/20 animate-pulse" />
           <p className="text-foreground-muted text-sm">Loading dashboard...</p>
@@ -349,7 +349,7 @@ export default function DashboardPage() {
     : [{ name: "No integrations yet", value: 1 }]
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background animate-fade-in">
       <Sidebar onSignOut={handleSignOut} />
 
       <main className="ml-64">

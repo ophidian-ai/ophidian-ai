@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { LoginForm } from "@/components/ui/login-form"
@@ -8,7 +8,9 @@ import { MeshGradientBg } from "@/components/ui/mesh-gradient-bg"
 
 export default function SignInPage() {
   const [error, setError] = useState<string | null>(null)
+  const [isTransitioning, setIsTransitioning] = useState(false)
   const router = useRouter()
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const handleSignIn = async (email: string, password: string) => {
     setError(null)
@@ -21,8 +23,12 @@ export default function SignInPage() {
         return
       }
 
+      // Fade out before navigating
+      setIsTransitioning(true)
+      await new Promise((resolve) => setTimeout(resolve, 400))
       router.push("/dashboard")
     } catch (err) {
+      setIsTransitioning(false)
       setError(err instanceof Error ? err.message : "Sign-in failed. Please try again.")
     }
   }
@@ -43,7 +49,10 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center px-4 py-12">
+    <div
+      ref={containerRef}
+      className={`relative min-h-screen w-full flex items-center justify-center px-4 py-12 transition-opacity duration-400 ${isTransitioning ? "opacity-0" : "opacity-100"}`}
+    >
       <MeshGradientBg
         colors={["#39FF14", "#2BCC10", "#0D1B2A", "#162032", "#0DB1B2", "#098F90"]}
         distortion={1.0}
