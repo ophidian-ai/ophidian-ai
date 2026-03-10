@@ -36,7 +36,7 @@ export async function submitContactForm(
   // --- Send email via Resend ---
   try {
     await resend.emails.send({
-      from: "OphidianAI Contact Form <onboarding@resend.dev>",
+      from: "OphidianAI Contact Form <contact@ophidianai.com>",
       to: "eric.lefler@ophidianai.com",
       subject: `New contact form submission from ${name}`,
       text: [
