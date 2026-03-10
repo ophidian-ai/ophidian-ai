@@ -42,7 +42,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
-  switch (event.type) {
+  try {
+    switch (event.type) {
     case "payment_intent.succeeded": {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
       const now = new Date().toISOString();
@@ -126,11 +127,19 @@ export async function POST(request: NextRequest) {
               }
 
               // Send magic link welcome email
-              await supabase.auth.admin.generateLink({
+              const { data: linkData } = await supabase.auth.admin.generateLink({
                 type: "magiclink",
                 email,
                 options: { redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard` },
               });
+              if (linkData?.properties?.action_link) {
+                await resend.emails.send({
+                  from: "OphidianAI <billing@ophidianai.com>",
+                  to: email,
+                  subject: "Welcome to OphidianAI - Sign In",
+                  html: `<p>Your account is ready. <a href="${linkData.properties.action_link}">Click here to sign in and set up your dashboard</a>.</p>`,
+                });
+              }
             }
           }
         }
@@ -239,11 +248,19 @@ export async function POST(request: NextRequest) {
               client = newClient;
 
               // Send magic link welcome email
-              await supabase.auth.admin.generateLink({
+              const { data: linkData } = await supabase.auth.admin.generateLink({
                 type: "magiclink",
                 email,
                 options: { redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard` },
               });
+              if (linkData?.properties?.action_link) {
+                await resend.emails.send({
+                  from: "OphidianAI <billing@ophidianai.com>",
+                  to: email,
+                  subject: "Welcome to OphidianAI - Sign In",
+                  html: `<p>Your account is ready. <a href="${linkData.properties.action_link}">Click here to sign in and set up your dashboard</a>.</p>`,
+                });
+              }
             }
           }
         }
@@ -303,6 +320,10 @@ export async function POST(request: NextRequest) {
       });
       break;
     }
+  }
+  } catch (err) {
+    console.error(`Error processing webhook event ${event.type}:`, err);
+    // Return 200 to prevent Stripe retries on partial failures
   }
 
   return NextResponse.json({ received: true });
