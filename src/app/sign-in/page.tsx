@@ -12,15 +12,19 @@ export default function SignInPage() {
 
   const handleSignIn = async (email: string, password: string) => {
     setError(null)
-    const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
 
-    if (error) {
-      setError(error.message)
-      return
+      if (error) {
+        setError(error.message)
+        return
+      }
+
+      router.push("/dashboard")
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Sign-in failed. Please try again.")
     }
-
-    router.push("/dashboard")
   }
 
   const handleGoogleSignIn = async () => {
