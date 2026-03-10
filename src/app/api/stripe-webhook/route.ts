@@ -3,8 +3,10 @@ import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
 
+let _stripe: Stripe | null = null;
 function getStripe() {
-  return new Stripe(process.env.STRIPE_SECRET_KEY!);
+  if (!_stripe) _stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+  return _stripe;
 }
 
 function getResend() {
@@ -115,15 +117,17 @@ export async function POST(request: NextRequest) {
                 }
 
                 // Create payment record
-                await supabase.from("payments").insert({
-                  client_id: newClient.id,
-                  client_service_id: newService!.id,
-                  stripe_payment_intent_id: paymentIntent.id,
-                  amount: paymentIntent.amount,
-                  milestone_label: "deposit",
-                  status: "paid",
-                  paid_at: now,
-                });
+                if (newService) {
+                  await supabase.from("payments").insert({
+                    client_id: newClient.id,
+                    client_service_id: newService.id,
+                    stripe_payment_intent_id: paymentIntent.id,
+                    amount: paymentIntent.amount,
+                    milestone_label: "deposit",
+                    status: "paid",
+                    paid_at: now,
+                  });
+                }
               }
 
               // Send magic link welcome email
@@ -323,7 +327,16 @@ export async function POST(request: NextRequest) {
   }
   } catch (err) {
     console.error(`Error processing webhook event ${event.type}:`, err);
-    // Return 200 to prevent Stripe retries on partial failures
+    try {
+      await resend.emails.send({
+        from: "OphidianAI System <billing@ophidianai.com>",
+        to: "eric.lefler@ophidianai.com",
+        subject: `Webhook Processing Error: ${event.type}`,
+        html: `<p>Failed to process Stripe webhook event ${event.type} (${event.id}). Check server logs for details.</p>`,
+      });
+    } catch {
+      // Don't let alert failure prevent 200 response
+    }
   }
 
   return NextResponse.json({ received: true });
