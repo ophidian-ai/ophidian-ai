@@ -1,38 +1,47 @@
-import { NextResponse } from "next/server"
-import { getStripe, PLANS, type PlanId, type BillingInterval } from "@/lib/stripe"
+import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
+import { RETAINER_PLANS, type RetainerPlanId } from "@/lib/stripe-plans";
 
-export async function POST(request: Request) {
-  try {
-    const { planId, interval } = (await request.json()) as {
-      planId: PlanId
-      interval: BillingInterval
-    }
+function getStripe() {
+  return new Stripe(process.env.STRIPE_SECRET_KEY!);
+}
 
-    const plan = PLANS[planId]
-    if (!plan) {
-      return NextResponse.json({ error: "Invalid plan" }, { status: 400 })
-    }
+export async function POST(request: NextRequest) {
+  const stripe = getStripe();
+  const { planId } = (await request.json()) as { planId: RetainerPlanId };
 
-    const amount = interval === "yearly" ? plan.yearly : plan.monthly
-
-    const paymentIntent = await getStripe().paymentIntents.create({
-      amount,
-      currency: "usd",
-      metadata: {
-        planId,
-        interval,
-        planName: plan.name,
-      },
-    })
-
-    return NextResponse.json({
-      clientSecret: paymentIntent.client_secret,
-    })
-  } catch (err) {
-    console.error("Failed to create payment intent:", err)
-    return NextResponse.json(
-      { error: "Failed to create payment intent" },
-      { status: 500 }
-    )
+  const plan = RETAINER_PLANS[planId];
+  if (!plan) {
+    return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
   }
+
+  const session = await stripe.checkout.sessions.create({
+    mode: "subscription",
+    payment_method_types: ["card"],
+    line_items: [
+      {
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: plan.name,
+            description: plan.description,
+          },
+          unit_amount: plan.priceMonthly,
+          recurring: { interval: "month" },
+        },
+        quantity: 1,
+      },
+    ],
+    custom_fields: [
+      { key: "company_name", label: { type: "custom", custom: "Company Name" }, type: "text" },
+      { key: "website_url", label: { type: "custom", custom: "Business Website URL" }, type: "text", optional: true },
+    ],
+    subscription_data: {
+      metadata: { service_type: planId.startsWith("seo_") ? "seo_growth" : "maintenance" },
+    },
+    success_url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://ophidian-ai.vercel.app"}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://ophidian-ai.vercel.app"}/pricing`,
+  });
+
+  return NextResponse.json({ url: session.url });
 }
