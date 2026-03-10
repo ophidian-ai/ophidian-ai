@@ -380,6 +380,17 @@ export async function POST(request: NextRequest) {
         subject: "Payment Failed Alert",
         html: `<p>Payment failed for PaymentIntent ${paymentIntent.id}. Customer: ${paymentIntent.customer || "unknown"}. Amount: $${(paymentIntent.amount / 100).toFixed(2)}.</p>`,
       });
+
+      try {
+        await notifyAdmins({
+          type: "payment_failed",
+          title: "Payment failed",
+          message: `Payment of $${(paymentIntent.amount / 100).toFixed(2)} failed. Customer: ${paymentIntent.customer || "unknown"}.`,
+          link: "/dashboard/admin/clients",
+        });
+      } catch (e) {
+        console.error("Notification failed:", e);
+      }
       break;
     }
   }
