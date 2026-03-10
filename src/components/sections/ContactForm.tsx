@@ -13,7 +13,18 @@ import {
 export type ContactFormProps = {
   heading: string;
   subtitle?: string;
+  defaultService?: string;
 };
+
+const serviceOptions = [
+  { value: "", label: "Select a service" },
+  { value: "web_starter", label: "Web Design - Starter" },
+  { value: "web_professional", label: "Web Design - Professional" },
+  { value: "web_ecommerce", label: "Web Design - E-Commerce" },
+  { value: "seo_audit", label: "Free SEO Audit" },
+  { value: "seo_cleanup", label: "SEO Cleanup" },
+  { value: "general", label: "General Inquiry" },
+];
 
 const budgetOptions = [
   { value: "", label: "Select budget range" },
@@ -29,7 +40,7 @@ const inputClasses =
 
 const initialState: ContactFormState = { success: false, message: "" };
 
-export function ContactForm({ heading, subtitle }: ContactFormProps) {
+export function ContactForm({ heading, subtitle, defaultService }: ContactFormProps) {
   const [state, formAction, isPending] = useActionState(
     submitContactForm,
     initialState
@@ -107,7 +118,7 @@ export function ContactForm({ heading, subtitle }: ContactFormProps) {
             </div>
           </div>
 
-          {/* Company + Budget row */}
+          {/* Company + Service row */}
           <div className="grid gap-6 sm:grid-cols-2">
             <div>
               <label htmlFor="cf-company" className="sr-only">
@@ -123,22 +134,41 @@ export function ContactForm({ heading, subtitle }: ContactFormProps) {
             </div>
 
             <div>
-              <label htmlFor="cf-budget" className="sr-only">
-                Budget range
+              <label htmlFor="cf-service" className="sr-only">
+                Service
               </label>
               <select
-                id="cf-budget"
-                name="budget"
-                defaultValue=""
+                id="cf-service"
+                name="service"
+                defaultValue={defaultService || ""}
                 className={`${inputClasses} text-foreground-dim [&:not([value=""])]:text-foreground`}
               >
-                {budgetOptions.map((opt) => (
+                {serviceOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
                     {opt.label}
                   </option>
                 ))}
               </select>
             </div>
+          </div>
+
+          {/* Budget row */}
+          <div>
+            <label htmlFor="cf-budget" className="sr-only">
+              Budget range
+            </label>
+            <select
+              id="cf-budget"
+              name="budget"
+              defaultValue=""
+              className={`${inputClasses} text-foreground-dim [&:not([value=""])]:text-foreground`}
+            >
+              {budgetOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Message */}

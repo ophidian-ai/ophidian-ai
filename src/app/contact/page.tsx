@@ -1,5 +1,7 @@
 "use client";
 
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { PageWrapper } from "@/components/layout/PageWrapper";
 import { ContactForm } from "@/components/sections/ContactForm";
 import { Container } from "@/components/ui/Container";
@@ -10,9 +12,11 @@ import { usePageContent } from "@/lib/use-page-content";
 import { EditableText } from "@/components/editable/editable-text";
 import { useEditMode } from "@/lib/edit-mode-context";
 
-export default function ContactPage() {
+function ContactPageInner() {
   const content = usePageContent("contact");
   const { isEditMode } = useEditMode();
+  const searchParams = useSearchParams();
+  const defaultService = searchParams.get("service") || "";
 
   const e = (key: string, fallback: string) => content[key] || fallback;
 
@@ -25,6 +29,7 @@ export default function ContactPage() {
               <ContactForm
                 heading={e("contact_heading", "Send Us a Message")}
                 subtitle={e("contact_subtitle", "Tell us about your project and we'll get back to you with a plan.")}
+                defaultService={defaultService}
               />
             </div>
 
@@ -86,5 +91,13 @@ export default function ContactPage() {
         </Container>
       </section>
     </PageWrapper>
+  );
+}
+
+export default function ContactPage() {
+  return (
+    <Suspense>
+      <ContactPageInner />
+    </Suspense>
   );
 }
