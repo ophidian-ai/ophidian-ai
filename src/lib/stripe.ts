@@ -1,3 +1,7 @@
+// DEPRECATED: These AI subscription plans are no longer active.
+// See src/lib/stripe-plans.ts for current retainer plans.
+// Keeping this file for reference until AI services launch.
+
 import Stripe from "stripe"
 
 // Lazy-init: avoids build-time crash when env var isn't present
