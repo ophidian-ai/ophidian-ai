@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { notifyAdmins } from "@/lib/notifications";
 
 export async function GET() {
   const supabase = await createClient();
@@ -84,6 +85,18 @@ export async function POST(request: NextRequest) {
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  // Notify admins about the new content request
+  try {
+    await notifyAdmins({
+      type: "content_request",
+      title: "New content request",
+      message: `New request: ${subject}`,
+      link: "/dashboard/admin/clients",
+    });
+  } catch (e) {
+    console.error("Notification failed:", e);
   }
 
   return NextResponse.json(contentRequest, { status: 201 });

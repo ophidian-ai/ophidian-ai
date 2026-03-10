@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createNotification } from "@/lib/notifications";
 import type { ProjectPhase } from "@/lib/supabase/types";
 
 const VALID_PHASES: ProjectPhase[] = [
@@ -58,6 +59,27 @@ export async function PATCH(
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  // Notify the client about the phase change
+  try {
+    const { data: clientRecord } = await supabase
+      .from("clients")
+      .select("profile_id")
+      .eq("id", project.client_id)
+      .single();
+
+    if (clientRecord?.profile_id) {
+      await createNotification({
+        userId: clientRecord.profile_id,
+        type: "phase_updated",
+        title: "Project phase updated",
+        message: `Your project has moved to the ${phase} phase.`,
+        link: "/dashboard/projects",
+      });
+    }
+  } catch (e) {
+    console.error("Notification failed:", e);
   }
 
   return NextResponse.json({ project });

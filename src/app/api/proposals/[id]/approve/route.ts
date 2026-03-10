@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { Resend } from "resend";
+import { notifyAdmins } from "@/lib/notifications";
 
 export async function POST(
   request: NextRequest,
@@ -103,6 +104,18 @@ export async function POST(
   } catch {
     // Email failure shouldn't block the response
     console.error("Failed to send proposal notification email");
+  }
+
+  // In-app notification for admins
+  try {
+    await notifyAdmins({
+      type: action === "approved" ? "proposal_approved" : "proposal_declined",
+      title: `Proposal ${action}`,
+      message: `${client.company_name} has ${action} their proposal.`,
+      link: "/dashboard/admin/proposals",
+    });
+  } catch (e) {
+    console.error("Notification failed:", e);
   }
 
   return NextResponse.json(updated);

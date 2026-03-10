@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
+import { notifyAdmins } from "@/lib/notifications";
 import type { ServiceType } from "@/lib/supabase/types";
 
 const WEB_SERVICES: ServiceType[] = [
@@ -197,6 +198,18 @@ export async function POST(request: NextRequest) {
         phase_updated_at: new Date().toISOString(),
       });
     }
+  }
+
+  // Notify admins about the new client
+  try {
+    await notifyAdmins({
+      type: "client_created",
+      title: "New client created",
+      message: `${company_name} has been added as a client.`,
+      link: `/dashboard/admin/clients/${client.id}`,
+    });
+  } catch (e) {
+    console.error("Notification failed:", e);
   }
 
   return NextResponse.json({ client }, { status: 201 });

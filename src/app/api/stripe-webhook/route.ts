@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
+import { createNotification, notifyAdmins } from "@/lib/notifications";
 
 let _stripe: Stripe | null = null;
 function getStripe() {
@@ -144,6 +145,18 @@ export async function POST(request: NextRequest) {
                   html: `<p>Your account is ready. <a href="${linkData.properties.action_link}">Click here to sign in and set up your dashboard</a>.</p>`,
                 });
               }
+
+              // Notify admins about new client from payment
+              try {
+                await notifyAdmins({
+                  type: "client_created",
+                  title: "New client created",
+                  message: `${companyName} has been added as a client via payment.`,
+                  link: "/dashboard/admin/clients",
+                });
+              } catch (e) {
+                console.error("Notification failed:", e);
+              }
             }
           }
         }
@@ -186,6 +199,39 @@ export async function POST(request: NextRequest) {
             status: "paid",
             paid_at: new Date().toISOString(),
           });
+
+          // Notify admin about payment received
+          try {
+            await notifyAdmins({
+              type: "payment_received",
+              title: "Payment received",
+              message: `Invoice payment of $${((invoice.amount_paid ?? 0) / 100).toFixed(2)} received.`,
+              link: "/dashboard/admin/clients",
+            });
+          } catch (e) {
+            console.error("Notification failed:", e);
+          }
+
+          // Notify client about payment confirmation
+          try {
+            const { data: clientRecord } = await supabase
+              .from("clients")
+              .select("profile_id")
+              .eq("id", service.client_id)
+              .single();
+
+            if (clientRecord?.profile_id) {
+              await createNotification({
+                userId: clientRecord.profile_id,
+                type: "payment_confirmed",
+                title: "Payment confirmed",
+                message: `Your payment of $${((invoice.amount_paid ?? 0) / 100).toFixed(2)} has been received.`,
+                link: "/dashboard/billing",
+              });
+            }
+          } catch (e) {
+            console.error("Notification failed:", e);
+          }
         }
       }
       break;
@@ -307,6 +353,18 @@ export async function POST(request: NextRequest) {
             website_url: websiteField?.text?.value || "",
           },
         });
+      }
+
+      try {
+        const customerEmail = session.customer_email || session.customer_details?.email;
+        await notifyAdmins({
+          type: "checkout_completed",
+          title: "New checkout completed",
+          message: `Checkout completed by ${customerEmail || "unknown customer"}.`,
+          link: "/dashboard/admin/clients",
+        });
+      } catch (e) {
+        console.error("Notification failed:", e);
       }
       break;
     }

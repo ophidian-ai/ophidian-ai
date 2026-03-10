@@ -19,7 +19,6 @@ import {
   Users,
   Zap,
   ChevronRight,
-  Bell,
   FolderOpen,
   FolderKanban,
   FileText,
@@ -39,6 +38,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import { NotificationBell } from "@/components/dashboard/notification-bell";
 
 // --- Types ---
 interface DashboardStats {
@@ -444,10 +444,7 @@ function AdminDashboard() {
           />
         </div>
         <div className="flex items-center gap-4">
-          <button className="relative p-2 text-foreground-muted hover:text-foreground transition-colors cursor-pointer">
-            <Bell size={18} />
-            <span className="absolute top-1 right-1 h-2 w-2 bg-primary rounded-full" />
-          </button>
+          <NotificationBell />
           <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
             <span className="text-background text-xs font-bold">
               {userName

@@ -25,3 +25,4 @@ Thumbs.db
 
 # Preview files (generated with embedded logos)
 *-preview.html
+supabase/.temp/
