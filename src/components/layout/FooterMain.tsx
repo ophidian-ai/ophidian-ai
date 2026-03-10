@@ -109,6 +109,18 @@ export function FooterMain() {
             <span className="text-xs text-foreground-dim">
               Columbus, Indiana
             </span>
+            <Link
+              href="/privacy"
+              className="text-xs text-foreground-dim transition-colors hover:text-primary"
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              href="/terms"
+              className="text-xs text-foreground-dim transition-colors hover:text-primary"
+            >
+              Terms of Service
+            </Link>
           </div>
         </div>
       </div>
