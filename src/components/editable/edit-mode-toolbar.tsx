@@ -1,12 +1,14 @@
 "use client"
 
 import { useEditMode } from "@/lib/edit-mode-context"
+import { usePathname } from "next/navigation"
 import { Pencil, Save, X } from "lucide-react"
 
 export function EditModeToolbar() {
   const { isAdmin, isEditMode, toggleEditMode, saveChanges, discardChanges, isSaving, pendingChanges } = useEditMode()
+  const pathname = usePathname()
 
-  if (!isAdmin) return null
+  if (!isAdmin || pathname.startsWith("/dashboard")) return null
 
   return (
     <div className="fixed bottom-6 left-6 z-50 flex items-center gap-2">
