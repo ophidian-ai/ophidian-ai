@@ -227,8 +227,8 @@ serve(async (req: Request) => {
             {
               client_id: client.id,
               date,
-              total_clicks: analytics.total_clicks,
-              total_impressions: analytics.total_impressions,
+              clicks: analytics.total_clicks,
+              impressions: analytics.total_impressions,
               avg_ctr: analytics.avg_ctr,
               avg_position: analytics.avg_position,
               top_queries: analytics.top_queries,

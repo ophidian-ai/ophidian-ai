@@ -98,13 +98,13 @@ function AnalyticsContent({ clientId }: { clientId: string | null }) {
     for (const d of data) {
       if (d.referral_sources) {
         for (const s of d.referral_sources) {
-          sourceMap[s.source] = (sourceMap[s.source] ?? 0) + s.visits;
+          sourceMap[s.source] = (sourceMap[s.source] ?? 0) + s.sessions;
         }
       }
     }
     return Object.entries(sourceMap)
-      .map(([source, visits]) => ({ source, visits }))
-      .sort((a, b) => b.visits - a.visits)
+      .map(([source, sessions]) => ({ source, sessions }))
+      .sort((a, b) => b.sessions - a.sessions)
       .slice(0, 6);
   }, [data]);
 
@@ -270,7 +270,7 @@ function AnalyticsContent({ clientId }: { clientId: string | null }) {
                     <PieChart>
                       <Pie
                         data={referralSources}
-                        dataKey="visits"
+                        dataKey="sessions"
                         nameKey="source"
                         cx="50%"
                         cy="50%"

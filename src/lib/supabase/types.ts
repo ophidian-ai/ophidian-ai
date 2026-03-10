@@ -127,7 +127,7 @@ export interface ClientAnalytics {
   bounce_rate: number | null;
   avg_session_duration: number | null;
   top_pages: Array<{ path: string; views: number }>;
-  referral_sources: Array<{ source: string; visits: number }>;
+  referral_sources: Array<{ source: string; sessions: number }>;
 }
 
 export interface ClientSeoMetrics {

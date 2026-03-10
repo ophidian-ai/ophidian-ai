@@ -214,7 +214,7 @@ serve(async (req: Request) => {
               client_id: client.id,
               date,
               page_views: metrics.page_views,
-              visitors: metrics.visitors,
+              unique_visitors: metrics.visitors,
               bounce_rate: metrics.bounce_rate,
               avg_session_duration: metrics.avg_session_duration,
               top_pages: dimensions.top_pages,
