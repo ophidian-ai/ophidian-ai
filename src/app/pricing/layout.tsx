@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Simple, transparent pricing for AI integration services. Starter, Growth, and Enterprise plans with no long-term contracts.",
+    "Transparent pricing for web design and SEO services. Custom websites starting at $2,200. Free SEO audits available. No hidden fees.",
 };
 
 export default function PricingLayout({
