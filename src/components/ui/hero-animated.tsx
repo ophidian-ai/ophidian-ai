@@ -64,6 +64,14 @@ export function HeroAnimated({
     const container = containerRef.current;
     if (!container) return;
 
+    // Force-restart CSS animations on mount (fixes client-side navigation)
+    const animated = container.querySelectorAll<HTMLElement>(".grid-line, .detail-dot, .floating-element");
+    animated.forEach((el) => {
+      el.style.animation = "none";
+      el.offsetHeight; // trigger reflow
+      el.style.animation = "";
+    });
+
     const words = container.querySelectorAll<HTMLElement>(".word");
     words.forEach((word) => {
       const delay = parseInt(word.getAttribute("data-delay") || "0", 10);
