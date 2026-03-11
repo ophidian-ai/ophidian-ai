@@ -14,7 +14,7 @@ export type ServiceType =
 export type ServiceStatus = "active" | "completed" | "cancelled";
 export type ProjectStatus = "active" | "on_hold" | "cancelled" | "completed";
 export type ProjectPhase = "discovery" | "design" | "development" | "review" | "live";
-export type ProposalStatus = "draft" | "sent" | "approved" | "declined";
+export type ProposalStatus = "draft" | "sent" | "revision_requested" | "approved" | "declined";
 export type PaymentMilestone = "deposit" | "midpoint" | "final" | "monthly";
 export type PaymentStatus = "pending" | "paid" | "overdue";
 export type RequestStatus = "pending" | "in_progress" | "completed";
@@ -39,6 +39,10 @@ export interface Client {
   ga4_property_id: string | null;
   search_console_url: string | null;
   stripe_customer_id: string | null;
+  status: "active" | "inactive" | "prospect";
+  contact_name: string | null;
+  phone: string | null;
+  onboarding_step: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -91,6 +95,11 @@ export interface Proposal {
   sent_at: string | null;
   approved_at: string | null;
   approved_by_ip: string | null;
+  signing_token_hash: string | null;
+  signing_token_expires_at: string | null;
+  typed_name: string | null;
+  user_agent: string | null;
+  document_hash: string | null;
   created_at: string;
 }
 
@@ -151,4 +160,37 @@ export interface Report {
   period_start: string;
   period_end: string;
   created_at: string;
+}
+
+export interface ProposalContent {
+  scope: string;
+  timeline: string;
+  deliverables: string[];
+  discounts: Array<{
+    code: string;
+    label: string;
+    amount: number;
+  }>;
+  basePrice: number;
+  finalPrice: number;
+}
+
+export interface ProposalRevision {
+  id: string;
+  proposal_id: string;
+  requested_by: string | null;
+  message: string;
+  requested_at: string;
+  resolved_at: string | null;
+}
+
+export interface PendingIrisTask {
+  id: string;
+  task_type: string;
+  payload: Record<string, unknown>;
+  status: "pending" | "completed" | "failed";
+  error_message: string | null;
+  retry_count: number;
+  created_at: string;
+  completed_at: string | null;
 }

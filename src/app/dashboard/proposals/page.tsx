@@ -9,6 +9,7 @@ import type { Proposal, ProposalStatus, PaymentMilestone } from "@/lib/supabase/
 const STATUS_STYLES: Record<ProposalStatus, { label: string; className: string }> = {
   draft: { label: "Draft", className: "bg-gray-500/10 text-gray-400 border-gray-500/20" },
   sent: { label: "Awaiting Review", className: "bg-amber-500/10 text-amber-400 border-amber-500/20" },
+  revision_requested: { label: "Revision Requested", className: "bg-orange-500/10 text-orange-400 border-orange-500/20" },
   approved: { label: "Approved", className: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" },
   declined: { label: "Declined", className: "bg-red-500/10 text-red-400 border-red-500/20" },
 };

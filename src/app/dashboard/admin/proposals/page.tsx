@@ -22,6 +22,7 @@ interface ProposalWithClient extends Proposal {
 const STATUS_COLORS: Record<ProposalStatus, string> = {
   draft: "bg-gray-500/15 text-gray-400 border-gray-500/30",
   sent: "bg-blue-500/15 text-blue-400 border-blue-500/30",
+  revision_requested: "bg-amber-500/15 text-amber-400 border-amber-500/30",
   approved: "bg-green-500/15 text-green-400 border-green-500/30",
   declined: "bg-red-500/15 text-red-400 border-red-500/30",
 };
