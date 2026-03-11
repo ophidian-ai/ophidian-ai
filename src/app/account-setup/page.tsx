@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { MeshGradientBg } from "@/components/ui/mesh-gradient-bg";
 import { Lock, Phone, Eye, EyeOff, ArrowRight, User } from "lucide-react";
 import { GlassButton } from "@/components/ui/glass-button";
+import { formatPhone } from "@/lib/format-phone";
 import Image from "next/image";
 
 export default function AccountSetupPage() {
@@ -244,7 +245,7 @@ export default function AccountSetupPage() {
                 <input
                   type="tel"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => setPhone(formatPhone(e.target.value))}
                   placeholder="(555) 123-4567"
                   className="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-colors"
                 />

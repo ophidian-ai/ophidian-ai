@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useDashboard } from "@/lib/dashboard-context";
 import { GlowCard } from "@/components/ui/spotlight-card";
 import { GlassButton } from "@/components/ui/glass-button";
+import { formatPhone } from "@/lib/format-phone";
 import {
   Users,
   Plus,
@@ -242,7 +243,7 @@ export default function AdminClientsPage() {
                         <div className="text-xs text-foreground-dim">{client.contact_email}</div>
                       </td>
                       <td className="px-5 py-4 text-sm text-foreground-muted">
-                        {client.profiles?.phone || "-"}
+                        {client.profiles?.phone ? formatPhone(client.profiles.phone) : "-"}
                       </td>
                       <td className="px-5 py-4">
                         <div className="flex flex-wrap gap-1.5">

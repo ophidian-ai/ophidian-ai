@@ -7,6 +7,7 @@ import { GlowCard } from "@/components/ui/spotlight-card";
 import { GlassButton } from "@/components/ui/glass-button";
 import { ArrowLeft, Plus, X } from "lucide-react";
 import type { ServiceType, PaymentMilestone } from "@/lib/supabase/types";
+import { formatPhone } from "@/lib/format-phone";
 
 interface ServiceOption {
   value: ServiceType;
@@ -85,6 +86,7 @@ export default function NewProposalPage() {
 
   // Form state
   const [submitting, setSubmitting] = useState(false);
+
   const [error, setError] = useState<string | null>(null);
 
   const basePriceCents = useMemo(() => {
@@ -273,7 +275,7 @@ export default function NewProposalPage() {
               <input
                 type="tel"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) => setPhone(formatPhone(e.target.value))}
                 placeholder="(555) 555-5555"
                 className={inputClass}
               />
