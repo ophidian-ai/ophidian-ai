@@ -167,19 +167,21 @@ export async function POST(request: NextRequest) {
           to: contact_email,
           subject: "Welcome to OphidianAI - Set Up Your Account",
           html: `
-            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; padding: 40px 20px;">
-              <h1 style="color: #F1F5F9; font-size: 24px; margin-bottom: 8px;">Welcome, ${first_name}!</h1>
-              <p style="color: #94A3B8; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
-                Your OphidianAI client portal is ready. Click the link below to set your password and access your dashboard.
-              </p>
-              <a href="${setupLink}" style="display: inline-block; background: #0DB1B2; color: #0D1B2A; font-weight: 600; font-size: 15px; padding: 12px 28px; border-radius: 8px; text-decoration: none;">
-                Set Up Your Account
-              </a>
-              <p style="color: #64748B; font-size: 13px; margin-top: 32px; line-height: 1.5;">
-                This link expires in 24 hours. If you didn't expect this email, you can safely ignore it.
-              </p>
-              <hr style="border: none; border-top: 1px solid #1E293B; margin: 32px 0;" />
-              <p style="color: #475569; font-size: 12px;">OphidianAI - AI-Powered Solutions</p>
+            <div style="background-color: #0D1B2A; width: 100%; padding: 0; margin: 0;">
+              <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; padding: 48px 32px; background-color: #0D1B2A;">
+                <h1 style="color: #F1F5F9; font-size: 24px; margin: 0 0 8px 0;">Welcome, ${first_name}!</h1>
+                <p style="color: #94A3B8; font-size: 15px; line-height: 1.6; margin: 0 0 28px 0;">
+                  Your OphidianAI client portal is ready. Click the button below to set your password and access your dashboard.
+                </p>
+                <a href="${setupLink}" style="display: inline-block; background: #39FF14; color: #0D1B2A; font-weight: 600; font-size: 15px; padding: 14px 32px; border-radius: 8px; text-decoration: none;">
+                  Set Up Your Account
+                </a>
+                <p style="color: #64748B; font-size: 13px; margin: 32px 0 0 0; line-height: 1.5;">
+                  This link expires in 24 hours. If you didn't expect this email, you can safely ignore it.
+                </p>
+                <hr style="border: none; border-top: 1px solid #1E293B; margin: 32px 0;" />
+                <p style="color: #475569; font-size: 12px; margin: 0;">OphidianAI - AI-Powered Solutions</p>
+              </div>
             </div>
           `,
         });
