@@ -232,7 +232,7 @@ export async function POST(request: NextRequest) {
 
   // If a web design service was selected, create a project record
   const hasWebService = services?.some((s) => WEB_SERVICES.includes(s));
-  if (hasWebService) {
+  if (hasWebService && services) {
     const webService = services.find((s) => WEB_SERVICES.includes(s))!;
 
     // Get the client_service id for the web service
