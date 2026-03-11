@@ -1,12 +1,12 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { Suspense, useState, useRef } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { LoginForm } from "@/components/ui/login-form"
 import { MeshGradientBg } from "@/components/ui/mesh-gradient-bg"
 
-export default function SignInPage() {
+function SignInContent() {
   const searchParams = useSearchParams()
   const sessionExpired = searchParams.get("reason") === "session_expired"
   const [error, setError] = useState<string | null>(null)
@@ -98,5 +98,13 @@ export default function SignInPage() {
         2026 OphidianAI. All rights reserved.
       </footer>
     </div>
+  )
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense>
+      <SignInContent />
+    </Suspense>
   )
 }
