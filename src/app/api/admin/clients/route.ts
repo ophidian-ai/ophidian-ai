@@ -151,12 +151,15 @@ export async function POST(request: NextRequest) {
         await serviceClient.auth.admin.generateLink({
           type: "recovery",
           email: contact_email,
-          options: {
-            redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://www.ophidianai.com"}/account-setup`,
-          },
         });
 
-      const setupLink = linkData?.properties?.action_link;
+      const tokenHash = linkData?.properties?.hashed_token;
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.ophidianai.com";
+      // Build our own link that goes through our auth callback with query params
+      // This avoids Supabase's redirect which uses hash fragments that server routes can't read
+      const setupLink = tokenHash
+        ? `${siteUrl}/auth/callback?token_hash=${tokenHash}&type=recovery&next=/account-setup`
+        : null;
 
       if (setupLink) {
         const { Resend } = await import("resend");
