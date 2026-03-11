@@ -21,20 +21,29 @@ export default function AccountSetupPage() {
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    async function loadUser() {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        router.replace("/sign-in");
-        return;
+    // Listen for auth state changes -- recovery links deliver tokens
+    // via URL hash fragments that the Supabase client exchanges automatically
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user) {
+        const name =
+          session.user.user_metadata?.full_name?.split(" ")[0] || "there";
+        setUserName(name);
       }
-      const name =
-        user.user_metadata?.full_name?.split(" ")[0] || "there";
-      setUserName(name);
-    }
-    loadUser();
-  }, [supabase, router]);
+    });
+
+    // Also check if already authenticated
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        const name =
+          user.user_metadata?.full_name?.split(" ")[0] || "there";
+        setUserName(name);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

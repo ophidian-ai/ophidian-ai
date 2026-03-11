@@ -152,7 +152,7 @@ export async function POST(request: NextRequest) {
           type: "recovery",
           email: contact_email,
           options: {
-            redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://www.ophidianai.com"}/auth/callback?next=/account-setup`,
+            redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://www.ophidianai.com"}/account-setup`,
           },
         });
 
