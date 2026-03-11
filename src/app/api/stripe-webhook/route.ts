@@ -177,6 +177,62 @@ export async function POST(request: NextRequest) {
 
     case "invoice.paid": {
       const invoice = event.data.object as Stripe.Invoice;
+
+      // Check for one-off deposit/milestone payments (from onboarding pipeline)
+      const clientId = invoice.metadata?.client_id;
+      if (clientId) {
+        const projectId = invoice.metadata?.project_id;
+
+        // Find and update pending payment
+        const { data: payment } = await supabase
+          .from("payments")
+          .select("id")
+          .eq("client_id", clientId)
+          .eq("status", "pending")
+          .eq("milestone_label", "deposit")
+          .limit(1)
+          .single();
+
+        if (payment) {
+          await supabase
+            .from("payments")
+            .update({
+              status: "paid",
+              paid_at: new Date().toISOString(),
+              stripe_payment_intent_id: invoice.id,
+            })
+            .eq("id", payment.id);
+
+          // Get client info for notification
+          const { data: client } = await supabase
+            .from("clients")
+            .select("company_name")
+            .eq("id", clientId)
+            .single();
+
+          const companyName = client?.company_name || "Unknown";
+
+          // Notify admin
+          await notifyAdmins({
+            type: "payment_received",
+            title: "Deposit Payment Received",
+            message: `${companyName} paid their deposit. Project ready for discovery.`,
+            link: `/dashboard/admin/projects`,
+          });
+
+          // Email confirmation to Eric
+          await resend.emails.send({
+            from: "OphidianAI <notifications@ophidianai.com>",
+            to: "eric.lefler@ophidianai.com",
+            subject: `Deposit Received -- ${companyName}`,
+            html: `<p><strong>${companyName}</strong> has paid their project deposit. The project is now ready for discovery.</p>`,
+          });
+        }
+
+        // Return early -- don't fall through to subscription handling
+        return NextResponse.json({ received: true });
+      }
+
       const subscriptionRef = invoice.parent?.subscription_details?.subscription;
       const subscriptionId = typeof subscriptionRef === "string"
         ? subscriptionRef
