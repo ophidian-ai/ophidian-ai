@@ -1,18 +1,20 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { LoginForm } from "@/components/ui/login-form"
 import { MeshGradientBg } from "@/components/ui/mesh-gradient-bg"
 
 export default function SignInPage() {
+  const searchParams = useSearchParams()
+  const sessionExpired = searchParams.get("reason") === "session_expired"
   const [error, setError] = useState<string | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const router = useRouter()
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const handleSignIn = async (email: string, password: string) => {
+  const handleSignIn = async (email: string, password: string, remember: boolean) => {
     setError(null)
     try {
       const supabase = createClient()
@@ -21,6 +23,20 @@ export default function SignInPage() {
       if (error) {
         setError(error.message)
         return
+      }
+
+      // Set remember-me cookie and last-activity timestamp
+      const cookieOpts = remember
+        ? ";path=/;max-age=" + 30 * 24 * 60 * 60 + ";samesite=lax"
+        : ";path=/;samesite=lax"
+      document.cookie = `remember_me=${remember}${cookieOpts}`
+      document.cookie = `last_activity=${Date.now()}${cookieOpts}`
+
+      // Save or clear remembered email
+      if (remember) {
+        localStorage.setItem("remembered_email", email)
+      } else {
+        localStorage.removeItem("remembered_email")
       }
 
       // Fade out before navigating
@@ -61,6 +77,11 @@ export default function SignInPage() {
       />
 
       <div className="relative z-10 w-full max-w-md">
+        {sessionExpired && !error && (
+          <div className="mb-4 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm text-center">
+            Your session expired due to inactivity. Please sign in again.
+          </div>
+        )}
         {error && (
           <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
             {error}

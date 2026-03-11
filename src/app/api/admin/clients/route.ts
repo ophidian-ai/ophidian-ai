@@ -46,7 +46,8 @@ export async function GET() {
       `
       *,
       client_services (*),
-      projects (*)
+      projects (*),
+      profiles!clients_profile_id_fkey (full_name, phone)
     `
     )
     .order("created_at", { ascending: false });

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { MeshGradientBg } from "@/components/ui/mesh-gradient-bg";
-import { Lock, Phone, Eye, EyeOff, ArrowRight } from "lucide-react";
+import { Lock, Phone, Eye, EyeOff, ArrowRight, User } from "lucide-react";
 import { GlassButton } from "@/components/ui/glass-button";
 import Image from "next/image";
 
@@ -12,6 +12,8 @@ export default function AccountSetupPage() {
   const router = useRouter();
   const supabase = createClient();
 
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [phone, setPhone] = useState("");
@@ -27,18 +29,22 @@ export default function AccountSetupPage() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
-        const name =
-          session.user.user_metadata?.full_name?.split(" ")[0] || "there";
-        setUserName(name);
+        const fullName = session.user.user_metadata?.full_name || "";
+        const parts = fullName.split(" ");
+        setUserName(parts[0] || "there");
+        if (parts[0] && !firstName) setFirstName(parts[0]);
+        if (parts.length > 1 && !lastName) setLastName(parts.slice(1).join(" "));
       }
     });
 
     // Also check if already authenticated
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (user) {
-        const name =
-          user.user_metadata?.full_name?.split(" ")[0] || "there";
-        setUserName(name);
+        const fullName = user.user_metadata?.full_name || "";
+        const parts = fullName.split(" ");
+        setUserName(parts[0] || "there");
+        if (parts[0] && !firstName) setFirstName(parts[0]);
+        if (parts.length > 1 && !lastName) setLastName(parts.slice(1).join(" "));
       }
     });
 
@@ -72,16 +78,21 @@ export default function AccountSetupPage() {
       return;
     }
 
-    // Update phone in profile
-    if (phone.trim()) {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+    // Update profile with name and phone
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-      if (user) {
+    if (user) {
+      const fullName = `${firstName.trim()} ${lastName.trim()}`.trim();
+      const profileUpdate: Record<string, string> = {};
+      if (fullName) profileUpdate.full_name = fullName;
+      if (phone.trim()) profileUpdate.phone = phone.trim();
+
+      if (Object.keys(profileUpdate).length > 0) {
         await supabase
           .from("profiles")
-          .update({ phone: phone.trim() })
+          .update(profileUpdate)
           .eq("id", user.id);
       }
     }
@@ -130,6 +141,46 @@ export default function AccountSetupPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Name Fields */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-sm text-foreground-muted mb-1.5">
+                  First Name
+                </label>
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                    <User className="text-foreground-dim" size={18} />
+                  </div>
+                  <input
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    placeholder="First name"
+                    required
+                    className="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-colors"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm text-foreground-muted mb-1.5">
+                  Last Name
+                </label>
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                    <User className="text-foreground-dim" size={18} />
+                  </div>
+                  <input
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    placeholder="Last name"
+                    required
+                    className="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-colors"
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* Password */}
             <div>
               <label className="block text-sm text-foreground-muted mb-1.5">

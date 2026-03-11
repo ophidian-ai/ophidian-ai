@@ -21,9 +21,15 @@ import type {
 
 type FilterType = "all" | "active" | "completed";
 
+interface ClientProfile {
+  full_name: string | null;
+  phone: string | null;
+}
+
 interface ClientWithRelations extends Client {
   client_services: ClientService[];
   projects: Project[];
+  profiles: ClientProfile | null;
 }
 
 const SERVICE_LABELS: Record<ServiceType, string> = {
@@ -92,7 +98,8 @@ export default function AdminClientsPage() {
       result = result.filter(
         (c) =>
           c.company_name.toLowerCase().includes(q) ||
-          c.contact_email.toLowerCase().includes(q)
+          c.contact_email.toLowerCase().includes(q) ||
+          (c.profiles?.full_name?.toLowerCase().includes(q) ?? false)
       );
     }
 
@@ -170,7 +177,7 @@ export default function AdminClientsPage() {
           />
           <input
             type="text"
-            placeholder="Search by company name..."
+            placeholder="Search by company or contact name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-10 pr-4 py-2 bg-surface/50 border border-white/10 rounded-lg text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-primary/50"
@@ -188,7 +195,10 @@ export default function AdminClientsPage() {
                   Company
                 </th>
                 <th className="text-left px-5 py-3 text-xs font-medium text-foreground-muted uppercase tracking-wider">
-                  Email
+                  Contact
+                </th>
+                <th className="text-left px-5 py-3 text-xs font-medium text-foreground-muted uppercase tracking-wider">
+                  Phone
                 </th>
                 <th className="text-left px-5 py-3 text-xs font-medium text-foreground-muted uppercase tracking-wider">
                   Services
@@ -206,7 +216,7 @@ export default function AdminClientsPage() {
               {filteredClients.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={8}
                     className="px-5 py-8 text-center text-foreground-muted text-sm"
                   >
                     No clients found.
@@ -228,7 +238,11 @@ export default function AdminClientsPage() {
                         {client.company_name}
                       </td>
                       <td className="px-5 py-4 text-sm text-foreground-muted">
-                        {client.contact_email}
+                        <div>{client.profiles?.full_name || "-"}</div>
+                        <div className="text-xs text-foreground-dim">{client.contact_email}</div>
+                      </td>
+                      <td className="px-5 py-4 text-sm text-foreground-muted">
+                        {client.profiles?.phone || "-"}
                       </td>
                       <td className="px-5 py-4">
                         <div className="flex flex-wrap gap-1.5">
