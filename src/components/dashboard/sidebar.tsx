@@ -55,6 +55,12 @@ const clientNavItems: NavItem[] = [
     href: "/dashboard/content-requests",
     module: "content_requests",
   },
+  {
+    icon: FileSignature,
+    label: "Proposals",
+    href: "/dashboard/proposals",
+    module: "proposals",
+  },
   { icon: Receipt, label: "Reports", href: "/dashboard/reports" },
   { icon: CreditCard, label: "Billing", href: "/dashboard/billing" },
   { icon: Settings, label: "Account Settings", href: "/dashboard/account" },
