@@ -27,6 +27,7 @@ export interface Profile {
   role: UserRole;
   company: string | null;
   website_url: string | null;
+  phone: string | null;
 }
 
 export interface Client {

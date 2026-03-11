@@ -71,23 +71,30 @@ export async function POST(request: NextRequest) {
 
   const body = await request.json();
   const {
-    company_name,
+    first_name,
+    last_name,
     contact_email,
+    company_name,
     website_url,
     services,
   }: {
-    company_name: string;
+    first_name: string;
+    last_name: string;
     contact_email: string;
+    company_name?: string;
     website_url?: string;
-    services: ServiceType[];
+    services?: ServiceType[];
   } = body;
 
-  if (!company_name || !contact_email || !services?.length) {
+  if (!first_name || !last_name || !contact_email) {
     return NextResponse.json(
-      { error: "company_name, contact_email, and services are required" },
+      { error: "first_name, last_name, and contact_email are required" },
       { status: 400 }
     );
   }
+
+  const fullName = `${first_name} ${last_name}`;
+  const displayName = company_name || fullName;
 
   // Check if a profile already exists for this email
   const { data: existingProfile } = await supabase
@@ -116,7 +123,7 @@ export async function POST(request: NextRequest) {
       await serviceClient.auth.admin.createUser({
         email: contact_email,
         email_confirm: true,
-        user_metadata: { company: company_name },
+        user_metadata: { full_name: fullName, company: displayName },
       });
 
     if (createError) {
@@ -132,10 +139,54 @@ export async function POST(request: NextRequest) {
     await serviceClient.from("profiles").upsert({
       id: profileId,
       email: contact_email,
+      full_name: fullName,
       role: "client",
-      company: company_name,
+      company: displayName,
       website_url: website_url ?? null,
     });
+
+    // Generate account setup link and send welcome email
+    try {
+      const { data: linkData } =
+        await serviceClient.auth.admin.generateLink({
+          type: "recovery",
+          email: contact_email,
+          options: {
+            redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://www.ophidianai.com"}/auth/callback?next=/account-setup`,
+          },
+        });
+
+      const setupLink = linkData?.properties?.action_link;
+
+      if (setupLink) {
+        const { Resend } = await import("resend");
+        const resend = new Resend(process.env.RESEND_API_KEY);
+
+        await resend.emails.send({
+          from: "OphidianAI <iris@ophidianai.com>",
+          to: contact_email,
+          subject: "Welcome to OphidianAI - Set Up Your Account",
+          html: `
+            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; padding: 40px 20px;">
+              <h1 style="color: #F1F5F9; font-size: 24px; margin-bottom: 8px;">Welcome, ${first_name}!</h1>
+              <p style="color: #94A3B8; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
+                Your OphidianAI client portal is ready. Click the link below to set your password and access your dashboard.
+              </p>
+              <a href="${setupLink}" style="display: inline-block; background: #0DB1B2; color: #0D1B2A; font-weight: 600; font-size: 15px; padding: 12px 28px; border-radius: 8px; text-decoration: none;">
+                Set Up Your Account
+              </a>
+              <p style="color: #64748B; font-size: 13px; margin-top: 32px; line-height: 1.5;">
+                This link expires in 24 hours. If you didn't expect this email, you can safely ignore it.
+              </p>
+              <hr style="border: none; border-top: 1px solid #1E293B; margin: 32px 0;" />
+              <p style="color: #475569; font-size: 12px;">OphidianAI - AI-Powered Solutions</p>
+            </div>
+          `,
+        });
+      }
+    } catch (emailErr) {
+      console.error("Welcome email failed:", emailErr);
+    }
   }
 
   // Create client record
@@ -143,7 +194,8 @@ export async function POST(request: NextRequest) {
     .from("clients")
     .insert({
       profile_id: profileId,
-      company_name,
+      name: displayName,
+      company_name: displayName,
       contact_email,
       website_url: website_url ?? null,
     })
@@ -157,27 +209,29 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Create client_services records
-  const serviceRecords = services.map((serviceType) => ({
-    client_id: client.id,
-    service_type: serviceType,
-    status: "active" as const,
-    started_at: new Date().toISOString(),
-  }));
+  // Create client_services records (if services were selected)
+  if (services && services.length > 0) {
+    const serviceRecords = services.map((serviceType) => ({
+      client_id: client.id,
+      service_type: serviceType,
+      status: "active" as const,
+      started_at: new Date().toISOString(),
+    }));
 
-  const { error: servicesError } = await supabase
-    .from("client_services")
-    .insert(serviceRecords);
+    const { error: servicesError } = await supabase
+      .from("client_services")
+      .insert(serviceRecords);
 
-  if (servicesError) {
-    return NextResponse.json(
-      { error: `Failed to create services: ${servicesError.message}` },
-      { status: 500 }
-    );
+    if (servicesError) {
+      return NextResponse.json(
+        { error: `Failed to create services: ${servicesError.message}` },
+        { status: 500 }
+      );
+    }
   }
 
   // If a web design service was selected, create a project record
-  const hasWebService = services.some((s) => WEB_SERVICES.includes(s));
+  const hasWebService = services?.some((s) => WEB_SERVICES.includes(s));
   if (hasWebService) {
     const webService = services.find((s) => WEB_SERVICES.includes(s))!;
 
@@ -205,7 +259,7 @@ export async function POST(request: NextRequest) {
     await notifyAdmins({
       type: "client_created",
       title: "New client created",
-      message: `${company_name} has been added as a client.`,
+      message: `${displayName} has been added as a client.`,
       link: `/dashboard/admin/clients/${client.id}`,
     });
   } catch (e) {

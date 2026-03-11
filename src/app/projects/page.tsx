@@ -8,7 +8,7 @@ import { EditableImage } from "@/components/editable/editable-image";
 import { useEditMode } from "@/lib/edit-mode-context";
 
 const defaultProjects = [
-  { title: "Bloomin' Acres", subtitle: "Sourdough bakery & produce", href: "https://bloomin-acres.vercel.app", photo: { url: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=900&auto=format&fit=crop&q=80", text: "Artisan sourdough bread on wooden cutting board", pos: "50% 40%" } },
+  { title: "Bloomin' Acres", subtitle: "Sourdough bakery & produce", href: "/portfolio", photo: { url: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=900&auto=format&fit=crop&q=80", text: "Artisan sourdough bread on wooden cutting board", pos: "50% 40%" } },
   { title: "AI Dashboard", subtitle: "Analytics & monitoring", photo: { url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&auto=format&fit=crop&q=80", text: "Data analytics dashboard on monitor", pos: "50% 50%" } },
   { title: "E-Commerce Platform", subtitle: "Modern shopping experience", photo: { url: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=900&auto=format&fit=crop&q=80", text: "Person shopping online on laptop", pos: "50% 50%" } },
   { title: "SaaS Landing Page", subtitle: "Conversion-focused design", photo: { url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&auto=format&fit=crop&q=80", text: "Modern website design on laptop screen", pos: "50% 30%" } },

@@ -170,8 +170,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                 {item.href ? (
                   <a
                     href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    {...(item.href.startsWith("/") ? {} : { target: "_blank", rel: "noopener noreferrer" })}
                     className="block w-full h-full"
                   >
                     {cardContent}

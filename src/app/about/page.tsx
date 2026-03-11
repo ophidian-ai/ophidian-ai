@@ -9,6 +9,7 @@ import { Text } from "@/components/ui/Text";
 import { Card } from "@/components/ui/Card";
 import { usePageContent } from "@/lib/use-page-content";
 import { EditableText } from "@/components/editable/editable-text";
+import { EditableImage } from "@/components/editable/editable-image";
 import { useEditMode } from "@/lib/edit-mode-context";
 
 const defaultValues = [
@@ -67,23 +68,35 @@ export default function AboutPage() {
               </div>
               <div className="w-full lg:w-1/2">
                 <div className="glass relative aspect-[4/3] rounded-2xl overflow-hidden flex items-center justify-center border border-primary/10 bg-surface">
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="h-24 w-24 rounded-full bg-primary/10 border-2 border-primary/30 flex items-center justify-center">
-                      <span className="text-4xl font-bold text-primary font-mono">EL</span>
+                  {content["founder_image"] || isEditMode ? (
+                    <EditableImage
+                      page="about"
+                      contentKey="founder_image"
+                      defaultSrc="/images/about/founder-placeholder.png"
+                      dbValue={content["founder_image"]}
+                      alt="Eric Lefler, Founder of OphidianAI"
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center gap-4">
+                      <div className="h-24 w-24 rounded-full bg-primary/10 border-2 border-primary/30 flex items-center justify-center">
+                        <span className="text-4xl font-bold text-primary font-mono">EL</span>
+                      </div>
                     </div>
-                    <div className="text-center">
-                      {isEditMode ? (
-                        <>
-                          <EditableText page="about" contentKey="founder_name" defaultValue={defaultAbout.founder_name} dbValue={content["founder_name"]} as="p" className="text-foreground font-semibold" />
-                          <EditableText page="about" contentKey="founder_title" defaultValue={defaultAbout.founder_title} dbValue={content["founder_title"]} as="p" className="text-foreground-muted text-sm" />
-                        </>
-                      ) : (
-                        <>
-                          <p className="text-foreground font-semibold">{e("founder_name", defaultAbout.founder_name)}</p>
-                          <p className="text-foreground-muted text-sm">{e("founder_title", defaultAbout.founder_title)}</p>
-                        </>
-                      )}
-                    </div>
+                  )}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 text-center z-10">
+                    {isEditMode ? (
+                      <>
+                        <EditableText page="about" contentKey="founder_name" defaultValue={defaultAbout.founder_name} dbValue={content["founder_name"]} as="p" className="text-white font-semibold" />
+                        <EditableText page="about" contentKey="founder_title" defaultValue={defaultAbout.founder_title} dbValue={content["founder_title"]} as="p" className="text-white/70 text-sm" />
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-white font-semibold">{e("founder_name", defaultAbout.founder_name)}</p>
+                        <p className="text-white/70 text-sm">{e("founder_title", defaultAbout.founder_title)}</p>
+                      </>
+                    )}
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 pointer-events-none" />
                 </div>

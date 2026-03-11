@@ -11,6 +11,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { GlowCard } from "@/components/ui/spotlight-card";
 import { usePageContent } from "@/lib/use-page-content";
 import { EditableText } from "@/components/editable/editable-text";
+import { EditableImage } from "@/components/editable/editable-image";
 import { useEditMode } from "@/lib/edit-mode-context";
 
 const serviceSchema = {
@@ -96,8 +97,20 @@ export default function ServicesPage() {
                   <div key={i} className={`flex flex-col items-center gap-12 lg:gap-16 ${isReversed ? "lg:flex-row-reverse" : "lg:flex-row"} animate-fade-up`}>
                     <div className="w-full lg:w-1/2 shrink-0">
                       <GlowCard className="glass relative aspect-[4/3] rounded-2xl overflow-hidden flex items-center justify-center border border-primary/10">
-                        <div className="text-primary/30">{serviceIcons[i]}</div>
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
+                        {content[`service_${si}_image`] || isEditMode ? (
+                          <EditableImage
+                            page="services"
+                            contentKey={`service_${si}_image`}
+                            defaultSrc={`/images/services/service-${si}-placeholder.png`}
+                            dbValue={content[`service_${si}_image`]}
+                            alt={service.title}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="text-primary/30">{serviceIcons[i]}</div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 pointer-events-none" />
                       </GlowCard>
                     </div>
                     <div className="w-full lg:w-1/2">

@@ -51,12 +51,15 @@ export default function NewClientPage() {
   const router = useRouter();
   const { role } = useDashboard();
 
-  const [companyName, setCompanyName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
+  const [companyName, setCompanyName] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [selectedServices, setSelectedServices] = useState<ServiceType[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   if (role !== "admin") {
     router.replace("/dashboard");
@@ -75,13 +78,8 @@ export default function NewClientPage() {
     e.preventDefault();
     setError(null);
 
-    if (!companyName.trim() || !contactEmail.trim()) {
-      setError("Company name and contact email are required.");
-      return;
-    }
-
-    if (selectedServices.length === 0) {
-      setError("Select at least one service.");
+    if (!firstName.trim() || !lastName.trim() || !contactEmail.trim()) {
+      setError("First name, last name, and email are required.");
       return;
     }
 
@@ -92,10 +90,12 @@ export default function NewClientPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          company_name: companyName.trim(),
+          first_name: firstName.trim(),
+          last_name: lastName.trim(),
           contact_email: contactEmail.trim(),
+          company_name: companyName.trim() || undefined,
           website_url: websiteUrl.trim() || undefined,
-          services: selectedServices,
+          services: selectedServices.length > 0 ? selectedServices : undefined,
         }),
       });
 
@@ -107,7 +107,10 @@ export default function NewClientPage() {
       }
 
       const data = await res.json();
-      router.push(`/dashboard/admin/clients/${data.client.id}`);
+      setSuccess(true);
+      setTimeout(() => {
+        router.push(`/dashboard/admin/clients/${data.client.id}`);
+      }, 2000);
     } catch {
       setError("An unexpected error occurred.");
       setSubmitting(false);
@@ -136,126 +139,167 @@ export default function NewClientPage() {
 
       {/* Form */}
       <GlowCard className="p-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Company Name */}
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">
-              Company Name <span className="text-red-400">*</span>
-            </label>
-            <input
-              type="text"
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
-              placeholder="Acme Corp"
-              className="w-full px-4 py-2.5 bg-surface/50 border border-white/10 rounded-lg text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-primary/50"
-              required
-            />
+        {success ? (
+          <div className="text-center py-8 space-y-3">
+            <div className="text-primary text-lg font-semibold">
+              Client created successfully
+            </div>
+            <p className="text-foreground-muted text-sm">
+              A welcome email has been sent to {contactEmail} with a link to set up their account.
+            </p>
+            <p className="text-foreground-dim text-xs">Redirecting...</p>
           </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Name Row */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-1.5">
+                  First Name <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder="John"
+                  className="w-full px-4 py-2.5 bg-surface/50 border border-white/10 rounded-lg text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-primary/50"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-1.5">
+                  Last Name <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  placeholder="Doe"
+                  className="w-full px-4 py-2.5 bg-surface/50 border border-white/10 rounded-lg text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-primary/50"
+                  required
+                />
+              </div>
+            </div>
 
-          {/* Contact Email */}
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">
-              Contact Email <span className="text-red-400">*</span>
-            </label>
-            <input
-              type="email"
-              value={contactEmail}
-              onChange={(e) => setContactEmail(e.target.value)}
-              placeholder="contact@example.com"
-              className="w-full px-4 py-2.5 bg-surface/50 border border-white/10 rounded-lg text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-primary/50"
-              required
-            />
-          </div>
+            {/* Contact Email */}
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1.5">
+                Email <span className="text-red-400">*</span>
+              </label>
+              <input
+                type="email"
+                value={contactEmail}
+                onChange={(e) => setContactEmail(e.target.value)}
+                placeholder="john@example.com"
+                className="w-full px-4 py-2.5 bg-surface/50 border border-white/10 rounded-lg text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-primary/50"
+                required
+              />
+            </div>
 
-          {/* Website URL */}
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">
-              Website URL
-            </label>
-            <input
-              type="url"
-              value={websiteUrl}
-              onChange={(e) => setWebsiteUrl(e.target.value)}
-              placeholder="https://example.com"
-              className="w-full px-4 py-2.5 bg-surface/50 border border-white/10 rounded-lg text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-primary/50"
-            />
-          </div>
+            {/* Company Name */}
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1.5">
+                Company Name
+              </label>
+              <input
+                type="text"
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
+                placeholder="Acme Corp"
+                className="w-full px-4 py-2.5 bg-surface/50 border border-white/10 rounded-lg text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-primary/50"
+              />
+            </div>
 
-          {/* Services */}
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-3">
-              Services <span className="text-red-400">*</span>
-            </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {SERVICE_OPTIONS.map((option) => {
-                const selected = selectedServices.includes(option.value);
-                return (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() => toggleService(option.value)}
-                    className={`text-left p-3 rounded-lg border transition-colors cursor-pointer ${
-                      selected
-                        ? "border-primary/50 bg-primary/10"
-                        : "border-white/10 hover:border-white/20 bg-surface/30"
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <div
-                        className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
-                          selected
-                            ? "border-primary bg-primary"
-                            : "border-white/30"
-                        }`}
-                      >
-                        {selected && (
-                          <svg
-                            viewBox="0 0 12 12"
-                            className="w-2.5 h-2.5 text-background"
-                          >
-                            <path
-                              d="M10 3L4.5 8.5 2 6"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              fill="none"
-                            />
-                          </svg>
-                        )}
+            {/* Website URL */}
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1.5">
+                Website URL
+              </label>
+              <input
+                type="url"
+                value={websiteUrl}
+                onChange={(e) => setWebsiteUrl(e.target.value)}
+                placeholder="https://example.com"
+                className="w-full px-4 py-2.5 bg-surface/50 border border-white/10 rounded-lg text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-primary/50"
+              />
+            </div>
+
+            {/* Services */}
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-3">
+                Services
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {SERVICE_OPTIONS.map((option) => {
+                  const selected = selectedServices.includes(option.value);
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => toggleService(option.value)}
+                      className={`text-left p-3 rounded-lg border transition-colors cursor-pointer ${
+                        selected
+                          ? "border-primary/50 bg-primary/10"
+                          : "border-white/10 hover:border-white/20 bg-surface/30"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <div
+                          className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                            selected
+                              ? "border-primary bg-primary"
+                              : "border-white/30"
+                          }`}
+                        >
+                          {selected && (
+                            <svg
+                              viewBox="0 0 12 12"
+                              className="w-2.5 h-2.5 text-background"
+                            >
+                              <path
+                                d="M10 3L4.5 8.5 2 6"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                fill="none"
+                              />
+                            </svg>
+                          )}
+                        </div>
+                        <span className="text-sm font-medium text-foreground">
+                          {option.label}
+                        </span>
                       </div>
-                      <span className="text-sm font-medium text-foreground">
-                        {option.label}
-                      </span>
-                    </div>
-                    <p className="text-xs text-foreground-muted mt-1 ml-6">
-                      {option.description}
-                    </p>
-                  </button>
-                );
-              })}
+                      <p className="text-xs text-foreground-muted mt-1 ml-6">
+                        {option.description}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
 
-          {/* Error */}
-          {error && (
-            <div className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-2.5">
-              {error}
+            {/* Error */}
+            {error && (
+              <div className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-2.5">
+                {error}
+              </div>
+            )}
+
+            {/* Submit */}
+            <div className="flex justify-end gap-3">
+              <GlassButton
+                type="button"
+                size="sm"
+                onClick={() => router.push("/dashboard/admin/clients")}
+              >
+                Cancel
+              </GlassButton>
+              <GlassButton type="submit" size="sm" disabled={submitting}>
+                {submitting ? "Creating..." : "Create Client"}
+              </GlassButton>
             </div>
-          )}
-
-          {/* Submit */}
-          <div className="flex justify-end gap-3">
-            <GlassButton
-              type="button"
-              size="sm"
-              onClick={() => router.push("/dashboard/admin/clients")}
-            >
-              Cancel
-            </GlassButton>
-            <GlassButton type="submit" size="sm" disabled={submitting}>
-              {submitting ? "Creating..." : "Create Client"}
-            </GlassButton>
-          </div>
-        </form>
+          </form>
+        )}
       </GlowCard>
     </div>
   );

@@ -1,28 +1,96 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 import { MeshGradientBg } from "@/components/ui/mesh-gradient-bg";
-import { User, Mail, Building2, ArrowRight } from "lucide-react";
+import { Lock, Phone, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { GlassButton } from "@/components/ui/glass-button";
+import Image from "next/image";
 
 export default function AccountSetupPage() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [company, setCompany] = useState("");
+  const router = useRouter();
+  const supabase = createClient();
+
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    async function loadUser() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        router.replace("/sign-in");
+        return;
+      }
+      const name =
+        user.user_metadata?.full_name?.split(" ")[0] || "there";
+      setUserName(name);
+    }
+    loadUser();
+  }, [supabase, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    window.location.href = "/dashboard";
+
+    // Update password
+    const { error: pwError } = await supabase.auth.updateUser({
+      password,
+    });
+
+    if (pwError) {
+      setError(pwError.message);
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Update phone in profile
+    if (phone.trim()) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        await supabase
+          .from("profiles")
+          .update({ phone: phone.trim() })
+          .eq("id", user.id);
+      }
+    }
+
+    router.push("/dashboard");
   };
 
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center px-4 py-12">
       <MeshGradientBg
-        colors={["#39FF14", "#2BCC10", "#0D1B2A", "#162032", "#0DB1B2", "#098F90"]}
+        colors={[
+          "#39FF14",
+          "#2BCC10",
+          "#0D1B2A",
+          "#162032",
+          "#0DB1B2",
+          "#098F90",
+        ]}
         distortion={1.0}
         speed={0.3}
         veilOpacity="bg-background/80"
@@ -33,99 +101,102 @@ export default function AccountSetupPage() {
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
-              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
-                <span className="text-background font-bold text-sm">O</span>
-              </div>
-              <span className="text-xl font-semibold text-foreground tracking-tight">
+              <Image
+                src="/images/logo_icon.png"
+                alt="OphidianAI"
+                width={32}
+                height={32}
+                className="h-8 w-8"
+              />
+              <span className="text-xl font-semibold tracking-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 OphidianAI
               </span>
             </div>
             <h2 className="text-2xl font-bold text-foreground mb-1">
-              Set up your account
+              Welcome{userName ? `, ${userName}` : ""}
             </h2>
             <p className="text-foreground-muted text-sm">
-              Tell us a bit about yourself to get started.
+              Set your password and complete your profile to get started.
             </p>
           </div>
 
-          {/* Progress */}
-          <div className="flex gap-2 mb-8">
-            <div className="h-1 flex-1 rounded-full bg-primary" />
-            <div className="h-1 flex-1 rounded-full bg-primary/30" />
-            <div className="h-1 flex-1 rounded-full bg-primary/10" />
-          </div>
-
           <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm text-foreground-muted mb-1.5">
-                  First name
-                </label>
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                    <User className="text-foreground-dim" size={18} />
-                  </div>
-                  <input
-                    type="text"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    placeholder="John"
-                    required
-                    className="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-colors"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm text-foreground-muted mb-1.5">
-                  Last name
-                </label>
-                <input
-                  type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  placeholder="Doe"
-                  required
-                  className="w-full px-3 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-colors"
-                />
-              </div>
-            </div>
-
+            {/* Password */}
             <div>
               <label className="block text-sm text-foreground-muted mb-1.5">
-                Email
+                Password
               </label>
               <div className="relative">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                  <Mail className="text-foreground-dim" size={18} />
+                  <Lock className="text-foreground-dim" size={18} />
                 </div>
                 <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="john@company.com"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Choose a password"
                   required
+                  minLength={6}
+                  className="w-full pl-10 pr-10 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-colors"
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground-dim hover:text-foreground focus:outline-none transition-colors"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+
+            {/* Confirm Password */}
+            <div>
+              <label className="block text-sm text-foreground-muted mb-1.5">
+                Confirm Password
+              </label>
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                  <Lock className="text-foreground-dim" size={18} />
+                </div>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm your password"
+                  required
+                  minLength={6}
                   className="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-colors"
                 />
               </div>
             </div>
 
+            {/* Phone */}
             <div>
               <label className="block text-sm text-foreground-muted mb-1.5">
-                Company (optional)
+                Phone Number{" "}
+                <span className="text-foreground-dim">(optional)</span>
               </label>
               <div className="relative">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                  <Building2 className="text-foreground-dim" size={18} />
+                  <Phone className="text-foreground-dim" size={18} />
                 </div>
                 <input
-                  type="text"
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
-                  placeholder="Acme Inc."
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="(555) 123-4567"
                   className="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-colors"
                 />
               </div>
             </div>
+
+            {/* Error */}
+            {error && (
+              <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
+                {error}
+              </div>
+            )}
 
             <GlassButton
               type="submit"
@@ -146,6 +217,10 @@ export default function AccountSetupPage() {
           </form>
         </div>
       </div>
+
+      <footer className="absolute bottom-4 left-0 right-0 text-center text-foreground-dim text-xs z-20">
+        2026 OphidianAI. All rights reserved.
+      </footer>
     </div>
   );
 }
