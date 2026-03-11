@@ -114,7 +114,7 @@ export async function POST(
   const schedule = proposal.payment_schedule as Array<{ milestone: string; amount: number; percentage: number }>;
   const deposit = schedule.find((s) => s.milestone === "deposit");
   const depositAmount = deposit ? deposit.amount : content.finalPrice;
-  const serviceType = (content as Record<string, unknown>).serviceType as string || "web_professional";
+  const serviceType = (content as unknown as Record<string, unknown>).serviceType as string || "web_professional";
 
   const result = await onboardClient({
     clientId: client.id,
