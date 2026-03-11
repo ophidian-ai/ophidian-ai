@@ -20,6 +20,13 @@ interface DiscountOption {
   amount: number; // in cents
 }
 
+interface ServiceTemplate {
+  scope: string;
+  timeline: string;
+  deliverables: string[];
+  basePrice: string;
+}
+
 const SERVICE_OPTIONS: ServiceOption[] = [
   { value: "web_starter", label: "Web Starter" },
   { value: "web_professional", label: "Web Professional" },
@@ -28,6 +35,105 @@ const SERVICE_OPTIONS: ServiceOption[] = [
   { value: "seo_growth", label: "SEO Growth" },
   { value: "maintenance", label: "Maintenance" },
 ];
+
+const SERVICE_TEMPLATES: Record<ServiceType, ServiceTemplate> = {
+  web_starter: {
+    scope: "Design and build a modern, mobile-responsive website with up to 5 pages. Includes basic on-page SEO setup, contact form integration, and 2 rounds of design revisions.",
+    timeline: "1-2 weeks from kickoff",
+    deliverables: [
+      "Custom homepage design",
+      "Up to 4 additional pages (About, Services, Contact, etc.)",
+      "Mobile-responsive design",
+      "Basic on-page SEO (meta tags, headings, alt text)",
+      "Contact form with email notifications",
+      "Google Maps embed",
+      "Social media links",
+      "SSL certificate and hosting setup",
+    ],
+    basePrice: "2200",
+  },
+  web_professional: {
+    scope: "Design and build a full-featured, mobile-responsive website with up to 10 pages. Includes comprehensive SEO setup, AI-assisted copywriting, Google Business Profile optimization, unlimited design revisions, and ongoing support options.",
+    timeline: "2-3 weeks from kickoff",
+    deliverables: [
+      "Custom homepage design with brand-aligned visuals",
+      "Up to 9 additional pages",
+      "Mobile-responsive design optimized for all devices",
+      "Full on-page SEO (meta tags, schema markup, sitemap, robots.txt)",
+      "AI-assisted copywriting for all pages",
+      "Google Business Profile setup and optimization",
+      "Contact form with email notifications",
+      "Google Maps embed",
+      "Social media integration",
+      "Analytics setup (Google Analytics / Search Console)",
+      "SSL certificate and hosting setup",
+      "Unlimited design revisions",
+    ],
+    basePrice: "3500",
+  },
+  web_ecommerce: {
+    scope: "Design and build a full e-commerce website with product catalog, shopping cart, and Stripe payment integration. Includes everything in the Professional tier plus inventory management, order notifications, and checkout flow.",
+    timeline: "3-4 weeks from kickoff",
+    deliverables: [
+      "Custom homepage and storefront design",
+      "Product catalog with categories and search",
+      "Shopping cart and secure checkout (Stripe)",
+      "Order confirmation and notification emails",
+      "Up to 8 additional pages",
+      "Mobile-responsive design optimized for all devices",
+      "Full on-page SEO with product schema markup",
+      "AI-assisted copywriting for all pages",
+      "Google Business Profile setup and optimization",
+      "Analytics setup (Google Analytics / Search Console)",
+      "SSL certificate and hosting setup",
+      "Unlimited design revisions",
+    ],
+    basePrice: "4500",
+  },
+  seo_cleanup: {
+    scope: "Comprehensive SEO audit and done-for-you cleanup of your existing website. Includes fixing technical issues, optimizing on-page elements, improving site speed, and submitting to search engines.",
+    timeline: "1-2 weeks",
+    deliverables: [
+      "Full SEO audit report with findings",
+      "Meta tag optimization (titles, descriptions) for all pages",
+      "Heading structure and content optimization",
+      "Image alt text and compression",
+      "XML sitemap creation and submission",
+      "Google Search Console setup and verification",
+      "Robots.txt optimization",
+      "Fix broken links and redirect issues",
+      "Page speed improvements",
+    ],
+    basePrice: "800",
+  },
+  seo_growth: {
+    scope: "Ongoing monthly SEO growth retainer focused on improving search rankings, driving organic traffic, and tracking performance. Includes keyword research, content strategy, and monthly reporting.",
+    timeline: "3-month minimum commitment",
+    deliverables: [
+      "Monthly keyword research and tracking",
+      "Content strategy and optimization recommendations",
+      "On-page SEO updates and improvements",
+      "Google Business Profile management",
+      "Monthly performance report with analytics",
+      "Competitor analysis",
+      "Local SEO optimization",
+    ],
+    basePrice: "250",
+  },
+  maintenance: {
+    scope: "Monthly website maintenance and support. Includes hosting, SSL management, security monitoring, minor content updates, uptime monitoring, and priority support.",
+    timeline: "Month-to-month",
+    deliverables: [
+      "Vercel hosting and SSL management",
+      "Security monitoring and updates",
+      "Minor content updates (text, images)",
+      "Uptime monitoring with alerts",
+      "Monthly performance check",
+      "Priority email support",
+    ],
+    basePrice: "100",
+  },
+};
 
 const DISCOUNT_OPTIONS: DiscountOption[] = [
   { code: "DISCOUNT_REFERRAL", label: "Referral Discount", amount: 50000 },
@@ -117,6 +223,14 @@ export default function NewProposalPage() {
   if (role !== "admin") {
     router.replace("/dashboard");
     return null;
+  }
+
+  function applyTemplate(type: ServiceType) {
+    const template = SERVICE_TEMPLATES[type];
+    setScope(template.scope);
+    setTimeline(template.timeline);
+    setDeliverables(template.deliverables);
+    setBasePriceDollars(template.basePrice);
   }
 
   function toggleDiscount(code: string) {
@@ -294,7 +408,11 @@ export default function NewProposalPage() {
             </label>
             <select
               value={serviceType}
-              onChange={(e) => setServiceType(e.target.value as ServiceType)}
+              onChange={(e) => {
+                const type = e.target.value as ServiceType;
+                setServiceType(type);
+                if (type) applyTemplate(type);
+              }}
               className={`${inputClass} cursor-pointer`}
               required
             >
