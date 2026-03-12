@@ -1,7 +1,7 @@
 "use client"
 
 import { Suspense, useState, useRef } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { LoginForm } from "@/components/ui/login-form"
 import { MeshGradientBg } from "@/components/ui/mesh-gradient-bg"
@@ -11,7 +11,6 @@ function SignInContent() {
   const sessionExpired = searchParams.get("reason") === "session_expired"
   const [error, setError] = useState<string | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
-  const router = useRouter()
   const containerRef = useRef<HTMLDivElement>(null)
 
   const handleSignIn = async (email: string, password: string, remember: boolean) => {
