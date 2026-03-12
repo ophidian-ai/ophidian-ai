@@ -42,6 +42,7 @@ function SignInContent() {
       // Fade out before navigating
       setIsTransitioning(true)
       await new Promise((resolve) => setTimeout(resolve, 400))
+      router.refresh()
       router.push("/dashboard")
     } catch (err) {
       setIsTransitioning(false)
