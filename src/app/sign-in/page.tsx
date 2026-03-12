@@ -39,11 +39,10 @@ function SignInContent() {
         localStorage.removeItem("remembered_email")
       }
 
-      // Fade out before navigating
+      // Fade out then hard-navigate to bypass Next.js router cache
       setIsTransitioning(true)
       await new Promise((resolve) => setTimeout(resolve, 400))
-      router.refresh()
-      router.push("/dashboard")
+      window.location.href = "/dashboard"
     } catch (err) {
       setIsTransitioning(false)
       setError(err instanceof Error ? err.message : "Sign-in failed. Please try again.")
