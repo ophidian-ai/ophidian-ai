@@ -19,6 +19,8 @@ import {
   Check,
   X,
   Upload,
+  User,
+  Phone,
 } from "lucide-react";
 import type {
   Client,
@@ -238,6 +240,13 @@ export default function AdminClientDetailPage() {
             Client Information
           </h2>
           <dl className="space-y-3">
+            {client.contact_name && (
+              <div className="flex items-center gap-3">
+                <User size={16} className="text-foreground-muted" />
+                <dt className="text-sm text-foreground-muted w-24">Contact</dt>
+                <dd className="text-sm text-foreground">{client.contact_name}</dd>
+              </div>
+            )}
             <div className="flex items-center gap-3">
               <Building2 size={16} className="text-foreground-muted" />
               <dt className="text-sm text-foreground-muted w-24">Company</dt>
@@ -250,6 +259,13 @@ export default function AdminClientDetailPage() {
                 {client.contact_email}
               </dd>
             </div>
+            {client.phone && (
+              <div className="flex items-center gap-3">
+                <Phone size={16} className="text-foreground-muted" />
+                <dt className="text-sm text-foreground-muted w-24">Phone</dt>
+                <dd className="text-sm text-foreground">{client.phone}</dd>
+              </div>
+            )}
             <div className="flex items-center gap-3">
               <Globe size={16} className="text-foreground-muted" />
               <dt className="text-sm text-foreground-muted w-24">Website</dt>
