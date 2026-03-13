@@ -217,7 +217,7 @@ export async function POST(request: NextRequest) {
             type: "payment_received",
             title: "Deposit Payment Received",
             message: `${companyName} paid their deposit. Project ready for discovery.`,
-            link: `/dashboard/admin/projects`,
+            link: `/dashboard/admin/clients`,
           });
 
           // Email confirmation to Eric
