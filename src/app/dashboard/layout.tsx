@@ -48,12 +48,14 @@ export default async function DashboardLayout({
         .select("*")
         .eq("client_id", clientId);
 
-      // Fetch active project phase (for web design clients)
+      // Fetch project phase (for web design clients) -- check active and launched
       const { data: project } = await supabase
         .from("projects")
         .select("phase")
         .eq("client_id", clientId)
-        .eq("status", "active")
+        .in("status", ["active", "launched"])
+        .order("created_at", { ascending: false })
+        .limit(1)
         .maybeSingle();
 
       const projectPhase = (project?.phase as ProjectPhase) ?? null;

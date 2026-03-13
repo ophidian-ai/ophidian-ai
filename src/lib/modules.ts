@@ -45,7 +45,7 @@ export function getClientModules(
       ["web_starter", "web_professional", "web_ecommerce"].includes(s.service_type)
   );
 
-  if (hasWebService && projectPhase === "live") {
+  if (hasWebService && (projectPhase === "live" || projectPhase === "maintenance")) {
     modules.add("analytics");
     modules.add("content_requests");
   }

@@ -32,7 +32,7 @@ function ProjectsContent({ clientId }: { clientId: string | null }) {
         .from("projects")
         .select("*")
         .eq("client_id", clientId)
-        .eq("status", "active")
+        .in("status", ["active", "launched"])
         .order("created_at", { ascending: false });
 
       if (projectData && projectData.length > 0) {

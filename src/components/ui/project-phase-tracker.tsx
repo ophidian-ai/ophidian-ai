@@ -19,10 +19,11 @@ const PHASE_NODES: PhaseNode[] = [
   { id: "design", label: "Design", color: "#2BCC10", gradientFrom: "#2BCC10", gradientTo: "#1FA88E" },
   { id: "development", label: "Development", color: "#1FA88E", gradientFrom: "#1FA88E", gradientTo: "#15B0A0" },
   { id: "review", label: "Review", color: "#15B0A0", gradientFrom: "#15B0A0", gradientTo: "#0DB1B2" },
-  { id: "live", label: "Live", color: "#0DB1B2", gradientFrom: "#0DB1B2", gradientTo: "#0DB1B2" },
+  { id: "live", label: "Live", color: "#0DB1B2", gradientFrom: "#0DB1B2", gradientTo: "#098F90" },
+  { id: "maintenance", label: "Maintenance", color: "#098F90", gradientFrom: "#098F90", gradientTo: "#098F90" },
 ];
 
-const PHASE_ORDER: ProjectPhase[] = ["discovery", "design", "development", "review", "live"];
+const PHASE_ORDER: ProjectPhase[] = ["discovery", "design", "development", "review", "live", "maintenance"];
 
 interface ProjectPhaseTrackerProps {
   currentPhase: ProjectPhase;

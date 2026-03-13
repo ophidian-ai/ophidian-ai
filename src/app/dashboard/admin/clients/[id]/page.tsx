@@ -82,8 +82,8 @@ export default function AdminClientDetailPage() {
 
   const [client, setClient] = useState<Client | null>(null);
   const [services, setServices] = useState<ClientService[]>([]);
-  const [project, setProject] = useState<Project | null>(null);
-  const [milestones, setMilestones] = useState<ProjectMilestone[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [milestones, setMilestones] = useState<Record<string, ProjectMilestone[]>>({});
   const [payments, setPayments] = useState<Payment[]>([]);
   const [contentRequests, setContentRequests] = useState<ContentRequest[]>([]);
   const [reports, setReports] = useState<Report[]>([]);
@@ -121,8 +121,8 @@ export default function AdminClientDetailPage() {
           .from("projects")
           .select("*")
           .eq("client_id", clientId)
-          .eq("status", "active")
-          .maybeSingle(),
+          .in("status", ["active", "launched"])
+          .order("created_at", { ascending: false }),
         supabase
           .from("payments")
           .select("*")
@@ -142,20 +142,26 @@ export default function AdminClientDetailPage() {
 
       setClient(clientRes.data as Client | null);
       setServices((servicesRes.data ?? []) as ClientService[]);
-      setProject(projectRes.data as Project | null);
+      const allProjects = (projectRes.data ?? []) as Project[];
+      setProjects(allProjects);
       setPayments((paymentsRes.data ?? []) as Payment[]);
       setContentRequests((contentRes.data ?? []) as ContentRequest[]);
       setReports((reportsRes.data ?? []) as Report[]);
 
-      // Fetch milestones if project exists
-      const proj = projectRes.data as Project | null;
-      if (proj) {
+      // Fetch milestones for all projects
+      if (allProjects.length > 0) {
+        const projectIds = allProjects.map((p) => p.id);
         const { data: milestoneData } = await supabase
           .from("project_milestones")
           .select("*")
-          .eq("project_id", proj.id)
+          .in("project_id", projectIds)
           .order("due_date", { ascending: true });
-        setMilestones((milestoneData ?? []) as ProjectMilestone[]);
+        const grouped: Record<string, ProjectMilestone[]> = {};
+        for (const m of (milestoneData ?? []) as ProjectMilestone[]) {
+          if (!grouped[m.project_id]) grouped[m.project_id] = [];
+          grouped[m.project_id].push(m);
+        }
+        setMilestones(grouped);
       }
 
       setLoading(false);
@@ -165,26 +171,27 @@ export default function AdminClientDetailPage() {
   }, [role, router, clientId]);
 
   const handleMilestoneToggle = useCallback(
-    async (milestoneId: string) => {
+    async (milestoneId: string, projectId: string) => {
       const res = await fetch(`/api/admin/milestones/${milestoneId}/toggle`, {
         method: "PATCH",
       });
 
       if (res.ok) {
         const data = await res.json();
-        setMilestones((prev) =>
-          prev.map((m) => (m.id === milestoneId ? data.milestone : m))
-        );
+        setMilestones((prev) => ({
+          ...prev,
+          [projectId]: (prev[projectId] ?? []).map((m) =>
+            m.id === milestoneId ? data.milestone : m
+          ),
+        }));
       }
     },
     []
   );
 
   const handlePhaseChange = useCallback(
-    async (phase: ProjectPhase) => {
-      if (!project) return;
-
-      const res = await fetch(`/api/admin/projects/${project.id}/phase`, {
+    async (projectId: string, phase: ProjectPhase) => {
+      const res = await fetch(`/api/admin/projects/${projectId}/phase`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phase }),
@@ -192,11 +199,16 @@ export default function AdminClientDetailPage() {
 
       if (res.ok) {
         const data = await res.json();
-        setProject(data.project);
+        setProjects((prev) =>
+          prev.map((p) => (p.id === projectId ? data.project : p))
+        );
       }
     },
-    [project]
+    []
   );
+
+  const activeProjects = projects.filter((p) => p.status === "active");
+  const launchedProjects = projects.filter((p) => p.status === "launched");
 
   const handleInlineEdit = async (field: EditableField["key"]) => {
     if (!client) return;
@@ -406,82 +418,108 @@ export default function AdminClientDetailPage() {
         )}
       </GlowCard>
 
-      {/* Project Phase Tracker */}
-      {project && (
-        <div>
-          <h2 className="text-lg font-semibold text-foreground mb-3">
-            Project Progress
-          </h2>
-          <ProjectPhaseTracker
-            currentPhase={project.phase}
-            editable
-            onPhaseChange={handlePhaseChange}
-          />
-        </div>
-      )}
-
-      {/* Milestones */}
-      {project && milestones.length > 0 && (
-        <GlowCard className="p-5">
-          <h2 className="text-lg font-semibold text-foreground mb-4">
-            Milestones
-          </h2>
-          <div className="space-y-3">
-            {milestones.map((m) => (
-              <div
-                key={m.id}
-                className="flex items-start gap-3 cursor-pointer group"
-                onClick={() => handleMilestoneToggle(m.id)}
-              >
-                <div className="flex-shrink-0 mt-0.5">
-                  <div
-                    className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                      m.completed_at
-                        ? "bg-accent/20 border-accent"
-                        : "border-white/30 group-hover:border-white/50"
-                    }`}
-                  >
-                    {m.completed_at && (
-                      <Check size={12} className="text-accent" />
-                    )}
-                  </div>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-3">
-                    <span
-                      className={`text-sm font-medium ${
-                        m.completed_at
-                          ? "text-foreground"
-                          : "text-foreground-dim"
-                      }`}
-                    >
-                      {m.title}
-                    </span>
-                    <span className="text-xs text-foreground-muted capitalize">
-                      {m.phase}
-                    </span>
-                    {m.completed_at && (
-                      <span className="text-xs text-accent px-2 py-0.5 rounded-full bg-accent/10">
-                        Complete
-                      </span>
-                    )}
-                  </div>
-                  {m.description && (
-                    <p className="text-xs text-foreground-dim mt-1">
-                      {m.description}
-                    </p>
-                  )}
-                  {m.due_date && (
-                    <p className="text-xs text-foreground-muted mt-1">
-                      Due: {new Date(m.due_date).toLocaleDateString()}
-                    </p>
-                  )}
-                </div>
-              </div>
-            ))}
+      {/* Active Projects */}
+      {activeProjects.map((proj) => (
+        <div key={proj.id} className="space-y-4">
+          <div>
+            <h2 className="text-lg font-semibold text-foreground mb-3">
+              Project Progress — {proj.name ?? "Active Project"}
+            </h2>
+            <ProjectPhaseTracker
+              currentPhase={proj.phase}
+              editable
+              onPhaseChange={(phase) => handlePhaseChange(proj.id, phase)}
+            />
           </div>
+
+          {(milestones[proj.id] ?? []).length > 0 && (
+            <GlowCard className="p-5">
+              <h2 className="text-lg font-semibold text-foreground mb-4">
+                Milestones
+              </h2>
+              <div className="space-y-3">
+                {(milestones[proj.id] ?? []).map((m) => (
+                  <div
+                    key={m.id}
+                    className="flex items-start gap-3 cursor-pointer group"
+                    onClick={() => handleMilestoneToggle(m.id, proj.id)}
+                  >
+                    <div className="flex-shrink-0 mt-0.5">
+                      <div
+                        className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+                          m.completed_at
+                            ? "bg-accent/20 border-accent"
+                            : "border-white/30 group-hover:border-white/50"
+                        }`}
+                      >
+                        {m.completed_at && (
+                          <Check size={12} className="text-accent" />
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3">
+                        <span
+                          className={`text-sm font-medium ${
+                            m.completed_at
+                              ? "text-foreground"
+                              : "text-foreground-dim"
+                          }`}
+                        >
+                          {m.title}
+                        </span>
+                        <span className="text-xs text-foreground-muted capitalize">
+                          {m.phase}
+                        </span>
+                        {m.completed_at && (
+                          <span className="text-xs text-accent px-2 py-0.5 rounded-full bg-accent/10">
+                            Complete
+                          </span>
+                        )}
+                      </div>
+                      {m.description && (
+                        <p className="text-xs text-foreground-dim mt-1">
+                          {m.description}
+                        </p>
+                      )}
+                      {m.due_date && (
+                        <p className="text-xs text-foreground-muted mt-1">
+                          Due: {new Date(m.due_date).toLocaleDateString()}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </GlowCard>
+          )}
+        </div>
+      ))}
+
+      {/* Launched Projects */}
+      {launchedProjects.map((proj) => (
+        <GlowCard key={proj.id} className="p-5">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-semibold text-foreground">
+              {proj.name ?? "Launched Project"}
+            </h2>
+            <span
+              className={`text-xs px-3 py-1 rounded-full border font-medium ${
+                proj.phase === "maintenance"
+                  ? "bg-amber-500/15 text-amber-400 border-amber-500/30"
+                  : "bg-green-500/15 text-green-400 border-green-500/30"
+              }`}
+            >
+              {proj.phase === "maintenance" ? "Maintenance" : "Live"}
+            </span>
+          </div>
+          <ProjectPhaseTracker
+            currentPhase={proj.phase}
+            editable
+            onPhaseChange={(phase) => handlePhaseChange(proj.id, phase)}
+          />
         </GlowCard>
-      )}
+      ))}
 
       {/* Payment History */}
       <GlowCard className="p-5">

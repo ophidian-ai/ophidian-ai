@@ -9,6 +9,7 @@ const VALID_PHASES: ProjectPhase[] = [
   "development",
   "review",
   "live",
+  "maintenance",
 ];
 
 export async function PATCH(
@@ -47,12 +48,29 @@ export async function PATCH(
     );
   }
 
+  // When a project goes live, change status from active to launched
+  // When toggling back from maintenance to live, keep launched status
+  const updateData: Record<string, string> = {
+    phase,
+    phase_updated_at: new Date().toISOString(),
+  };
+
+  if (phase === "live") {
+    // Check current status -- only flip to launched if currently active
+    const { data: current } = await supabase
+      .from("projects")
+      .select("status")
+      .eq("id", id)
+      .single();
+
+    if (current?.status === "active") {
+      updateData.status = "launched";
+    }
+  }
+
   const { data: project, error } = await supabase
     .from("projects")
-    .update({
-      phase,
-      phase_updated_at: new Date().toISOString(),
-    })
+    .update(updateData)
     .eq("id", id)
     .select()
     .single();
@@ -70,11 +88,23 @@ export async function PATCH(
       .single();
 
     if (clientRecord?.profile_id) {
+      const message =
+        phase === "live"
+          ? "Your project is now live!"
+          : phase === "maintenance"
+            ? "Your project is in maintenance mode. We're working on your requested changes."
+            : `Your project has moved to the ${phase} phase.`;
+
       await createNotification({
         userId: clientRecord.profile_id,
         type: "phase_updated",
-        title: "Project phase updated",
-        message: `Your project has moved to the ${phase} phase.`,
+        title:
+          phase === "live"
+            ? "Project is live!"
+            : phase === "maintenance"
+              ? "Maintenance in progress"
+              : "Project phase updated",
+        message,
         link: "/dashboard/projects",
       });
     }

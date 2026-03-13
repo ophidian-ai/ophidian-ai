@@ -12,8 +12,8 @@ export type ServiceType =
   | "maintenance";
 
 export type ServiceStatus = "active" | "completed" | "cancelled";
-export type ProjectStatus = "active" | "on_hold" | "cancelled" | "completed";
-export type ProjectPhase = "discovery" | "design" | "development" | "review" | "live";
+export type ProjectStatus = "active" | "launched" | "on_hold" | "cancelled" | "completed";
+export type ProjectPhase = "discovery" | "design" | "development" | "review" | "live" | "maintenance";
 export type ProposalStatus = "draft" | "sent" | "revision_requested" | "approved" | "declined";
 export type PaymentMilestone = "deposit" | "midpoint" | "final" | "monthly";
 export type PaymentStatus = "pending" | "paid" | "overdue";
@@ -62,6 +62,7 @@ export interface Project {
   id: string;
   client_id: string;
   client_service_id: string;
+  name: string;
   status: ProjectStatus;
   phase: ProjectPhase;
   phase_updated_at: string;
