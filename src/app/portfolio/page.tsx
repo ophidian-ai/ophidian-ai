@@ -55,8 +55,8 @@ export default function PortfolioPage() {
             ) : (
               <div className="grid md:grid-cols-2 gap-8">
                 {projects.map((project) => (
-                  <Link key={project.id} href={`/portfolio/${project.slug}`} className="group block">
-                    <GlowCard className="glass rounded-2xl border border-primary/10 overflow-hidden transition-all duration-300 group-hover:border-primary/30 group-hover:shadow-lg group-hover:shadow-primary/5">
+                  <Link key={project.id} href={`/portfolio/${project.slug}`} className="group block h-full">
+                    <GlowCard className="glass rounded-2xl border border-primary/10 overflow-hidden transition-all duration-300 group-hover:border-primary/30 group-hover:shadow-lg group-hover:shadow-primary/5 h-full flex flex-col">
                       <div className="relative aspect-video bg-surface border-b border-primary/10 overflow-hidden">
                         <Image
                           src={project.hero_image}
@@ -66,7 +66,7 @@ export default function PortfolioPage() {
                           style={{ objectPosition: project.hero_image_pos }}
                         />
                       </div>
-                      <div className="p-6">
+                      <div className="p-6 flex flex-col flex-1">
                         <div className="flex items-start justify-between gap-4">
                           <div>
                             <h2 className="text-xl font-bold text-foreground mb-1 group-hover:text-primary transition-colors">
@@ -89,12 +89,19 @@ export default function PortfolioPage() {
                             ))}
                           </div>
                         )}
-                        {project.external_url && (
-                          <div className="mt-4 flex items-center gap-1.5 text-xs text-foreground-muted">
-                            <ExternalLink className="h-3 w-3" />
-                            Live site available
-                          </div>
-                        )}
+                        <div className="mt-auto pt-4">
+                          {project.external_url ? (
+                            <div className="flex items-center gap-1.5 text-xs text-foreground-muted">
+                              <ExternalLink className="h-3 w-3" />
+                              Live site available
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-1.5 text-xs text-foreground-muted">
+                              <ArrowRight className="h-3 w-3" />
+                              View case study
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </GlowCard>
                   </Link>
