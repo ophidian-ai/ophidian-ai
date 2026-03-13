@@ -1,26 +1,49 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { PageWrapper } from "@/components/layout/PageWrapper";
 import { CircularGallery, type GalleryItem } from "@/components/ui/circular-gallery";
 import { usePageContent } from "@/lib/use-page-content";
 import { EditableText } from "@/components/editable/editable-text";
 import { EditableImage } from "@/components/editable/editable-image";
 import { useEditMode } from "@/lib/edit-mode-context";
+import { getPortfolioProjects, type PortfolioProject } from "@/lib/portfolio";
 
-const defaultProjects = [
-  { title: "Bloomin' Acres", subtitle: "Sourdough bakery & produce", href: "/portfolio", photo: { url: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=900&auto=format&fit=crop&q=80", text: "Artisan sourdough bread on wooden cutting board", pos: "50% 40%" } },
+// Placeholder projects for visual density in the gallery
+const placeholderProjects: GalleryItem[] = [
   { title: "AI Dashboard", subtitle: "Analytics & monitoring", photo: { url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&auto=format&fit=crop&q=80", text: "Data analytics dashboard on monitor", pos: "50% 50%" } },
   { title: "E-Commerce Platform", subtitle: "Modern shopping experience", photo: { url: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=900&auto=format&fit=crop&q=80", text: "Person shopping online on laptop", pos: "50% 50%" } },
   { title: "SaaS Landing Page", subtitle: "Conversion-focused design", photo: { url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&auto=format&fit=crop&q=80", text: "Modern website design on laptop screen", pos: "50% 30%" } },
   { title: "Restaurant Site", subtitle: "Local business web presence", photo: { url: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&auto=format&fit=crop&q=80", text: "Modern restaurant interior", pos: "50% 50%" } },
-  { title: "AI Chatbot", subtitle: "Customer service automation", photo: { url: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=900&auto=format&fit=crop&q=80", text: "AI chatbot interface on screen", pos: "50% 50%" } },
 ];
+
+function dbToGalleryItem(p: PortfolioProject): GalleryItem {
+  return {
+    title: p.title,
+    subtitle: p.subtitle,
+    href: `/portfolio/${p.slug}`,
+    photo: {
+      url: p.gallery_image || p.hero_image,
+      text: p.gallery_image_alt || p.hero_image_alt,
+      pos: p.gallery_image_pos || p.hero_image_pos,
+    },
+  };
+}
 
 export default function ProjectsPage() {
   const content = usePageContent("projects");
   const { isEditMode } = useEditMode();
+  const [dbProjects, setDbProjects] = useState<PortfolioProject[]>([]);
 
-  const resolvedProjects: GalleryItem[] = defaultProjects.map((p, i) => ({
+  useEffect(() => {
+    getPortfolioProjects().then(setDbProjects);
+  }, []);
+
+  // Real projects first, then placeholders to fill the gallery
+  const galleryItems: GalleryItem[] = [
+    ...dbProjects.map(dbToGalleryItem),
+    ...placeholderProjects,
+  ].map((p, i) => ({
     ...p,
     title: content[`project_${i + 1}_title`] || p.title,
     subtitle: content[`project_${i + 1}_subtitle`] || p.subtitle,
@@ -29,6 +52,9 @@ export default function ProjectsPage() {
       url: content[`project_${i + 1}_image`] || p.photo.url,
     },
   }));
+
+  // For edit mode, show all items in grid
+  const editItems = galleryItems;
 
   return (
     <PageWrapper>
@@ -58,7 +84,7 @@ export default function ProjectsPage() {
 
           {isEditMode ? (
             <div className="w-full max-w-4xl mx-auto px-4 mt-32 grid grid-cols-2 md:grid-cols-3 gap-4">
-              {defaultProjects.map((p, i) => (
+              {editItems.map((p, i) => (
                 <div key={i} className="glass rounded-xl border border-primary/10 overflow-hidden text-center">
                   <div className="relative aspect-video">
                     <EditableImage
@@ -80,7 +106,7 @@ export default function ProjectsPage() {
             </div>
           ) : (
             <div className="w-full h-full">
-              <CircularGallery items={resolvedProjects} />
+              <CircularGallery items={galleryItems} />
             </div>
           )}
         </div>
