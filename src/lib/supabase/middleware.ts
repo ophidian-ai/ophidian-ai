@@ -59,7 +59,14 @@ export async function updateSession(request: NextRequest) {
         if (path.startsWith("/dashboard")) {
           const signInUrl = new URL("/sign-in", request.url)
           signInUrl.searchParams.set("reason", "session_expired")
-          return NextResponse.redirect(signInUrl)
+          const redirectResponse = NextResponse.redirect(signInUrl)
+          // Transfer all cookie changes (sign-out + deletions) to the redirect response
+          supabaseResponse.cookies.getAll().forEach((cookie) => {
+            redirectResponse.cookies.set(cookie)
+          })
+          redirectResponse.cookies.delete("last_activity")
+          redirectResponse.cookies.delete("remember_me")
+          return redirectResponse
         }
         return supabaseResponse
       }
