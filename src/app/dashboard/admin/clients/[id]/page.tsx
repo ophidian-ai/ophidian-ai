@@ -26,6 +26,7 @@ import type {
   Client,
   ClientService,
   Project,
+  ProjectMilestone,
   Payment,
   ContentRequest,
   Report,
@@ -82,6 +83,7 @@ export default function AdminClientDetailPage() {
   const [client, setClient] = useState<Client | null>(null);
   const [services, setServices] = useState<ClientService[]>([]);
   const [project, setProject] = useState<Project | null>(null);
+  const [milestones, setMilestones] = useState<ProjectMilestone[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [contentRequests, setContentRequests] = useState<ContentRequest[]>([]);
   const [reports, setReports] = useState<Report[]>([]);
@@ -144,11 +146,39 @@ export default function AdminClientDetailPage() {
       setPayments((paymentsRes.data ?? []) as Payment[]);
       setContentRequests((contentRes.data ?? []) as ContentRequest[]);
       setReports((reportsRes.data ?? []) as Report[]);
+
+      // Fetch milestones if project exists
+      const proj = projectRes.data as Project | null;
+      if (proj) {
+        const { data: milestoneData } = await supabase
+          .from("project_milestones")
+          .select("*")
+          .eq("project_id", proj.id)
+          .order("due_date", { ascending: true });
+        setMilestones((milestoneData ?? []) as ProjectMilestone[]);
+      }
+
       setLoading(false);
     }
 
     fetchData();
   }, [role, router, clientId]);
+
+  const handleMilestoneToggle = useCallback(
+    async (milestoneId: string) => {
+      const res = await fetch(`/api/admin/milestones/${milestoneId}/toggle`, {
+        method: "PATCH",
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setMilestones((prev) =>
+          prev.map((m) => (m.id === milestoneId ? data.milestone : m))
+        );
+      }
+    },
+    []
+  );
 
   const handlePhaseChange = useCallback(
     async (phase: ProjectPhase) => {
@@ -388,6 +418,69 @@ export default function AdminClientDetailPage() {
             onPhaseChange={handlePhaseChange}
           />
         </div>
+      )}
+
+      {/* Milestones */}
+      {project && milestones.length > 0 && (
+        <GlowCard className="p-5">
+          <h2 className="text-lg font-semibold text-foreground mb-4">
+            Milestones
+          </h2>
+          <div className="space-y-3">
+            {milestones.map((m) => (
+              <div
+                key={m.id}
+                className="flex items-start gap-3 cursor-pointer group"
+                onClick={() => handleMilestoneToggle(m.id)}
+              >
+                <div className="flex-shrink-0 mt-0.5">
+                  <div
+                    className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+                      m.completed_at
+                        ? "bg-accent/20 border-accent"
+                        : "border-white/30 group-hover:border-white/50"
+                    }`}
+                  >
+                    {m.completed_at && (
+                      <Check size={12} className="text-accent" />
+                    )}
+                  </div>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={`text-sm font-medium ${
+                        m.completed_at
+                          ? "text-foreground"
+                          : "text-foreground-dim"
+                      }`}
+                    >
+                      {m.title}
+                    </span>
+                    <span className="text-xs text-foreground-muted capitalize">
+                      {m.phase}
+                    </span>
+                    {m.completed_at && (
+                      <span className="text-xs text-accent px-2 py-0.5 rounded-full bg-accent/10">
+                        Complete
+                      </span>
+                    )}
+                  </div>
+                  {m.description && (
+                    <p className="text-xs text-foreground-dim mt-1">
+                      {m.description}
+                    </p>
+                  )}
+                  {m.due_date && (
+                    <p className="text-xs text-foreground-muted mt-1">
+                      Due: {new Date(m.due_date).toLocaleDateString()}
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </GlowCard>
       )}
 
       {/* Payment History */}
