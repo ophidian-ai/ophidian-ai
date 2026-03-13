@@ -84,16 +84,6 @@ export function FooterMain() {
                   eric.lefler@ophidianai.com
                 </a>
               </li>
-              <li>
-                <a
-                  href="https://github.com/ophidian-ai"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-foreground-muted transition-colors hover:text-primary"
-                >
-                  GitHub
-                </a>
-              </li>
             </ul>
           </div>
         </div>
