@@ -7,7 +7,6 @@ import { GlowCard } from "@/components/ui/spotlight-card";
 import { GlassButton } from "@/components/ui/glass-button";
 import { formatPhone } from "@/lib/format-phone";
 import {
-  Users,
   Plus,
   Search,
   ChevronRight,

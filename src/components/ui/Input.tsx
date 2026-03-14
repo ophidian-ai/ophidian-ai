@@ -49,7 +49,8 @@ export const Input = forwardRef<
 
       {isMultiline ? (
         (() => {
-          const { multiline: _, ...textareaProps } = rest as TextareaFieldProps;
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { multiline: _multiline, ...textareaProps } = rest as TextareaFieldProps;
           return (
             <textarea
               ref={ref as React.Ref<HTMLTextAreaElement>}

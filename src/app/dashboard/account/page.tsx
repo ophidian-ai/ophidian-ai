@@ -40,7 +40,8 @@ export default function AccountPage() {
     avatar_url: string
   } | null>(null)
   const [fullName, setFullName] = useState("")
-  const [currentPassword, setCurrentPassword] = useState("")
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [profileMessage, setProfileMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)

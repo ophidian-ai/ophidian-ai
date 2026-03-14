@@ -53,6 +53,7 @@ export async function GET(
     }
 
     // Strip sensitive fields
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { signing_token_expires_at: _expires, ...safeProposal } = proposal;
     return NextResponse.json(safeProposal);
   }

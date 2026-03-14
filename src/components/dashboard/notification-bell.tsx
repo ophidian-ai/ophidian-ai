@@ -15,6 +15,16 @@ interface Notification {
   created_at: string;
 }
 
+function timeAgo(dateStr: string) {
+  const seconds = Math.floor(
+    (Date.now() - new Date(dateStr).getTime()) / 1000
+  );
+  if (seconds < 60) return "just now";
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+  return `${Math.floor(seconds / 86400)}d ago`;
+}
+
 export function NotificationBell() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [open, setOpen] = useState(false);
@@ -100,15 +110,6 @@ export function NotificationBell() {
     }
   }
 
-  function timeAgo(dateStr: string) {
-    const seconds = Math.floor(
-      (Date.now() - new Date(dateStr).getTime()) / 1000
-    );
-    if (seconds < 60) return "just now";
-    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-    return `${Math.floor(seconds / 86400)}d ago`;
-  }
 
   return (
     <div ref={panelRef} className="relative">

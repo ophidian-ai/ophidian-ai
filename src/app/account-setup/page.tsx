@@ -50,7 +50,7 @@ export default function AccountSetupPage() {
     });
 
     return () => subscription.unsubscribe();
-  }, [supabase]);
+  }, [supabase, firstName, lastName]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -33,7 +33,7 @@ export function MeshGradientBg({
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    setMounted(true); // eslint-disable-line react-hooks/set-state-in-effect -- safe: runs once on mount
     const update = () =>
       setDimensions({
         width: window.innerWidth,

@@ -9,7 +9,6 @@ interface TimelineContentProps {
   timelineRef: RefObject<HTMLDivElement | null>;
   customVariants?: Variants;
   className?: string;
-  as?: keyof React.JSX.IntrinsicElements;
 }
 
 export function TimelineContent({
@@ -18,7 +17,6 @@ export function TimelineContent({
   timelineRef,
   customVariants,
   className,
-  as: Tag = "div",
 }: TimelineContentProps) {
   const isInView = useInView(timelineRef, { once: true, margin: "-100px" });
 
@@ -41,10 +39,8 @@ export function TimelineContent({
 
   const variants = customVariants || defaultVariants;
 
-  const MotionComponent = motion.create(Tag as any);
-
   return (
-    <MotionComponent
+    <motion.div
       custom={animationNum}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
@@ -52,6 +48,6 @@ export function TimelineContent({
       className={className}
     >
       {children}
-    </MotionComponent>
+    </motion.div>
   );
 }

@@ -41,6 +41,7 @@ export function EditableText({
     }
   }, [isEditMode, displayValue])
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const Component = Tag as any
 
   if (!isEditMode) {

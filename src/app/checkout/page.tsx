@@ -19,6 +19,7 @@ function CheckoutContent() {
 
   useEffect(() => {
     if (!plan || !planId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setError("Invalid plan selected.");
       return;
     }

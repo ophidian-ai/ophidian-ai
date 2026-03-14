@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useDashboard } from "@/lib/dashboard-context";
 import { GlowCard } from "@/components/ui/spotlight-card";
@@ -13,10 +12,8 @@ import {
   FileSignature,
   DollarSign,
   AlertTriangle,
-  Clock,
   MessageSquare,
   Plus,
-  ChevronRight,
   Activity,
 } from "lucide-react";
 import type {
@@ -25,9 +22,6 @@ import type {
   Proposal,
   Payment,
   ContentRequest,
-  PaymentStatus,
-  ProposalStatus,
-  RequestStatus,
 } from "@/lib/supabase/types";
 
 interface Stats {

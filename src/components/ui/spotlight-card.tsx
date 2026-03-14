@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, forwardRef } from "react";
 
-export interface GlowCardProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type GlowCardProps = React.HTMLAttributes<HTMLDivElement>;
 
 const GlowCard = forwardRef<HTMLDivElement, GlowCardProps>(
   ({ children, className = "", ...props }, ref) => {

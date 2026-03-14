@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useDashboard } from "@/lib/dashboard-context";
 import { GlowCard } from "@/components/ui/spotlight-card";
-import { DollarSign, TrendingUp, Clock, BarChart3 } from "lucide-react";
+import { DollarSign, TrendingUp, Clock } from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -42,16 +42,6 @@ const PIE_COLORS = [
   "#098F90",
   "#64748B",
 ];
-
-interface MonthlyRevenue {
-  month: string;
-  amount: number;
-}
-
-interface ServiceBreakdown {
-  name: string;
-  value: number;
-}
 
 export default function AdminRevenuePage() {
   const router = useRouter();

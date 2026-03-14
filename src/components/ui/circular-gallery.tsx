@@ -137,6 +137,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
 
             const cardContent = (
               <div className="relative w-full h-full rounded-xl shadow-2xl overflow-hidden group border border-primary/20 bg-surface/70 backdrop-blur-lg transition-all duration-300 hover:border-primary/40 hover:shadow-glow">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={item.photo.url}
                   alt={item.photo.text}

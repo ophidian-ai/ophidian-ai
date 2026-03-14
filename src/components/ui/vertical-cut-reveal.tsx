@@ -117,7 +117,7 @@ const VerticalCutReveal = forwardRef<VerticalCutRevealRef, TextProps>(
         }
         return Math.abs((staggerFrom as number) - index) * staggerDuration;
       },
-      [elements.length, staggerFrom, staggerDuration, splitBy, elements]
+      [staggerFrom, staggerDuration, splitBy, elements]
     );
 
     const startAnimation = useCallback(() => {
@@ -132,6 +132,7 @@ const VerticalCutReveal = forwardRef<VerticalCutRevealRef, TextProps>(
 
     useEffect(() => {
       if (autoStart) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         startAnimation();
       }
     }, [autoStart, startAnimation]);

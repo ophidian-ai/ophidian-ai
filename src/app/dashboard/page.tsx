@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useDashboard } from "@/lib/dashboard-context";
+import type { DashboardModule } from "@/lib/modules";
 import { GlowCard } from "@/components/ui/spotlight-card";
 import {
   LayoutDashboard,
@@ -14,7 +15,6 @@ import {
   Search,
   TrendingUp,
   TrendingDown,
-  DollarSign,
   Activity,
   Users,
   Zap,
@@ -222,7 +222,7 @@ function ClientDashboard() {
 
   const visibleLinks = quickLinks.filter((link) => {
     if (!link.module) return true;
-    return modules.has(link.module as any);
+    return modules.has(link.module as DashboardModule);
   });
 
   return (

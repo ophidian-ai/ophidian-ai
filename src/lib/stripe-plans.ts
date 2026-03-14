@@ -7,6 +7,7 @@ export interface RetainerPlan {
   name: string;
   description: string;
   priceMonthly: number; // cents
+  stripePriceId: string;
   features: string[];
 }
 
@@ -16,6 +17,7 @@ export const RETAINER_PLANS: Record<string, RetainerPlan> = {
     name: "SEO Growth - Standard",
     description: "Ongoing SEO optimization with monthly reporting",
     priceMonthly: 25000, // $250
+    stripePriceId: process.env.STRIPE_PRICE_SEO_GROWTH_STANDARD || "price_1TA0CGR4rFKcPc1jldz9yRYR",
     features: [
       "Keyword tracking",
       "1 blog post/page update per month",
@@ -28,6 +30,7 @@ export const RETAINER_PLANS: Record<string, RetainerPlan> = {
     name: "SEO Growth - Premium",
     description: "Comprehensive SEO with strategy calls",
     priceMonthly: 35000, // $350
+    stripePriceId: process.env.STRIPE_PRICE_SEO_GROWTH_PREMIUM || "price_1TA0CQR4rFKcPc1jSucwFEXJ",
     features: [
       "Everything in Standard",
       "2 posts/updates per month",
@@ -40,6 +43,7 @@ export const RETAINER_PLANS: Record<string, RetainerPlan> = {
     name: "Website Maintenance",
     description: "Hosting, security, and minor content updates",
     priceMonthly: 10000, // $100
+    stripePriceId: process.env.STRIPE_PRICE_MAINTENANCE_STANDARD || "price_1TA09lR4rFKcPc1jv1EVGLQc",
     features: [
       "Vercel hosting",
       "SSL certificate",
@@ -53,6 +57,7 @@ export const RETAINER_PLANS: Record<string, RetainerPlan> = {
     name: "E-Commerce Maintenance",
     description: "Enhanced maintenance for online stores",
     priceMonthly: 15000, // $150
+    stripePriceId: process.env.STRIPE_PRICE_MAINTENANCE_ECOMMERCE || "price_1TA09yR4rFKcPc1jQN0HDUtr",
     features: [
       "Everything in Standard Maintenance",
       "Product catalog updates",

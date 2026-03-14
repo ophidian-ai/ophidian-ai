@@ -239,7 +239,7 @@ export default function ProposalDetailPage() {
           <div className="glass rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-6">
             <p className="text-emerald-400 font-medium">Proposal signed successfully.</p>
             <p className="text-foreground-dim text-sm mt-1">
-              You'll receive your account setup email and invoice shortly.
+              You&apos;ll receive your account setup email and invoice shortly.
             </p>
           </div>
         )}
@@ -248,7 +248,7 @@ export default function ProposalDetailPage() {
           <div className="glass rounded-xl border border-amber-500/20 bg-amber-500/5 p-6">
             <p className="text-amber-400 font-medium">Revision request submitted.</p>
             <p className="text-foreground-dim text-sm mt-1">
-              We'll update the proposal and notify you.
+              We&apos;ll update the proposal and notify you.
             </p>
           </div>
         )}
@@ -280,7 +280,7 @@ export default function ProposalDetailPage() {
           <div className="glass rounded-xl border border-orange-500/20 bg-orange-500/5 p-6">
             <p className="text-orange-400 font-medium">Revision requested.</p>
             <p className="text-foreground-dim text-sm mt-1">
-              We're working on updates and will send you a new link when ready.
+              We&apos;re working on updates and will send you a new link when ready.
             </p>
           </div>
         )}
@@ -398,7 +398,7 @@ export default function ProposalDetailPage() {
               <h2 className="text-base font-semibold text-foreground">Sign & Submit</h2>
 
               <div className="text-xs text-foreground-dim bg-white/[0.03] rounded-lg p-4 leading-relaxed border border-white/5">
-                By typing your name below and clicking "Sign & Submit", you are
+                By typing your name below and clicking &quot;Sign &amp; Submit&quot;, you are
                 electronically signing this proposal under the Electronic Signatures
                 in Global and National Commerce Act (ESIGN Act). Your typed name
                 constitutes your legal signature and you agree to be bound by the

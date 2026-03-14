@@ -68,7 +68,7 @@ export function HeroAnimated({
     const animated = container.querySelectorAll<HTMLElement>(".grid-line, .detail-dot, .floating-element");
     animated.forEach((el) => {
       el.style.animation = "none";
-      el.offsetHeight; // trigger reflow
+      void el.offsetHeight; // trigger reflow
       el.style.animation = "";
     });
 

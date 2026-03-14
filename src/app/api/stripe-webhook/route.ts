@@ -181,7 +181,8 @@ export async function POST(request: NextRequest) {
       // Check for one-off deposit/milestone payments (from onboarding pipeline)
       const clientId = invoice.metadata?.client_id;
       if (clientId) {
-        const projectId = invoice.metadata?.project_id;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const _projectId = invoice.metadata?.project_id;
 
         // Find and update pending payment
         const { data: payment } = await supabase

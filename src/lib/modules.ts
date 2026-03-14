@@ -22,7 +22,8 @@ const SERVICE_MODULE_MAP: Record<ServiceType, DashboardModule[]> = {
 };
 
 // Modules that activate only when a project reaches "live" phase
-const LIVE_SITE_MODULES: DashboardModule[] = ["analytics", "seo_performance", "content_requests"];
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _LIVE_SITE_MODULES: DashboardModule[] = ["analytics", "seo_performance", "content_requests"];
 
 export function getClientModules(
   services: ClientService[],

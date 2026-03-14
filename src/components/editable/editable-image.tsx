@@ -67,12 +67,12 @@ export function EditableImage({
   }
 
   const imageProps = fill
-    ? { fill: true as const, alt, className, sizes: "(max-width: 768px) 100vw, 50vw" }
-    : { width: width ?? 400, height: height ?? 300, alt, className }
+    ? { fill: true as const, className, sizes: "(max-width: 768px) 100vw, 50vw" }
+    : { width: width ?? 400, height: height ?? 300, className }
 
   return (
     <div className={`relative w-full h-full ${isEditMode ? "group" : ""}`}>
-      <Image src={src} {...imageProps} />
+      <Image src={src} alt={alt} {...imageProps} />
 
       {isEditMode && (
         <>

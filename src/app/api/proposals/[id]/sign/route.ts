@@ -116,7 +116,8 @@ export async function POST(
   const depositAmount = deposit ? deposit.amount : content.finalPrice;
   const serviceType = (content as unknown as Record<string, unknown>).serviceType as string || "web_professional";
 
-  const result = await onboardClient({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _result = await onboardClient({
     clientId: client.id,
     email: client.contact_email,
     fullName: client.contact_name,

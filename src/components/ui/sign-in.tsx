@@ -88,6 +88,7 @@ const SignIn = ({ onSignIn, onGoogleSignIn, signUpHref = "#" }: SignInProps) => 
               onClick={onGoogleSignIn}
               className="w-full flex items-center justify-center gap-2 bg-gradient-to-b from-surface to-surface-hover rounded-full px-5 py-3 font-medium text-foreground shadow hover:brightness-110 transition mb-2 text-sm border border-primary/10"
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://www.svgrepo.com/show/475656/google-color.svg"
                 alt="Google"
@@ -117,21 +118,25 @@ const SignIn = ({ onSignIn, onGoogleSignIn, signUpHref = "#" }: SignInProps) => 
           who trust OphidianAI.
         </p>
         <div className="flex -space-x-1">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="https://randomuser.me/api/portraits/men/32.jpg"
             alt="user"
             className="w-8 h-8 rounded-full border-2 border-background object-cover"
           />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="https://randomuser.me/api/portraits/women/44.jpg"
             alt="user"
             className="w-8 h-8 rounded-full border-2 border-background object-cover"
           />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="https://randomuser.me/api/portraits/men/54.jpg"
             alt="user"
             className="w-8 h-8 rounded-full border-2 border-background object-cover"
           />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="https://randomuser.me/api/portraits/women/68.jpg"
             alt="user"
