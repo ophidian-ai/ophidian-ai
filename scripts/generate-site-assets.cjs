@@ -42,6 +42,7 @@ const BASE_URL = "generativelanguage.googleapis.com";
 const SCRIPT_DIR = __dirname;
 const PUBLIC_DIR = path.join(SCRIPT_DIR, "../public");
 const OUTPUT_DIR = path.join(SCRIPT_DIR, "output");
+const GALLERY_DIR = path.join(SCRIPT_DIR, "../../../references/inspiration/nature-gallery");
 
 // Parse CLI flags
 const args = process.argv.slice(2);
@@ -50,9 +51,10 @@ const runPortraits = runAll || args.includes("--portraits");
 const runTextures = runAll || args.includes("--textures");
 const runOg = runAll || args.includes("--og");
 const runHero = runAll || args.includes("--hero");
+const runNature = args.includes("--nature");
 
-if (!runPortraits && !runTextures && !runOg && !runHero) {
-  console.log("Usage: node generate-site-assets.cjs [--all | --portraits | --textures | --og | --hero]");
+if (!runPortraits && !runTextures && !runOg && !runHero && !runNature) {
+  console.log("Usage: node generate-site-assets.cjs [--all | --portraits | --textures | --og | --hero | --nature]");
   process.exit(0);
 }
 
@@ -452,6 +454,173 @@ async function generateHeroFrames() {
 }
 
 // ---------------------------------------------------------------------------
+// Nature gallery asset generation
+// ---------------------------------------------------------------------------
+
+function galleryRefs(folder, filenames) {
+  return filenames.map((f) => ({
+    path: path.join(GALLERY_DIR, folder, f),
+    mimeType: f.endsWith(".png") ? "image/png" : "image/jpeg",
+  })).filter((r) => fs.existsSync(r.path));
+}
+
+const NATURE_ASSETS = [
+  {
+    file: "hero-object.png",
+    label: "Hero sculptural object",
+    dir: "images",
+    refs: [
+      ...galleryRefs("macro", ["davidclode-snake-8928741_1920.jpg"]),
+      ...galleryRefs("organic-forms", ["sametyenipinar-liquid-9000810_1920.png"]),
+      ...galleryRefs("textures", ["wyxina-bark-8526227_1920.jpg"]),
+    ],
+    prompt: `Create a photorealistic 3D sculptural object on a pure black background. This is the hero centerpiece image for an AI company website called OphidianAI.
+
+The object:
+- A single organic sculptural form — inspired by serpent skin and coiled fluid organic shapes
+- Material: dark biomechanical serpent scales with deep forest green and near-black tones
+- Scale texture is real and detailed — use the reference snake image as the surface material reference
+- The form is smooth, coiled, fluid — reference the liquid/fluid organic forms reference for the overall shape language
+- Lit from within by intense venom green (#39FF14) bioluminescent light — the light bleeds through cracks between scales like the creature is alive with electrical energy
+- The dark bark texture reference inspires the aged, deeply ridged surface quality of the scales
+- High-end photorealistic 3D render quality — NOT an illustration, NOT a cartoon. Cinematic octane/arnold render quality.
+- The object floats in ABSOLUTE darkness — pure black #000000 background with zero gradients, no floor, no shadow on ground, no environment
+- The green glow is the only light source; it illuminates the object itself but does not touch the background
+
+Composition:
+- The sculptural object occupies roughly the center-right of the frame (like Brant Paints hero)
+- Breathing room on all sides
+- 16:9 aspect ratio, 1920x1080 quality
+- No text, no watermarks, no UI elements
+
+This image will be used as a full-screen hero visual for a premium AI agency website.`,
+  },
+  {
+    file: "hero-bg.png",
+    label: "Hero background",
+    dir: "images",
+    refs: [
+      ...galleryRefs("landscapes", ["baptiste_lheurette-mountain-5195052_1920.jpg"]),
+      ...galleryRefs("light-atmosphere", ["photostockeditor-bioluminescent-9732826_1920.jpg"]),
+    ],
+    prompt: `Generate a cinematic atmospheric background image for a dark, premium website hero section.
+
+Visual direction:
+- Extremely dark — near-black tones (#050505 to #0d1a0d)
+- Subtle organic atmospheric depth — like looking at a dark mountain silhouette under a bioluminescent night sky
+- The bioluminescent reference inspires the lighting: faint, mysterious glow at the horizon or scattered through the atmosphere — not a specific glowing object, just ambient atmospheric light
+- Deep forest green and charcoal tones dominate — this is nature at its most elemental and dark
+- No hard lines, no specific landscape details — this is atmospheric abstraction
+- The image should work as a background behind text and a 3D hero object — subtle enough not to compete
+- 16:9 aspect ratio, 1920x1080
+- No text, no UI elements`,
+  },
+  {
+    file: "services-bg.png",
+    label: "Services section background",
+    dir: "images",
+    refs: [
+      ...galleryRefs("textures", ["wyxina-bark-8526227_1920.jpg", "ioa8320-moss-483206_1920.jpg"]),
+    ],
+    prompt: `Generate a very dark organic texture for use as a subtle website section background.
+
+Visual direction:
+- Extremely dark — #080808 to #111111 tonal range
+- Organic surface texture — inspired by deeply ridged dark tree bark and moss-covered surfaces
+- The texture should suggest organic depth and age without being recognizable as a specific material
+- Faint, barely-visible teal-green undertones in the deepest ridges (reference the bark image tones)
+- No bright colors — maximum chroma is extremely desaturated and dark
+- Seamless/tileable feeling — no obvious focal point
+- 16:9 aspect ratio
+- This is a background element: extremely subtle, adds depth without competing with foreground content`,
+  },
+  {
+    file: "break-bg.png",
+    label: "Organic break section",
+    dir: "images",
+    refs: [
+      ...galleryRefs("landscapes", ["jrydertr-forest-7127716_1920.jpg", "wyxina-dark-7826049_1920.jpg"]),
+      ...galleryRefs("light-atmosphere", ["jggrz-mushrooms-7035893_1920.jpg"]),
+    ],
+    prompt: `Generate a moody, atmospheric full-bleed image for a website section break — the moment between technology and nature.
+
+Visual direction:
+- A deep, dark forest floor or forest atmosphere at night
+- Reference the dark forest and mushroom images: deep greens, near-black, mysterious organic shapes emerging from darkness
+- The glowing mushroom reference inspires faint points of bioluminescent light in the deep darkness — barely visible, like distant fireflies or glowing spores
+- Very dark overall — this is atmospheric, not a bright nature photo
+- Color palette: deep forest green (#0a1a0a), charcoal, near-black, with tiny points of warm or green bioluminescent light
+- Full-bleed composition — no obvious focal point, wraps the eye around the entire frame
+- 16:9 aspect ratio, cinematic quality
+- No text, no UI elements`,
+  },
+  {
+    file: "about-visual.png",
+    label: "About page visual",
+    dir: "images",
+    refs: [
+      ...galleryRefs("landscapes", ["mila-del-monte-forest-8355748_1920.jpg", "thmilherou-mist-5013325_1920.jpg"]),
+    ],
+    prompt: `Generate a premium, atmospheric landscape image for a website about page.
+
+Visual direction:
+- A moody misty forest or mountain landscape — the kind that makes you feel small and contemplative
+- Reference images: misty mountain/forest scenes with dramatic atmosphere
+- Dark foreground elements (trees, silhouettes) against slightly lighter misty middle ground
+- The feeling is introspective, grounded, ancient — not dramatic or action-oriented
+- Color palette: dark greens, cool grays, deep blue-green atmospheric haze
+- High contrast between dark foreground and misty background depth
+- 16:9 cinematic crop, wide-angle feeling
+- This will have text overlaid on it — the image should have areas of relative visual quiet for readability`,
+  },
+  {
+    file: "testimonials-bg.png",
+    label: "Testimonials section background",
+    dir: "images",
+    refs: [
+      ...galleryRefs("textures", ["puckel-moss-7909644_1920.jpg", "ambrevega-forest-9642627_1920.jpg"]),
+    ],
+    prompt: `Generate a very dark, subtle organic texture for use as a website testimonials section background.
+
+Visual direction:
+- Very dark — #060606 to #0f0f0f tonal range
+- Soft organic texture — inspired by dense deep-green moss and forest floor materials
+- The texture should feel soft and natural, not harsh or industrial
+- Deep, muted forest greens at 5-10% saturation — barely perceptible color
+- No obvious pattern repeat, no hard edges
+- 16:9 aspect ratio
+- Extremely subtle — this is a supporting element, not a hero image`,
+  },
+];
+
+async function generateNatureAssets() {
+  console.log("\n=== NATURE GALLERY ASSETS ===");
+
+  for (const asset of NATURE_ASSETS) {
+    const dir = path.join(PUBLIC_DIR, asset.dir);
+    ensureDir(dir);
+    const outputPath = path.join(dir, asset.file);
+
+    if (fs.existsSync(outputPath)) {
+      console.log(`  Skipping ${asset.file} (already exists)`);
+      continue;
+    }
+
+    if (asset.refs.length === 0) {
+      console.warn(`  WARNING: No reference images found for ${asset.label} — skipping`);
+      continue;
+    }
+
+    console.log(`  References: ${asset.refs.map((r) => path.basename(r.path)).join(", ")}`);
+    await generateAndSave(asset.label, asset.prompt, outputPath, asset.refs);
+    await new Promise((r) => setTimeout(r, 2000));
+  }
+
+  console.log("\nNature assets complete.");
+  console.log("Outputs saved to public/images/");
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 
@@ -463,12 +632,14 @@ async function main() {
     runTextures && "textures",
     runOg && "og",
     runHero && "hero",
+    runNature && "nature",
   ].filter(Boolean).join(", ")}`);
 
   if (runPortraits) await generatePortraits();
   if (runTextures) await generateTextures();
   if (runOg) await generateOgImages();
   if (runHero) await generateHeroFrames();
+  if (runNature) await generateNatureAssets();
 
   console.log("\n✓ All requested assets generated.");
   console.log("\nNext steps:");
@@ -476,6 +647,7 @@ async function main() {
   if (runTextures) console.log("  - Apply textures as section backgrounds in globals.css or component inline styles");
   if (runOg) console.log("  - Reference OG images in page metadata (layout.tsx openGraph.images)");
   if (runHero) console.log("  - Run Google Flow video generation with the HD still frames");
+  if (runNature) console.log("  - Review generated images in public/images/ and use in site components");
 }
 
 main().catch((err) => {
