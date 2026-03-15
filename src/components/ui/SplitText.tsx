@@ -1,6 +1,6 @@
 "use client";
 
-interface SplitTextProps {
+export interface SplitTextProps {
   text: string;
   className?: string;
   charClassName?: string;
