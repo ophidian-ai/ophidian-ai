@@ -441,3 +441,93 @@ h4 { font-size: 1.25rem; }
     display: none !important;
   }
 }
+
+/* ============================================================
+   SCROLL REVEAL ANIMATIONS — organic dark homepage
+   ============================================================ */
+
+/* Generic fade-up (stats, eyebrows, misc) */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1),
+              transform 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+/* 3D flip — headlines (Brant Paints rotateX style) */
+.reveal-flip {
+  opacity: 0;
+  transform: perspective(800px) rotateX(-72deg);
+  transform-origin: 50% 0%;
+  transition: opacity 0.5s cubic-bezier(0.16,1,0.3,1),
+              transform 0.95s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal-flip.visible { opacity: 1; transform: perspective(800px) rotateX(0deg); }
+
+/* Slide from right — service rows */
+.reveal-right {
+  opacity: 0;
+  transform: translateX(56px);
+  transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1),
+              transform 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal-right.visible { opacity: 1; transform: none; }
+
+/* Slide from left — testimonials */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-56px);
+  transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1),
+              transform 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal-left.visible { opacity: 1; transform: none; }
+
+/* Spring scale-up — cards (Brant Paints 0.74 → 1.0) */
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.74);
+  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1),
+              transform 1.0s cubic-bezier(0.34,1.4,0.64,1);
+}
+.reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+/* Masked text rise — Layrid translateY(100%) style */
+.reveal-rise-wrap { overflow: hidden; display: block; }
+.reveal-rise {
+  display: block;
+  transform: translateY(110%);
+  transition: transform 1.0s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal-rise.visible { transform: translateY(0%); }
+
+/* Clip-path image panel variants */
+.img-panel--curtain-up {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1.25s cubic-bezier(0.16,1,0.3,1);
+}
+.img-panel--curtain-up.in-view { clip-path: inset(0 0 0% 0); }
+
+.img-panel--wipe-right {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.4s cubic-bezier(0.16,1,0.3,1);
+}
+.img-panel--wipe-right.in-view { clip-path: inset(0 0% 0 0); }
+
+.img-panel--curtain-down {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1.25s cubic-bezier(0.16,1,0.3,1);
+}
+.img-panel--curtain-down.in-view { clip-path: inset(0% 0 0 0); }
+
+/* Stagger delays */
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.25; transform: translateX(-50%) translateY(0); }
+  50%       { opacity: 0.5;  transform: translateX(-50%) translateY(4px); }
+}
