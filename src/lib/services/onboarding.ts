@@ -277,7 +277,7 @@ function buildWelcomeEmailHtml(name: string, company: string, setupLink: string)
           <p>Welcome to OphidianAI! Your project for <strong>${company}</strong> is now set up and ready to go.</p>
           <p>Click the button below to set up your account and access your project dashboard:</p>
           <div style="text-align: center; margin: 30px 0;">
-            <a href="${setupLink}" style="background: #39FF14; color: #0D1B2A; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block;">Set Up Your Account</a>
+            <a href="${setupLink}" style="background: #39FF14; color: #0A0A0A; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block;">Set Up Your Account</a>
           </div>
           <p style="color: #888; font-size: 13px;">This link expires in 24 hours. If it expires, contact us for a new one.</p>
         </div>

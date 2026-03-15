@@ -105,7 +105,7 @@ const PricingSwitch = ({
             onClick={() => { if (isYearly) onToggle(); }}
             className={cn(
               "relative z-10 w-fit h-10 rounded-full sm:px-6 px-3 sm:py-2 py-1 font-medium transition-all duration-300",
-              !isYearly ? "text-[#0D1B2A]" : "text-[#39FF14]/60 hover:text-[#39FF14]"
+              !isYearly ? "text-background" : "text-primary/60 hover:text-primary"
             )}
           >
             <span className="relative z-10">Monthly</span>
@@ -115,7 +115,7 @@ const PricingSwitch = ({
             onClick={() => { if (!isYearly) onToggle(); }}
             className={cn(
               "relative z-10 w-fit h-10 flex-shrink-0 rounded-full sm:px-6 px-3 sm:py-2 py-1 font-medium transition-all duration-300",
-              isYearly ? "text-[#0D1B2A]" : "text-[#39FF14]/60 hover:text-[#39FF14]"
+              isYearly ? "text-background" : "text-primary/60 hover:text-primary"
             )}
           >
             <span className="relative z-10">Yearly</span>

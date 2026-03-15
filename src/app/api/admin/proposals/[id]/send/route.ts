@@ -80,7 +80,7 @@ export async function POST(
             <p>Your proposal for <strong>${client.company_name}</strong> is ready for review.</p>
             <p>Click the button below to review the details, request changes, or approve:</p>
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${reviewUrl}" style="background: #39FF14; color: #0D1B2A; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block;">Review Proposal</a>
+              <a href="${reviewUrl}" style="background: #39FF14; color: #0A0A0A; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block;">Review Proposal</a>
             </div>
             <p style="color: #888; font-size: 13px;">This link expires in 7 days.</p>
           </div>

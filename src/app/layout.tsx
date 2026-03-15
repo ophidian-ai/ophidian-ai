@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Space_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { JsonLd } from "@/components/JsonLd";
-import { GlobalBackground } from "@/components/layout/GlobalBackground";
 import { FloatingParticles } from "@/components/ui/FloatingParticles";
 import AIChatWidget from "@/components/ui/ai-orb";
 import { EditModeProvider } from "@/lib/edit-mode-context";
@@ -83,7 +82,6 @@ export default function RootLayout({
         className={`${inter.variable} ${spaceMono.variable} font-sans antialiased bg-background text-foreground`}
       >
         <JsonLd data={organizationSchema} />
-        <GlobalBackground />
         <FloatingParticles />
         <EditModeProvider>
           <div className="relative z-10">

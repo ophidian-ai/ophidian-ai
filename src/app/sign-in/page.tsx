@@ -4,7 +4,6 @@ import { Suspense, useState, useRef } from "react"
 import { useSearchParams } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { LoginForm } from "@/components/ui/login-form"
-import { MeshGradientBg } from "@/components/ui/mesh-gradient-bg"
 
 function SignInContent() {
   const searchParams = useSearchParams()
@@ -68,12 +67,7 @@ function SignInContent() {
       ref={containerRef}
       className={`relative min-h-screen w-full flex items-center justify-center px-4 py-12 transition-opacity duration-400 ${isTransitioning ? "opacity-0" : "opacity-100"}`}
     >
-      <MeshGradientBg
-        colors={["#39FF14", "#2BCC10", "#0A0A0A", "#161616", "#0DB1B2", "#098F90"]}
-        distortion={1.0}
-        speed={0.3}
-        veilOpacity="bg-background/80"
-      />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(57,255,20,0.04)_0%,transparent_70%)]" />
 
       <div className="relative z-10 w-full max-w-md">
         {sessionExpired && !error && (

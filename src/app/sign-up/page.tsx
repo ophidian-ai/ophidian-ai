@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
-import { MeshGradientBg } from "@/components/ui/mesh-gradient-bg"
+
 import { GlassButton } from "@/components/ui/glass-button"
 import Image from "next/image"
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react"
@@ -44,12 +44,7 @@ export default function SignUpPage() {
 
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center px-4 py-12">
-      <MeshGradientBg
-        colors={["#39FF14", "#2BCC10", "#0A0A0A", "#161616", "#0DB1B2", "#098F90"]}
-        distortion={1.0}
-        speed={0.3}
-        veilOpacity="bg-background/80"
-      />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(57,255,20,0.04)_0%,transparent_70%)]" />
 
       <div className="relative z-10 w-full max-w-md">
         <div className="p-8 sm:p-10 rounded-2xl backdrop-blur-md bg-background/60 border border-primary/10 shadow-2xl shadow-black/40">

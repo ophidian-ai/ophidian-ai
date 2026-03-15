@@ -442,7 +442,7 @@ export default function ProposalDetailPage() {
                 type="button"
                 onClick={handleSign}
                 disabled={!agreed || !typedName.trim() || actionState === "signing"}
-                className="w-full py-3 rounded-full bg-primary text-[#0D1B2A] font-semibold text-sm transition-opacity disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90"
+                className="w-full py-3 rounded-full bg-primary text-background font-semibold text-sm transition-opacity disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90"
                 style={{ backgroundColor: "#39FF14" }}
               >
                 {actionState === "signing" ? "Submitting..." : "Sign & Submit"}
