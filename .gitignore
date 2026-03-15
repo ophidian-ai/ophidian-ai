@@ -30,5 +30,5 @@ supabase/.temp/
 
 .env*.local
 
-# Scroll-scrub frame sequences (too large for git, generated from AI pipeline)
-public/frames/
+# Scroll-scrub raw generation assets (keep frames committed for Vercel deploy)
+scripts/output/
