@@ -1,117 +1,128 @@
 import Link from "next/link";
 
-const companyLinks = [
-  { href: "/about", label: "About" },
-  { href: "/services", label: "Services" },
-  { href: "/portfolio", label: "Portfolio" },
-  { href: "/blog", label: "Blog" },
-] as const;
-
-const resourceLinks = [
-  { href: "/faq", label: "FAQ" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/contact", label: "Contact" },
-] as const;
-
 export function FooterMain() {
   return (
-    <footer className="border-t border-surface-border bg-surface">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
-          {/* Brand column */}
-          <div className="sm:col-span-2 lg:col-span-1">
-            <Link href="/" className="text-xl font-bold text-foreground">
-              OphidianAI
+    <footer className="border-t border-white/8 pt-16 pb-0 overflow-hidden">
+      {/* Upper footer — links + contact */}
+      <div className="px-6 md:px-12 pb-16 grid grid-cols-2 md:grid-cols-4 gap-10 max-w-6xl mx-auto">
+        {/* Contact */}
+        <div>
+          <p className="text-xs uppercase tracking-[0.3em] text-foreground/40 mb-4">Contact</p>
+          <a
+            href="mailto:eric.lefler@ophidianai.com"
+            className="text-sm text-foreground/60 hover:text-foreground transition-colors"
+          >
+            eric.lefler@ophidianai.com
+          </a>
+          <div className="flex flex-col gap-2 mt-4">
+            <a
+              href="https://www.linkedin.com/company/ophidianai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-foreground/40 hover:text-foreground transition-colors"
+            >
+              LinkedIn
+            </a>
+            <a
+              href="https://github.com/ophidian-ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-foreground/40 hover:text-foreground transition-colors"
+            >
+              GitHub
+            </a>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <div>
+          <p className="text-xs uppercase tracking-[0.3em] text-foreground/40 mb-4">Navigation</p>
+          <div className="flex flex-col gap-2">
+            {[
+              { label: "Services", href: "/services" },
+              { label: "Projects", href: "/projects" },
+              { label: "Pricing", href: "/pricing" },
+              { label: "About", href: "/about" },
+            ].map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm text-foreground/40 hover:text-foreground transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Resources */}
+        <div>
+          <p className="text-xs uppercase tracking-[0.3em] text-foreground/40 mb-4">Resources</p>
+          <div className="flex flex-col gap-2">
+            {[
+              { label: "Blog", href: "/blog" },
+              { label: "FAQ", href: "/faq" },
+              { label: "Contact", href: "/contact" },
+            ].map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm text-foreground/40 hover:text-foreground transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Studio Note */}
+        <div>
+          <p className="text-xs uppercase tracking-[0.3em] text-foreground/40 mb-4">Studio Note</p>
+          <p className="text-sm text-foreground/40 leading-relaxed">
+            We build for businesses that are serious about AI. If it feels right,{" "}
+            <Link
+              href="/contact"
+              className="text-foreground/60 hover:text-foreground underline underline-offset-2 transition-colors"
+            >
+              this can be the starting point
             </Link>
-            <p className="mt-1 font-mono text-xs tracking-widest text-primary">
-              Intelligence. Engineered.
-            </p>
-            <p className="mt-4 text-sm leading-relaxed text-foreground-muted">
-              AI-powered solutions that transform how businesses operate.
-              Subscription integrations, custom builds, and strategic consulting.
-            </p>
-          </div>
-
-          {/* Company links */}
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
-              Company
-            </h3>
-            <ul className="mt-4 space-y-3">
-              {companyLinks.map(({ href, label }) => (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    className="text-sm text-foreground-muted transition-colors hover:text-primary"
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Resources links */}
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
-              Resources
-            </h3>
-            <ul className="mt-4 space-y-3">
-              {resourceLinks.map(({ href, label }) => (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    className="text-sm text-foreground-muted transition-colors hover:text-primary"
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Connect */}
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
-              Connect
-            </h3>
-            <ul className="mt-4 space-y-3">
-              <li>
-                <a
-                  href="mailto:eric.lefler@ophidianai.com"
-                  className="text-sm text-foreground-muted transition-colors hover:text-primary"
-                >
-                  eric.lefler@ophidianai.com
-                </a>
-              </li>
-            </ul>
-          </div>
+            .
+          </p>
         </div>
       </div>
 
+      {/* Oversized wordmark */}
+      <div className="px-4 md:px-8 select-none" aria-hidden="true">
+        <p
+          className="font-bold leading-none tracking-tighter text-foreground/10"
+          style={{
+            fontSize: "clamp(4rem, 16vw, 18rem)",
+            lineHeight: 0.85,
+          }}
+        >
+          Ophidian<span style={{ color: "#39FF14" }}>AI</span>
+        </p>
+      </div>
+
       {/* Bottom bar */}
-      <div className="border-t border-surface-border">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-6 sm:flex-row sm:px-6 lg:px-8">
-          <p className="text-xs text-foreground-dim">
-            &copy; 2026 OphidianAI. All rights reserved.
-          </p>
-          <div className="flex gap-6">
-            <span className="text-xs text-foreground-dim">
-              Columbus, Indiana
-            </span>
-            <Link
-              href="/privacy"
-              className="text-xs text-foreground-dim transition-colors hover:text-primary"
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              href="/terms"
-              className="text-xs text-foreground-dim transition-colors hover:text-primary"
-            >
-              Terms of Service
-            </Link>
-          </div>
+      <div className="px-6 md:px-12 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-white/5 mt-4">
+        <p className="text-xs text-foreground/30">
+          &copy;{new Date().getFullYear()} OphidianAI. All rights reserved.
+        </p>
+        <p className="text-xs text-foreground/20">Columbus, Indiana</p>
+        <div className="flex gap-4">
+          <Link
+            href="/privacy"
+            className="text-xs text-foreground/30 hover:text-foreground transition-colors"
+          >
+            Privacy Policy
+          </Link>
+          <Link
+            href="/terms"
+            className="text-xs text-foreground/30 hover:text-foreground transition-colors"
+          >
+            Terms of Service
+          </Link>
         </div>
       </div>
     </footer>
