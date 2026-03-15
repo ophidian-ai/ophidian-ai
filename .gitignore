@@ -29,3 +29,6 @@ Thumbs.db
 supabase/.temp/
 
 .env*.local
+
+# Scroll-scrub frame sequences (too large for git, generated from AI pipeline)
+public/frames/
