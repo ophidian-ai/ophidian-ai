@@ -90,13 +90,15 @@ export function ScrollScrubHero() {
       if (frameIndex !== lastFrame && images[frameIndex]) {
         const img = images[frameIndex];
 
-        // Cover-fit: scale to fill canvas, crop edges
-        const scale = Math.max(
+        // Contain-fit with scale-back: keeps serpent centered with breathing room
+        // 0.65 = serpent fills ~65% of viewport height (adjust to taste)
+        const SERPENT_SCALE = 0.65;
+        const containScale = Math.min(
           canvas.width / img.width,
           canvas.height / img.height
-        );
-        const w = img.width * scale;
-        const h = img.height * scale;
+        ) * SERPENT_SCALE;
+        const w = img.width * containScale;
+        const h = img.height * containScale;
         const x = (canvas.width - w) / 2;
         const y = (canvas.height - h) / 2;
 
