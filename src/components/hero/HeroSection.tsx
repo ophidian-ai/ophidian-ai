@@ -1,66 +1,109 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useFrameSequence } from "@/components/hero/useFrameSequence";
+
+const TOTAL_FRAMES = 121;
 
 /**
  * OphidianAI homepage hero.
  *
  * Layout: 280vh scroll wrapper with sticky 100vh section.
- * As the user scrolls through the wrapper, the hero background
- * scales down and gains rounded corners — "shrinking to a card".
- * The headline and CTA fade out as shrink progresses.
- *
- * Background: hero-bg.png (dark forest atmosphere)
- * No video dependency — static image for reliability.
+ * The serpent frame sequence plays as you scroll through the wrapper.
+ * Simultaneously, the container scales down and gains rounded corners
+ * — "shrinking to a card". Headline fades out as shrink progresses.
  */
 export function HeroSection() {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const mediaRef   = useRef<HTMLDivElement>(null);
+  const wrapperRef  = useRef<HTMLDivElement>(null);
+  const mediaRef    = useRef<HTMLDivElement>(null);
+  const canvasRef   = useRef<HTMLCanvasElement>(null);
   const vignetteRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const contentRef  = useRef<HTMLDivElement>(null);
 
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => { setIsMobile(window.innerWidth < 768); }, []);
+
+  const totalFrames = isMobile ? 80 : TOTAL_FRAMES;
+  const { images, isReady } = useFrameSequence("/frames/serpent/frame-", totalFrames);
+
+  // Canvas dimensions
   useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    canvas.width  = 1280;
+    canvas.height = 720;
+  }, []);
+
+  // Draw frame 0 as soon as the sequence is ready (no scroll event needed)
+  useEffect(() => {
+    if (!isReady || !canvasRef.current || images.length === 0) return;
+    const ctx = canvasRef.current.getContext("2d");
+    if (!ctx || !images[0]) return;
+    ctx.clearRect(0, 0, 1280, 720);
+    ctx.drawImage(images[0], 0, 0, 1280, 720);
+  }, [isReady, images]);
+
+  // Combined: draw frames + shrink container, both driven by scroll
+  useEffect(() => {
+    let lastFrame = -1;
+
     function onScroll() {
-      const wrapper = wrapperRef.current;
-      const media   = mediaRef.current;
+      const wrapper  = wrapperRef.current;
+      const media    = mediaRef.current;
+      const canvas   = canvasRef.current;
       const vignette = vignetteRef.current;
-      const content = contentRef.current;
+      const content  = contentRef.current;
       if (!wrapper || !media) return;
 
-      const rect = wrapper.getBoundingClientRect();
-      const wh = window.innerHeight;
+      const rect        = wrapper.getBoundingClientRect();
+      const wh          = window.innerHeight;
       const totalScroll = wrapper.offsetHeight - wh;
-      const scrolled = -rect.top;
-      // Use first 55% of the scroll range for the shrink animation
-      const progress = Math.max(0, Math.min(1, scrolled / (totalScroll * 0.55)));
+      const scrolled    = -rect.top;
+      if (totalScroll <= 0) return;
 
-      if (progress > 0) {
-        const scale = 1 - progress * 0.28;
-        const br = progress * 20;
-        const mx = progress * 4;
-        const my = progress * 3;
-        media.style.transform = `scale(${scale})`;
+      // Frame progress: full wrapper drives the whole sequence
+      const frameProgress  = Math.max(0, Math.min(1, scrolled / totalScroll));
+      // Shrink progress: first 55% of the wrapper
+      const shrinkProgress = Math.max(0, Math.min(1, scrolled / (totalScroll * 0.55)));
+
+      // Draw the current frame
+      if (canvas && images.length > 0) {
+        const ctx        = canvas.getContext("2d");
+        const frameIndex = Math.min(Math.floor(frameProgress * (images.length - 1)), images.length - 1);
+        if (ctx && frameIndex !== lastFrame && images[frameIndex]) {
+          ctx.clearRect(0, 0, 1280, 720);
+          ctx.drawImage(images[frameIndex], 0, 0, 1280, 720);
+          lastFrame = frameIndex;
+        }
+      }
+
+      // Shrink + margin the media container
+      if (shrinkProgress > 0) {
+        const br = shrinkProgress * 20;
+        const mx = shrinkProgress * 4;
+        const my = shrinkProgress * 3;
+        media.style.transform    = `scale(${1 - shrinkProgress * 0.28})`;
         media.style.borderRadius = `${br}px`;
-        media.style.margin = `${my}% ${mx}%`;
-        media.style.width = `${100 - mx * 2}%`;
-        media.style.height = `${100 - my * 2}%`;
-        if (vignette) vignette.style.opacity = String(1 - progress * 0.85);
-        if (content) content.style.opacity = String(1 - progress * 2);
+        media.style.margin       = `${my}% ${mx}%`;
+        media.style.width        = `${100 - mx * 2}%`;
+        media.style.height       = `${100 - my * 2}%`;
+        if (vignette) vignette.style.opacity = String(1 - shrinkProgress * 0.85);
+        if (content)  content.style.opacity  = String(1 - shrinkProgress * 2);
       } else {
-        media.style.transform = "";
+        media.style.transform    = "";
         media.style.borderRadius = "";
-        media.style.margin = "";
-        media.style.width = "";
-        media.style.height = "";
+        media.style.margin       = "";
+        media.style.width        = "";
+        media.style.height       = "";
         if (vignette) vignette.style.opacity = "";
-        if (content) content.style.opacity = "";
+        if (content)  content.style.opacity  = "";
       }
     }
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [images]);
 
   return (
     <div ref={wrapperRef} style={{ height: "280vh", position: "relative" }}>
@@ -68,20 +111,45 @@ export function HeroSection() {
         className="sticky top-0 h-screen min-h-[720px] overflow-hidden flex items-end"
         style={{ padding: "0 48px 80px", background: "#000" }}
       >
-        {/* Background image — scales/shrinks on scroll */}
+        {/* Serpent canvas — shrinks to card on scroll */}
         <div
           ref={mediaRef}
           className="absolute inset-0 overflow-hidden"
           style={{ willChange: "transform, border-radius", transition: "none" }}
         >
+          {/* Atmospheric forest bg underneath the serpent */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/hero-bg.png"
             alt=""
-            className="w-full h-full object-cover"
-            style={{ opacity: 0.7 }}
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ opacity: 0.45 }}
           />
-          {/* Subtle radial tint overlay */}
+
+          {/* Poster frame shown before canvas is ready */}
+          {!isReady && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src="/frames/serpent/frame-0001.webp"
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ mixBlendMode: "lighten", opacity: 0.85 }}
+            />
+          )}
+
+          {/* Live canvas */}
+          <canvas
+            ref={canvasRef}
+            className="absolute inset-0 w-full h-full"
+            style={{
+              objectFit: "cover",
+              mixBlendMode: "lighten",
+              opacity: isReady ? 0.85 : 0,
+              transition: "opacity 0.4s",
+            }}
+          />
+
+          {/* Radial tint */}
           <div
             className="absolute inset-0"
             style={{
