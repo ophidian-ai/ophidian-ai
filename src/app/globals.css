@@ -520,6 +520,15 @@ h4 { font-size: 1.25rem; }
 }
 .img-panel--curtain-down.in-view { clip-path: inset(0% 0 0 0); }
 
+/* fade-scale variant — opacity + subtle scale */
+.img-panel--fade-scale {
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity 1.0s cubic-bezier(0.16,1,0.3,1),
+              transform 1.2s cubic-bezier(0.16,1,0.3,1);
+}
+.img-panel--fade-scale.in-view { opacity: 1; transform: scale(1); }
+
 /* Stagger delays */
 .reveal-delay-1 { transition-delay: 0.1s; }
 .reveal-delay-2 { transition-delay: 0.2s; }

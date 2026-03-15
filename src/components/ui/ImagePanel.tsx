@@ -24,7 +24,7 @@ const variantClass: Record<PanelVariant, string> = {
   "curtain-up":    "img-panel img-panel--curtain-up",
   "wipe-right":    "img-panel img-panel--wipe-right",
   "curtain-down":  "img-panel img-panel--curtain-down",
-  "fade-scale":    "img-panel",  // uses default opacity/scale reveal
+  "fade-scale":    "img-panel img-panel--fade-scale",
 };
 
 export function ImagePanel({
@@ -40,20 +40,20 @@ export function ImagePanel({
 
   // Parallax: image translates slightly on scroll
   useEffect(() => {
-    const img = imgRef.current;
-    const wrap = wrapRef.current;
-    if (!img || !wrap) return;
-
     function onScroll() {
-      if (!wrap) return;
+      const img = imgRef.current;
+      const wrap = wrapRef.current;
+      if (!img || !wrap) return;
       const rect = wrap.getBoundingClientRect();
       const pct = -rect.top / window.innerHeight;
+      // offset spans from -7.5% (top of viewport) to +7.5% (bottom) to match 115% image height
       const offset = -7.5 + pct * 15;
-      img!.style.transform = `translateY(${offset}%)`;
+      img.style.transform = `translateY(${offset}%)`;
     }
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
