@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { Inter, Space_Mono } from "next/font/google";
+import { Inter, Space_Mono, Playfair_Display } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { JsonLd } from "@/components/JsonLd";
-import { VideoBackground } from "@/components/ui/VideoBackground";
 import AIChatWidget from "@/components/ui/ai-orb";
 import { EditModeProvider } from "@/lib/edit-mode-context";
 import { EditModeToolbar } from "@/components/editable/edit-mode-toolbar";
@@ -18,6 +17,13 @@ const spaceMono = Space_Mono({
   variable: "--font-space-mono",
   subsets: ["latin"],
   weight: ["400", "700"],
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -79,10 +85,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${inter.variable} ${spaceMono.variable} font-sans antialiased bg-background text-foreground`}
+        className={`${inter.variable} ${spaceMono.variable} ${playfair.variable} font-sans antialiased bg-background text-foreground`}
       >
         <JsonLd data={organizationSchema} />
-        <VideoBackground />
         <EditModeProvider>
           <div className="relative z-10">
             {children}

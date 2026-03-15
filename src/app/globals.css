@@ -1,30 +1,44 @@
 @import "tailwindcss";
 
 /* ============================================================
-   OphidianAI Brand Theme
+   OphidianAI Brand Theme — Organic Intelligence
    ============================================================ */
 
 @theme inline {
-  /* Colors */
+  /* Legacy colors (preserved for dashboard compatibility) */
   --color-primary: #39FF14;
   --color-primary-light: #5FFF42;
   --color-primary-dark: #2BCC10;
   --color-accent: #0DB1B2;
   --color-accent-muted: rgba(13, 177, 178, 0.15);
 
-  --color-background: #000000;
-  --color-background-alt: #0A0A0A;
-  --color-surface: #161616;
-  --color-surface-hover: #1E1E1E;
+  --color-background: #1B2E21;
+  --color-background-alt: #0F1F14;
+  --color-surface: #1B2E21;
+  --color-surface-hover: #243B2B;
   --color-surface-border: rgba(255, 255, 255, 0.08);
 
   --color-foreground: #F1F5F9;
   --color-foreground-muted: #94A3B8;
   --color-foreground-dim: #64748B;
 
+  /* Organic palette */
+  --color-forest: #1B2E21;
+  --color-forest-deep: #0F1F14;
+  --color-sage: #D4DFD0;
+  --color-sage-light: #E8EDE5;
+  --color-venom: #39FF14;
+  --color-teal: #0DB1B2;
+  --color-gold: #C4A265;
+  --color-text-light: #F1F5F9;
+  --color-text-muted: #94A3B8;
+  --color-text-dark: #1B2E21;
+  --color-border-subtle: rgba(255, 255, 255, 0.08);
+
   /* Fonts */
   --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-space-mono), ui-monospace, monospace;
+  --font-display: var(--font-playfair), 'Playfair Display', serif;
 
   /* Spacing scale (augmenting defaults) */
   --spacing-18: 4.5rem;
@@ -53,10 +67,8 @@ body {
   min-height: 100vh;
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
+/* Smooth scrolling — disabled for GSAP ScrollTrigger compatibility.
+   Anchor link smooth scrolling handled via JS instead. */
 
 /* Focus styles */
 *:focus-visible {
@@ -539,4 +551,13 @@ h4 { font-size: 1.25rem; }
 @keyframes scrollPulse {
   0%, 100% { opacity: 0.25; transform: translateX(-50%) translateY(0); }
   50%       { opacity: 0.5;  transform: translateX(-50%) translateY(4px); }
+}
+
+/* Horizontal auto-scroll for image carousel */
+@keyframes scroll-x {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-scroll-x {
+  animation: scroll-x 60s linear infinite;
 }
