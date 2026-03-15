@@ -158,6 +158,19 @@ export function ScrollScrubHero() {
         className={`sticky top-0 h-screen w-full ${isReady ? "" : "hidden"}`}
       />
 
+      {/* Vignette overlay -- fades canvas edges to page background, hides frame bg mismatch + Veo watermark */}
+      <div
+        className="sticky top-0 h-screen w-full pointer-events-none"
+        style={{
+          marginTop: "-100vh",
+          background: `
+            radial-gradient(ellipse 70% 60% at center, transparent 40%, #000000 100%),
+            linear-gradient(to bottom, transparent 85%, #000000 100%)
+          `,
+          zIndex: 1,
+        }}
+      />
+
       {/* Text overlay */}
       <HeroTextOverlay containerRef={containerRef} />
 
