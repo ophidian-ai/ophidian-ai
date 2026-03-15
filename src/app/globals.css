@@ -503,3 +503,39 @@ h4 { font-size: 1.25rem; }
 .dashboard-card:nth-child(6) { animation-delay: -2.5s; }
 .dashboard-card:nth-child(7) { animation-delay: -3.5s; }
 .dashboard-card:nth-child(8) { animation-delay: -0.5s; }
+
+/* ============================================================
+   Scroll-Scrub Hero
+   ============================================================ */
+
+.scroll-scrub-container {
+  position: relative;
+  width: 100%;
+}
+
+.scroll-scrub-container canvas {
+  display: block;
+}
+
+/* Atmosphere fragment float animation */
+@keyframes fragment-float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-15px) rotate(2deg); }
+  50% { transform: translateY(-5px) rotate(-1deg); }
+  75% { transform: translateY(-20px) rotate(1.5deg); }
+}
+
+/* Reduced motion: collapse scroll runway, disable animations */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-scrub-container {
+    height: auto !important;
+  }
+
+  .scroll-scrub-container canvas {
+    position: relative !important;
+  }
+
+  .hero-atmosphere {
+    display: none !important;
+  }
+}
