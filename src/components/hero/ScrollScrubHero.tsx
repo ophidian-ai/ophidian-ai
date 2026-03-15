@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useFrameSequence } from "./useFrameSequence";
 import { useScrollProgress } from "./useScrollProgress";
 import { HeroTextOverlay } from "./HeroTextOverlay";
+import { HeroAtmosphere } from "./HeroAtmosphere";
 
 // Frame counts -- update after real asset generation (Task 12)
 const DESKTOP_FRAMES = 60; // placeholder count; real count ~150-240
@@ -46,6 +47,9 @@ export function ScrollScrubHero() {
 
   // Scroll progress (ref-based, no re-renders)
   const { progressRef } = useScrollProgress(containerRef);
+
+  // Atmosphere activation (triggers at 95% scroll progress)
+  const [atmosphereActive, setAtmosphereActive] = useState(false);
 
   // Canvas resize handler
   useEffect(() => {
@@ -101,12 +105,17 @@ export function ScrollScrubHero() {
         lastFrame = frameIndex;
       }
 
+      // Activate atmosphere when scroll passes 95%
+      if (progressRef.current >= 0.95 && !atmosphereActive) {
+        setAtmosphereActive(true);
+      }
+
       rafId = requestAnimationFrame(render);
     }
 
     render();
     return () => cancelAnimationFrame(rafId);
-  }, [isReady, images, progressRef, prefersReducedMotion]);
+  }, [isReady, images, progressRef, prefersReducedMotion, atmosphereActive]);
 
   // Reduced motion: show static final frame
   if (prefersReducedMotion) {
@@ -149,6 +158,9 @@ export function ScrollScrubHero() {
 
       {/* Text overlay */}
       <HeroTextOverlay containerRef={containerRef} />
+
+      {/* Post-scrub atmosphere (checkpoint: "hybrid" vs "full" -- Eric decides) */}
+      <HeroAtmosphere variant="hybrid" active={atmosphereActive} />
 
       {/* No-JS fallback */}
       <noscript>
