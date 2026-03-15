@@ -6,6 +6,7 @@ import Image from "next/image";
 import { GlassButton } from "@/components/ui/glass-button";
 import { AccountPopover } from "@/components/ui/account-popover";
 import { SplitText } from "@/components/ui/SplitText";
+import { NavStatusBar } from "@/components/ui/NavStatusBar";
 import { createClient } from "@/lib/supabase/client";
 
 const navLinks = [
@@ -168,6 +169,11 @@ export function NavMain() {
               </div>
             </button>
           </div>
+          {scrolled && (
+            <div className="border-t border-white/5 px-0 py-1.5">
+              <NavStatusBar />
+            </div>
+          )}
         </div>
       </nav>
 
