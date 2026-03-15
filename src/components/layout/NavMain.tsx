@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { GlassButton } from "@/components/ui/glass-button";
 import { AccountPopover } from "@/components/ui/account-popover";
+import { SplitText } from "@/components/ui/SplitText";
 import { createClient } from "@/lib/supabase/client";
 
 const navLinks = [
@@ -125,9 +126,9 @@ export function NavMain() {
                 <Link
                   key={href}
                   href={href}
-                  className="relative px-3 py-2 text-sm font-medium text-foreground-muted transition-colors hover:text-foreground after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-0 after:-translate-x-1/2 after:bg-primary after:transition-all after:duration-300 hover:after:w-2/3"
+                  className="group relative inline-flex overflow-hidden px-3 py-2 text-sm font-medium text-foreground-muted transition-colors duration-200 hover:text-foreground"
                 >
-                  {label}
+                  <SplitText text={label} delay={20} />
                 </Link>
               ))}
             </div>
