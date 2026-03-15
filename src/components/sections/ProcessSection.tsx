@@ -1,6 +1,8 @@
+import type { ReactNode } from "react";
+
 interface Step {
   num: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   name: string;
   desc: string;
 }
