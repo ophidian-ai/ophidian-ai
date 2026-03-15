@@ -542,7 +542,7 @@ function AdminDashboard() {
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    background: "#162032",
+                    background: "#161616",
                     border: "1px solid rgba(57,255,20,0.2)",
                     borderRadius: "8px",
                     color: "#F1F5F9",
@@ -603,7 +603,7 @@ function AdminDashboard() {
                   <YAxis stroke="rgba(255,255,255,0.3)" fontSize={12} />
                   <Tooltip
                     contentStyle={{
-                      background: "#162032",
+                      background: "#161616",
                       border: "1px solid rgba(57,255,20,0.2)",
                       borderRadius: "8px",
                       color: "#F1F5F9",

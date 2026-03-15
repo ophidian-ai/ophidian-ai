@@ -3,6 +3,7 @@ import { Inter, Space_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { JsonLd } from "@/components/JsonLd";
 import { GlobalBackground } from "@/components/layout/GlobalBackground";
+import { FloatingParticles } from "@/components/ui/FloatingParticles";
 import AIChatWidget from "@/components/ui/ai-orb";
 import { EditModeProvider } from "@/lib/edit-mode-context";
 import { EditModeToolbar } from "@/components/editable/edit-mode-toolbar";
@@ -83,6 +84,7 @@ export default function RootLayout({
       >
         <JsonLd data={organizationSchema} />
         <GlobalBackground />
+        <FloatingParticles />
         <EditModeProvider>
           <div className="relative z-10">
             {children}

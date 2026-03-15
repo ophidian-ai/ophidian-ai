@@ -7,7 +7,7 @@ import { HeroTextOverlay } from "./HeroTextOverlay";
 import { HeroAtmosphere } from "./HeroAtmosphere";
 
 // Frame counts -- from flow-iteration-3.mp4 extraction (15fps desktop, 10fps mobile)
-const DESKTOP_FRAMES = 120;
+const DESKTOP_FRAMES = 121;
 const MOBILE_FRAMES = 80;
 
 /**

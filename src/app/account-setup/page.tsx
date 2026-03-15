@@ -107,8 +107,8 @@ export default function AccountSetupPage() {
         colors={[
           "#39FF14",
           "#2BCC10",
-          "#0D1B2A",
-          "#162032",
+          "#0A0A0A",
+          "#161616",
           "#0DB1B2",
           "#098F90",
         ]}

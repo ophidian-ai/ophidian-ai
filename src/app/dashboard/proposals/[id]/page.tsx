@@ -177,7 +177,7 @@ export default function ProposalDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0D1B2A] flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-foreground-dim">Loading proposal...</div>
       </div>
     );
@@ -185,7 +185,7 @@ export default function ProposalDetailPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#0D1B2A] flex items-center justify-center p-6">
+      <div className="min-h-screen bg-background flex items-center justify-center p-6">
         <div className="glass rounded-xl border border-red-500/20 p-8 max-w-md w-full text-center">
           <p className="text-red-400 font-medium">{error}</p>
           <p className="text-foreground-dim text-sm mt-2">
@@ -211,7 +211,7 @@ export default function ProposalDetailPage() {
   const canAct = isSent && !!token;
 
   return (
-    <div className="min-h-screen bg-[#0D1B2A] py-10 px-4">
+    <div className="min-h-screen bg-background py-10 px-4">
       <div className="max-w-3xl mx-auto space-y-6">
         {/* Header */}
         <div className="glass rounded-xl border border-primary/10 p-8">

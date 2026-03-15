@@ -12,10 +12,10 @@
   --color-accent: #0DB1B2;
   --color-accent-muted: rgba(13, 177, 178, 0.15);
 
-  --color-background: #0D1B2A;
-  --color-background-alt: #1A2332;
-  --color-surface: #162032;
-  --color-surface-hover: #1E2D42;
+  --color-background: #0A0A0A;
+  --color-background-alt: #111111;
+  --color-surface: #161616;
+  --color-surface-hover: #1E1E1E;
   --color-surface-border: rgba(255, 255, 255, 0.08);
 
   --color-foreground: #F1F5F9;
@@ -49,7 +49,7 @@
    ============================================================ */
 
 body {
-  background: linear-gradient(180deg, var(--color-background) 0%, var(--color-background-alt) 100%);
+  background: var(--color-background);
   min-height: 100vh;
 }
 
@@ -110,7 +110,7 @@ h4 { font-size: 1.25rem; }
 
 /* Glass effect for cards */
 .glass {
-  background: rgba(22, 32, 50, 0.6);
+  background: rgba(22, 22, 22, 0.6);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -188,7 +188,7 @@ h4 { font-size: 1.25rem; }
 
 /* ============================================================
    Glow Card Effect (Brand Color Shifting)
-   Cycles through: Venom Green (#39FF14), Teal (#0DB1B2), Navy (#0D1B2A)
+   Cycles through: Venom Green (#39FF14), Teal (#0DB1B2), Dark (#0A0A0A)
    ============================================================ */
 
 .glow-card {

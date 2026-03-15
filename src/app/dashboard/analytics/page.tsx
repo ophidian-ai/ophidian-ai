@@ -208,7 +208,7 @@ function AnalyticsContent({ clientId }: { clientId: string | null }) {
                   <YAxis stroke="#6B7280" fontSize={12} />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#0D1B2A",
+                      backgroundColor: "#0A0A0A",
                       border: "1px solid rgba(13,177,178,0.2)",
                       borderRadius: "8px",
                       color: "#fff",
@@ -246,7 +246,7 @@ function AnalyticsContent({ clientId }: { clientId: string | null }) {
                       />
                       <Tooltip
                         contentStyle={{
-                          backgroundColor: "#0D1B2A",
+                          backgroundColor: "#0A0A0A",
                           border: "1px solid rgba(13,177,178,0.2)",
                           borderRadius: "8px",
                           color: "#fff",
@@ -283,7 +283,7 @@ function AnalyticsContent({ clientId }: { clientId: string | null }) {
                       </Pie>
                       <Tooltip
                         contentStyle={{
-                          backgroundColor: "#0D1B2A",
+                          backgroundColor: "#0A0A0A",
                           border: "1px solid rgba(13,177,178,0.2)",
                           borderRadius: "8px",
                           color: "#fff",

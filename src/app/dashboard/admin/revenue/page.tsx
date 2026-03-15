@@ -236,7 +236,7 @@ export default function AdminRevenuePage() {
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#0D1B2A",
+                      backgroundColor: "#0A0A0A",
                       border: "1px solid rgba(255,255,255,0.1)",
                       borderRadius: "8px",
                       color: "#fff",
@@ -291,7 +291,7 @@ export default function AdminRevenuePage() {
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#0D1B2A",
+                      backgroundColor: "#0A0A0A",
                       border: "1px solid rgba(255,255,255,0.1)",
                       borderRadius: "8px",
                       color: "#fff",

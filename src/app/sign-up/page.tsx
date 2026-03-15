@@ -45,7 +45,7 @@ export default function SignUpPage() {
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center px-4 py-12">
       <MeshGradientBg
-        colors={["#39FF14", "#2BCC10", "#0D1B2A", "#162032", "#0DB1B2", "#098F90"]}
+        colors={["#39FF14", "#2BCC10", "#0A0A0A", "#161616", "#0DB1B2", "#098F90"]}
         distortion={1.0}
         speed={0.3}
         veilOpacity="bg-background/80"

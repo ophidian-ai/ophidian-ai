@@ -70,9 +70,9 @@ export async function POST(
     to: client.contact_email,
     subject: "Your proposal from OphidianAI is ready for review",
     html: `
-      <div style="background: #0D1B2A; padding: 40px 20px; font-family: system-ui, sans-serif;">
-        <div style="max-width: 600px; margin: 0 auto; background: #1B2838; border-radius: 12px; overflow: hidden;">
-          <div style="padding: 30px; text-align: center; border-bottom: 1px solid #2A3A4A;">
+      <div style="background: #0A0A0A; padding: 40px 20px; font-family: system-ui, sans-serif;">
+        <div style="max-width: 600px; margin: 0 auto; background: #161616; border-radius: 12px; overflow: hidden;">
+          <div style="padding: 30px; text-align: center; border-bottom: 1px solid #2A2A2A;">
             <h1 style="color: #39FF14; margin: 0; font-size: 24px;">OphidianAI</h1>
           </div>
           <div style="padding: 30px; color: #E0E0E0; line-height: 1.6;">
