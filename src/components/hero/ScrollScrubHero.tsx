@@ -6,9 +6,9 @@ import { useScrollProgress } from "./useScrollProgress";
 import { HeroTextOverlay } from "./HeroTextOverlay";
 import { HeroAtmosphere } from "./HeroAtmosphere";
 
-// Frame counts -- update after real asset generation (Task 12)
-const DESKTOP_FRAMES = 60; // placeholder count; real count ~150-240
-const MOBILE_FRAMES = 60; // placeholder count; real count ~50-80
+// Frame counts -- from flow-iteration-3.mp4 extraction (15fps desktop, 10fps mobile)
+const DESKTOP_FRAMES = 120;
+const MOBILE_FRAMES = 80;
 
 /**
  * Scroll-scrub hero component for the OphidianAI homepage.
