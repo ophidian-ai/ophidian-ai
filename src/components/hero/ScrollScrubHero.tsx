@@ -175,7 +175,7 @@ export function ScrollScrubHero() {
       <HeroTextOverlay containerRef={containerRef} />
 
       {/* Post-scrub atmosphere (checkpoint: "hybrid" vs "full" -- Eric decides) */}
-      <HeroAtmosphere variant="hybrid" active={atmosphereActive} />
+      <HeroAtmosphere variant="full" active={atmosphereActive} />
 
       {/* No-JS fallback */}
       <noscript>
