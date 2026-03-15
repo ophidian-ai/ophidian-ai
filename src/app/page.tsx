@@ -3,10 +3,12 @@
 import { NavMain } from "@/components/layout/NavMain";
 import { FooterMain } from "@/components/layout/FooterMain";
 import { HeroAnimated } from "@/components/ui/hero-animated";
+import { ScrollScrubHero } from "@/components/hero/ScrollScrubHero";
 import { StatsBar } from "@/components/sections/StatsBar";
 import { FeaturesGrid } from "@/components/sections/FeaturesGrid";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { CTABanner } from "@/components/sections/CTABanner";
+import { TestimonialsColumn, type Testimonial } from "@/components/ui/testimonials-columns";
 import { usePageContent } from "@/lib/use-page-content";
 import { EditableText } from "@/components/editable/editable-text";
 import { useEditMode } from "@/lib/edit-mode-context";
@@ -39,6 +41,67 @@ const defaultFeatures = [
   { title: "Predictive Analytics", description: "AI-powered dashboards that forecast trends, flag anomalies, and surface the insights that drive better business decisions." },
 ];
 
+const testimonials: Testimonial[] = [
+  {
+    text: "OphidianAI transformed our online presence completely. The website they built drives real results and our customers love it.",
+    image: "https://randomuser.me/api/portraits/women/1.jpg",
+    name: "Sarah Mitchell",
+    role: "Small Business Owner",
+  },
+  {
+    text: "The AI integration streamlined our customer support. Response times dropped by 80% and satisfaction scores went through the roof.",
+    image: "https://randomuser.me/api/portraits/men/2.jpg",
+    name: "James Rodriguez",
+    role: "Operations Manager",
+  },
+  {
+    text: "Working with Eric was seamless. He understood our vision immediately and delivered a site that exceeded our expectations.",
+    image: "https://randomuser.me/api/portraits/women/3.jpg",
+    name: "Emily Chen",
+    role: "Marketing Director",
+  },
+  {
+    text: "The automated workflows OphidianAI built saved us 20+ hours a week. That's time we now spend growing the business.",
+    image: "https://randomuser.me/api/portraits/men/4.jpg",
+    name: "David Park",
+    role: "CEO",
+  },
+  {
+    text: "Finally, a tech partner who speaks our language. No jargon, just results. Our e-commerce conversion rate doubled.",
+    image: "https://randomuser.me/api/portraits/women/5.jpg",
+    name: "Lisa Thompson",
+    role: "E-commerce Manager",
+  },
+  {
+    text: "The AI chatbot handles 70% of our support tickets now. It's like having an extra team member that never sleeps.",
+    image: "https://randomuser.me/api/portraits/women/6.jpg",
+    name: "Amanda Foster",
+    role: "Customer Success Lead",
+  },
+  {
+    text: "OphidianAI built exactly what we needed -- no bloat, no unnecessary features. Clean, fast, and effective.",
+    image: "https://randomuser.me/api/portraits/men/7.jpg",
+    name: "Michael Rivera",
+    role: "Product Manager",
+  },
+  {
+    text: "They delivered a solution that scaled with us. As we grew, the system grew too. Best investment we made this year.",
+    image: "https://randomuser.me/api/portraits/women/8.jpg",
+    name: "Rachel Kim",
+    role: "COO",
+  },
+  {
+    text: "The analytics dashboard OphidianAI built gives us real-time insights we never had before. Game changer for our strategy.",
+    image: "https://randomuser.me/api/portraits/men/9.jpg",
+    name: "Chris Anderson",
+    role: "Data Analyst",
+  },
+];
+
+const testimonialCol1 = testimonials.slice(0, 3);
+const testimonialCol2 = testimonials.slice(3, 6);
+const testimonialCol3 = testimonials.slice(6, 9);
+
 const defaultSteps = [
   { title: "Discovery", description: "We audit your current workflows, identify high-impact automation opportunities, and define clear success metrics." },
   { title: "Architecture", description: "We design the integration blueprint -- which AI models, what data flows, how it connects to your existing stack." },
@@ -62,12 +125,7 @@ export default function Home() {
             <EditableText page="home" contentKey="hero_bottom" defaultValue={defaultHero.bottom} dbValue={content["hero_bottom"]} as="p" className="text-foreground-muted" />
           </section>
         ) : (
-          <HeroAnimated
-            taglineWords={(content["hero_tagline"] || defaultHero.tagline).split(" ")}
-            headlineWords={(content["hero_headline"] || defaultHero.headline).split(" ")}
-            sublineWords={(content["hero_subline"] || defaultHero.subline).split(" ")}
-            bottomWords={(content["hero_bottom"] || defaultHero.bottom).split(" ")}
-          />
+          <ScrollScrubHero />
         )}
 
         {isEditMode ? (
@@ -150,6 +208,38 @@ export default function Home() {
             }))}
           />
         )}
+
+        <section className="py-24 md:py-32 relative">
+          <div className="container z-10 mx-auto px-4">
+            <div className="flex flex-col items-center justify-center max-w-[540px] mx-auto">
+              <div className="flex justify-center">
+                <div className="border border-primary/20 py-1 px-4 rounded-lg text-primary text-sm">
+                  Testimonials
+                </div>
+              </div>
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tighter mt-5 text-foreground">
+                Trusted by{" "}
+                <span className="gradient-text">growing businesses</span>
+              </h2>
+              <p className="text-center mt-5 text-foreground-muted">
+                See what our clients have to say about working with OphidianAI.
+              </p>
+            </div>
+            <div className="flex justify-center gap-6 mt-10 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden">
+              <TestimonialsColumn testimonials={testimonialCol1} duration={15} />
+              <TestimonialsColumn
+                testimonials={testimonialCol2}
+                className="hidden md:block"
+                duration={19}
+              />
+              <TestimonialsColumn
+                testimonials={testimonialCol3}
+                className="hidden lg:block"
+                duration={17}
+              />
+            </div>
+          </div>
+        </section>
 
         {isEditMode ? (
           <section className="py-20 md:py-24 relative overflow-hidden">
