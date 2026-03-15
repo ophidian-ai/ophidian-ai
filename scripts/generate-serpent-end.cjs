@@ -10,7 +10,11 @@ const fs = require("fs");
 const path = require("path");
 const https = require("https");
 
-const API_KEY = "AIzaSyDfHqBT3f-l_UNiRPaH-GWR85DDB-1Ihec";
+// Load GEMINI_API_KEY from .env.local
+const envFile = fs.readFileSync(path.join(__dirname, "../.env.local"), "utf8");
+const keyMatch = envFile.match(/GEMINI_API_KEY="?([^"\n]+)"?/);
+const API_KEY = process.env.GEMINI_API_KEY || (keyMatch && keyMatch[1]);
+if (!API_KEY) { console.error("GEMINI_API_KEY not set in .env.local"); process.exit(1); }
 const MODEL = "nano-banana-pro-preview";
 const OUTPUT_DIR = path.join(__dirname, "output");
 const OUTPUT_FILE = path.join(OUTPUT_DIR, "serpent-end.png");

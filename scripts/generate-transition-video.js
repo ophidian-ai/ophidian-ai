@@ -16,7 +16,11 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const API_KEY = process.env.GEMINI_API_KEY || "AIzaSyDfHqBT3f-l_UNiRPaH-GWR85DDB-1Ihec";
+// Load GEMINI_API_KEY from .env.local
+const envFile = readFileSync(join(__dirname, "../.env.local"), "utf8");
+const keyMatch = envFile.match(/GEMINI_API_KEY="?([^"\n]+)"?/);
+const API_KEY = process.env.GEMINI_API_KEY || (keyMatch && keyMatch[1]);
+if (!API_KEY) { console.error("GEMINI_API_KEY not set in .env.local"); process.exit(1); }
 
 const ai = new GoogleGenAI({ apiKey: API_KEY });
 
