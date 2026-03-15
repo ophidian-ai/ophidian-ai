@@ -1,0 +1,39 @@
+import { Mail, Phone, MapPin, Clock } from "lucide-react";
+
+export function ContactSection() {
+  return (
+    <section id="contact" className="bg-forest py-24 md:py-32">
+      <div className="max-w-[1400px] mx-auto px-8">
+        <h2 className="text-3xl md:text-5xl font-display text-text-light mb-16">We are right here.</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+          <div className="space-y-8">
+            <p className="text-text-muted text-lg leading-relaxed">Ready to get started? Reach out and we&apos;ll set up a free discovery conversation to understand your needs.</p>
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-venom/10 flex items-center justify-center"><Phone className="w-5 h-5 text-venom" /></div>
+                <div><p className="text-sm text-text-muted">Phone</p><a href="tel:+18125551234" className="text-text-light hover:text-venom transition-colors">(812) 555-1234</a></div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-venom/10 flex items-center justify-center"><Mail className="w-5 h-5 text-venom" /></div>
+                <div><p className="text-sm text-text-muted">Email</p><a href="mailto:eric@ophidianai.com" className="text-text-light hover:text-venom transition-colors">eric@ophidianai.com</a></div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-venom/10 flex items-center justify-center"><MapPin className="w-5 h-5 text-venom" /></div>
+                <div><p className="text-sm text-text-muted">Location</p><p className="text-text-light">Columbus, Indiana</p></div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-venom/10 flex items-center justify-center"><Clock className="w-5 h-5 text-venom" /></div>
+                <div><p className="text-sm text-text-muted">Hours</p><p className="text-text-light">Monday - Friday: 9:00 - 18:00</p></div>
+              </div>
+            </div>
+          </div>
+          <div className="bg-forest-deep rounded-2xl p-8 md:p-12 border border-white/5 flex flex-col justify-center">
+            <h3 className="text-2xl font-display text-text-light mb-4">Let&apos;s talk about your project</h3>
+            <p className="text-text-muted mb-8 leading-relaxed">Book a free 30-minute discovery call. We&apos;ll discuss your goals, explore what&apos;s possible, and outline next steps — no pressure, no commitment.</p>
+            <a href="mailto:eric@ophidianai.com?subject=Project%20Inquiry" className="inline-flex self-start px-8 py-3 rounded-full text-sm font-medium bg-venom text-forest-deep hover:bg-venom/90 transition-colors">Start a Conversation</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
