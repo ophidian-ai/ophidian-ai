@@ -17,7 +17,7 @@ const STEPS = [
 
 export function ProcessOrbit() {
   const [active, setActive] = useState(0);
-  const sectionRef = useRef<HTMLElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
 
   const getPosition = (index: number, total: number) => {
     const angle = (Math.PI * index) / (total - 1) - Math.PI;
@@ -31,12 +31,11 @@ export function ProcessOrbit() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
-        trigger: sectionRef.current,
+        trigger: pinRef.current,
         start: "top top",
         end: "+=300%",
         pin: true,
         pinSpacing: true,
-        anticipatePin: 1,
         scrub: 0.5,
         onUpdate: (self) => {
           const stepIndex = Math.min(
@@ -46,104 +45,109 @@ export function ProcessOrbit() {
           setActive(stepIndex);
         },
       });
-    }, sectionRef);
+    }, pinRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} className="bg-forest py-24 md:py-32 min-h-screen flex flex-col justify-center">
-      <div className="max-w-[1400px] mx-auto px-8">
-        <h2 className="text-3xl md:text-5xl font-display text-text-light mb-20">Your path starts here</h2>
-        <div className="relative max-w-[800px] mx-auto mb-16">
-          <svg viewBox="0 0 800 400" className="w-full">
-            {/* Ellipse track */}
-            <ellipse cx="400" cy="200" rx="340" ry="160" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+    <div ref={pinRef} className="h-screen w-full bg-forest overflow-hidden">
+      <div className="h-full w-full flex flex-col items-center justify-center px-8">
+        <div className="w-full max-w-[1400px]">
+          <h2 className="text-3xl md:text-5xl font-display text-text-light mb-12 md:mb-20">
+            Your path starts here
+          </h2>
 
-            {/* Progress arc — lights up as steps progress */}
-            {STEPS.map((_, i) => {
-              if (i >= active) return null;
-              const p1 = getPosition(i, STEPS.length);
-              const p2 = getPosition(i + 1, STEPS.length);
-              return (
-                <line
-                  key={`progress-${i}`}
-                  x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y}
-                  stroke="var(--color-gold)"
-                  strokeWidth="2"
-                  opacity="0.4"
-                  className="transition-opacity duration-500"
-                />
-              );
-            })}
+          <div className="relative max-w-[800px] mx-auto mb-12 md:mb-16">
+            <svg viewBox="0 0 800 400" className="w-full">
+              {/* Ellipse track */}
+              <ellipse cx="400" cy="200" rx="340" ry="160" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
 
-            {/* Inactive connection lines */}
-            {STEPS.map((_, i) => {
-              if (i === STEPS.length - 1) return null;
-              const p1 = getPosition(i, STEPS.length);
-              const p2 = getPosition(i + 1, STEPS.length);
-              return (
-                <line
-                  key={`line-${i}`}
-                  x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y}
-                  stroke="rgba(255,255,255,0.08)"
-                  strokeWidth="1"
-                />
-              );
-            })}
-
-            {/* Step dots */}
-            {STEPS.map((step, i) => {
-              const pos = getPosition(i, STEPS.length);
-              const isActive = i === active;
-              const isCompleted = i < active;
-              return (
-                <g key={step.num} onClick={() => setActive(i)} className="cursor-pointer">
-                  <circle
-                    cx={pos.x} cy={pos.y}
-                    r={isActive ? 24 : 18}
-                    fill={isActive ? "var(--color-gold)" : isCompleted ? "var(--color-gold)" : "var(--color-forest-deep)"}
-                    stroke={isActive || isCompleted ? "var(--color-gold)" : "rgba(255,255,255,0.2)"}
-                    strokeWidth="1.5"
-                    opacity={isCompleted && !isActive ? 0.5 : 1}
-                    className="transition-all duration-500"
+              {/* Progress arc */}
+              {STEPS.map((_, i) => {
+                if (i >= active) return null;
+                const p1 = getPosition(i, STEPS.length);
+                const p2 = getPosition(i + 1, STEPS.length);
+                return (
+                  <line
+                    key={`progress-${i}`}
+                    x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y}
+                    stroke="var(--color-gold)"
+                    strokeWidth="2"
+                    opacity="0.4"
+                    className="transition-opacity duration-500"
                   />
-                  {isActive && (
-                    <circle
-                      cx={pos.x} cy={pos.y} r={32}
-                      fill="none" stroke="var(--color-gold)" strokeWidth="1" opacity="0.3"
-                    />
-                  )}
-                  <text
-                    x={pos.x} y={pos.y + 5}
-                    textAnchor="middle"
-                    fill={isActive || isCompleted ? "var(--color-forest-deep)" : "var(--color-text-light)"}
-                    fontSize="14" fontWeight="600"
-                  >
-                    {step.num}
-                  </text>
-                </g>
-              );
-            })}
-          </svg>
-        </div>
+                );
+              })}
 
-        {/* Active step content with fade transition */}
-        <div className="max-w-2xl mx-auto text-center">
-          <h3
-            key={`title-${active}`}
-            className="text-2xl md:text-3xl font-display italic text-text-light mb-4 animate-fade-up"
-          >
-            {STEPS[active].title}
-          </h3>
-          <p
-            key={`desc-${active}`}
-            className="text-text-muted text-lg leading-relaxed animate-fade-up delay-100"
-          >
-            {STEPS[active].desc}
-          </p>
+              {/* Inactive connection lines */}
+              {STEPS.map((_, i) => {
+                if (i === STEPS.length - 1) return null;
+                const p1 = getPosition(i, STEPS.length);
+                const p2 = getPosition(i + 1, STEPS.length);
+                return (
+                  <line
+                    key={`line-${i}`}
+                    x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y}
+                    stroke="rgba(255,255,255,0.08)"
+                    strokeWidth="1"
+                  />
+                );
+              })}
+
+              {/* Step dots */}
+              {STEPS.map((step, i) => {
+                const pos = getPosition(i, STEPS.length);
+                const isActive = i === active;
+                const isCompleted = i < active;
+                return (
+                  <g key={step.num} onClick={() => setActive(i)} className="cursor-pointer">
+                    <circle
+                      cx={pos.x} cy={pos.y}
+                      r={isActive ? 24 : 18}
+                      fill={isActive || isCompleted ? "var(--color-gold)" : "var(--color-forest-deep)"}
+                      stroke={isActive || isCompleted ? "var(--color-gold)" : "rgba(255,255,255,0.2)"}
+                      strokeWidth="1.5"
+                      opacity={isCompleted && !isActive ? 0.5 : 1}
+                      className="transition-all duration-500"
+                    />
+                    {isActive && (
+                      <circle
+                        cx={pos.x} cy={pos.y} r={32}
+                        fill="none" stroke="var(--color-gold)" strokeWidth="1" opacity="0.3"
+                      />
+                    )}
+                    <text
+                      x={pos.x} y={pos.y + 5}
+                      textAnchor="middle"
+                      fill={isActive || isCompleted ? "var(--color-forest-deep)" : "var(--color-text-light)"}
+                      fontSize="14" fontWeight="600"
+                    >
+                      {step.num}
+                    </text>
+                  </g>
+                );
+              })}
+            </svg>
+          </div>
+
+          {/* Active step content */}
+          <div className="max-w-2xl mx-auto text-center">
+            <h3
+              key={`title-${active}`}
+              className="text-2xl md:text-3xl font-display italic text-text-light mb-4 animate-fade-up"
+            >
+              {STEPS[active].title}
+            </h3>
+            <p
+              key={`desc-${active}`}
+              className="text-text-muted text-lg leading-relaxed animate-fade-up delay-100"
+            >
+              {STEPS[active].desc}
+            </p>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
