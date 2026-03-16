@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence, useInView } from "motion/react";
 import NumberFlow from "@number-flow/react";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SparklesCore } from "@/components/ui/sparkles";
 import { VerticalCutReveal } from "@/components/ui/vertical-cut-reveal";
+import { getPricing } from "@/app/actions/pricing";
+import type { PricingCategory } from "@/lib/stripe-catalog";
 
 /* ------------------------------------------------------------------ */
 /*  Plan data per service category                                     */
@@ -27,6 +29,9 @@ interface ServiceCategory {
   recurring?: boolean;
   plans: Plan[];
 }
+
+// Type guard to check if we're using Stripe data or hardcoded
+type AnyCategory = ServiceCategory | PricingCategory;
 
 const CATEGORIES: ServiceCategory[] = [
   {
@@ -229,13 +234,23 @@ export function PricingCards() {
   const [activeTab, setActiveTab] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isYearly, setIsYearly] = useState(false);
+  const [stripeCategories, setStripeCategories] = useState<PricingCategory[] | null>(null);
+
+  // Fetch live pricing from Stripe
+  useEffect(() => {
+    getPricing().then((data) => {
+      if (data.length > 0) setStripeCategories(data);
+    });
+  }, []);
 
   const handleTabChange = (newIndex: number) => {
     setDirection(newIndex > activeTab ? 1 : -1);
     setActiveTab(newIndex);
   };
 
-  const currentCategory = CATEGORIES[activeTab];
+  // Use Stripe data if loaded, otherwise fall back to hardcoded CATEGORIES
+  const categories = stripeCategories ?? CATEGORIES;
+  const currentCategory = categories[activeTab];
   const isRecurring = currentCategory.recurring ?? false;
 
   return (
@@ -306,7 +321,7 @@ export function PricingCards() {
           transition={{ duration: 0.5, delay: 0.5 }}
           className="flex flex-wrap justify-center gap-2 mb-12"
         >
-          {CATEGORIES.map((cat, i) => (
+          {categories.map((cat, i) => (
             <button
               key={cat.label}
               onClick={() => handleTabChange(i)}
