@@ -74,7 +74,7 @@ export async function POST(
     subject: `Proposal Revision Requested -- ${client.company_name}`,
     html: `
       <p><strong>${client.contact_name}</strong> from <strong>${client.company_name}</strong> has requested changes to their proposal.</p>
-      <blockquote style="border-left: 3px solid #39FF14; padding-left: 12px; color: #666;">${message}</blockquote>
+      <blockquote style="border-left: 3px solid #C4A265; padding-left: 12px; color: #666;">${message}</blockquote>
       <p><a href="${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/admin/proposals/${id}">Review in Dashboard</a></p>
     `,
   });

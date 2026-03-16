@@ -15,12 +15,12 @@ interface PhaseNode {
 }
 
 const PHASE_NODES: PhaseNode[] = [
-  { id: "discovery", label: "Discovery", color: "#39FF14", gradientFrom: "#39FF14", gradientTo: "#2BCC10" },
-  { id: "design", label: "Design", color: "#2BCC10", gradientFrom: "#2BCC10", gradientTo: "#1FA88E" },
-  { id: "development", label: "Development", color: "#1FA88E", gradientFrom: "#1FA88E", gradientTo: "#15B0A0" },
-  { id: "review", label: "Review", color: "#15B0A0", gradientFrom: "#15B0A0", gradientTo: "#0DB1B2" },
-  { id: "live", label: "Live", color: "#0DB1B2", gradientFrom: "#0DB1B2", gradientTo: "#098F90" },
-  { id: "maintenance", label: "Maintenance", color: "#098F90", gradientFrom: "#098F90", gradientTo: "#098F90" },
+  { id: "discovery", label: "Discovery", color: "#C4A265", gradientFrom: "#C4A265", gradientTo: "#A88B52" },
+  { id: "design", label: "Design", color: "#A88B52", gradientFrom: "#A88B52", gradientTo: "#6B8F71" },
+  { id: "development", label: "Development", color: "#6B8F71", gradientFrom: "#6B8F71", gradientTo: "#6B8F71" },
+  { id: "review", label: "Review", color: "#6B8F71", gradientFrom: "#6B8F71", gradientTo: "#7A9E7E" },
+  { id: "live", label: "Live", color: "#7A9E7E", gradientFrom: "#7A9E7E", gradientTo: "#5C7F61" },
+  { id: "maintenance", label: "Maintenance", color: "#5C7F61", gradientFrom: "#5C7F61", gradientTo: "#5C7F61" },
 ];
 
 const PHASE_ORDER: ProjectPhase[] = ["discovery", "design", "development", "review", "live", "maintenance"];

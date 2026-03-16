@@ -35,11 +35,11 @@ const SERVICE_LABELS: Record<ServiceType, string> = {
 };
 
 const PIE_COLORS = [
-  "#39FF14",
-  "#0DB1B2",
-  "#5FFF42",
-  "#2BCC10",
-  "#098F90",
+  "#C4A265",
+  "#7A9E7E",
+  "#D4B87A",
+  "#A88B52",
+  "#5C7F61",
   "#64748B",
 ];
 
@@ -155,7 +155,7 @@ export default function AdminRevenuePage() {
       label: "Total Revenue",
       value: `$${totalRevenue.toLocaleString()}`,
       icon: DollarSign,
-      color: "#39FF14",
+      color: "#C4A265",
     },
     {
       label: "Outstanding",
@@ -167,7 +167,7 @@ export default function AdminRevenuePage() {
       label: "Monthly Recurring Revenue",
       value: `$${mrr.toLocaleString()}/mo`,
       icon: TrendingUp,
-      color: "#0DB1B2",
+      color: "#7A9E7E",
     },
   ];
 
@@ -236,7 +236,7 @@ export default function AdminRevenuePage() {
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#0A0A0A",
+                      backgroundColor: "#0F1F14",
                       border: "1px solid rgba(255,255,255,0.1)",
                       borderRadius: "8px",
                       color: "#fff",
@@ -248,7 +248,7 @@ export default function AdminRevenuePage() {
                   />
                   <Bar
                     dataKey="amount"
-                    fill="#39FF14"
+                    fill="#C4A265"
                     radius={[4, 4, 0, 0]}
                     maxBarSize={48}
                   />
@@ -291,7 +291,7 @@ export default function AdminRevenuePage() {
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#0A0A0A",
+                      backgroundColor: "#0F1F14",
                       border: "1px solid rgba(255,255,255,0.1)",
                       borderRadius: "8px",
                       color: "#fff",

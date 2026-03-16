@@ -197,7 +197,7 @@ function SeoContent({ clientId }: { clientId: string | null }) {
                   <Tooltip
                     contentStyle={{
                       backgroundColor: "#0A0A0A",
-                      border: "1px solid rgba(13,177,178,0.2)",
+                      border: "1px solid rgba(122,158,126,0.2)",
                       borderRadius: "8px",
                       color: "#fff",
                     }}
@@ -206,7 +206,7 @@ function SeoContent({ clientId }: { clientId: string | null }) {
                     yAxisId="left"
                     type="monotone"
                     dataKey="impressions"
-                    stroke="#0DB1B2"
+                    stroke="#7A9E7E"
                     strokeWidth={2}
                     dot={false}
                   />
@@ -214,7 +214,7 @@ function SeoContent({ clientId }: { clientId: string | null }) {
                     yAxisId="right"
                     type="monotone"
                     dataKey="clicks"
-                    stroke="#39FF14"
+                    stroke="#C4A265"
                     strokeWidth={2}
                     dot={false}
                   />

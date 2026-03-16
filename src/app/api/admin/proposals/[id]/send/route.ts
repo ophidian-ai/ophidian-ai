@@ -70,17 +70,17 @@ export async function POST(
     to: client.contact_email,
     subject: "Your proposal from OphidianAI is ready for review",
     html: `
-      <div style="background: #0A0A0A; padding: 40px 20px; font-family: system-ui, sans-serif;">
+      <div style="background: #0F1F14; padding: 40px 20px; font-family: system-ui, sans-serif;">
         <div style="max-width: 600px; margin: 0 auto; background: #161616; border-radius: 12px; overflow: hidden;">
           <div style="padding: 30px; text-align: center; border-bottom: 1px solid #2A2A2A;">
-            <h1 style="color: #39FF14; margin: 0; font-size: 24px;">OphidianAI</h1>
+            <h1 style="color: #C4A265; margin: 0; font-size: 24px;">OphidianAI</h1>
           </div>
           <div style="padding: 30px; color: #E0E0E0; line-height: 1.6;">
             <p>Hi ${client.contact_name},</p>
             <p>Your proposal for <strong>${client.company_name}</strong> is ready for review.</p>
             <p>Click the button below to review the details, request changes, or approve:</p>
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${reviewUrl}" style="background: #39FF14; color: #0A0A0A; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block;">Review Proposal</a>
+              <a href="${reviewUrl}" style="background: #C4A265; color: #0F1F14; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block;">Review Proposal</a>
             </div>
             <p style="color: #888; font-size: 13px;">This link expires in 7 days.</p>
           </div>

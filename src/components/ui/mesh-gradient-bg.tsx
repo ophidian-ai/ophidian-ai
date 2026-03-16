@@ -16,12 +16,12 @@ interface MeshGradientBgProps {
 export function MeshGradientBg({
   className = "",
   colors = [
-    "#39FF14",
-    "#2BCC10",
-    "#0A0A0A",
+    "#C4A265",
+    "#A88B52",
+    "#0F1F14",
     "#161616",
-    "#0DB1B2",
-    "#098F90",
+    "#7A9E7E",
+    "#5C7F61",
   ],
   distortion = 0.8,
   swirl = 0.6,
