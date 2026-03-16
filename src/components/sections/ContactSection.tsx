@@ -1,10 +1,12 @@
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
 import { GlassButton } from "@/components/ui/glass-button";
+import { ParticleBackground } from "@/components/ui/particle-background";
 
 export function ContactSection() {
   return (
-    <section id="contact" className="bg-forest py-24 md:py-32">
-      <div className="max-w-[1400px] mx-auto px-8">
+    <section id="contact" className="relative bg-forest py-24 md:py-32 overflow-hidden">
+      <ParticleBackground density={600} />
+      <div className="relative z-10 max-w-[1400px] mx-auto px-8">
         <h2 className="text-3xl md:text-5xl font-display text-text-light mb-16">We are right here.</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
           <div className="space-y-8">

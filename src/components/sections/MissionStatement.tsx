@@ -3,6 +3,7 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ParticleBackground } from "@/components/ui/particle-background";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -39,8 +40,9 @@ export function MissionStatement() {
     <section
       id="about"
       ref={containerRef}
-      className="min-h-screen flex items-center justify-center bg-forest px-8 py-32"
+      className="relative min-h-screen flex items-center justify-center bg-forest px-8 py-32 overflow-hidden"
     >
+      <ParticleBackground />
       <p className="text-3xl md:text-5xl lg:text-6xl font-display text-center leading-relaxed max-w-5xl">
         {WORDS.map((word, i) => (
           <span key={i} className="mission-word inline-block text-text-light mr-[0.3em]">

@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { GlassButton } from "@/components/ui/glass-button";
+import { ParticleBackground } from "@/components/ui/particle-background";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,6 +41,7 @@ export function HeroVideo() {
 
   return (
     <section ref={containerRef} className="relative h-screen bg-forest overflow-hidden">
+      <ParticleBackground density={1000} speed={0.5} opacity={0.35} glow />
       <div
         ref={videoRef}
         className="absolute inset-0 overflow-hidden origin-center"

@@ -1,8 +1,10 @@
 import { Mail, Phone, MapPin } from "lucide-react";
+import { ParticleBackground } from "@/components/ui/particle-background";
 
 export function FooterLava() {
   return (
-    <footer id="contact-footer" className="bg-forest-deep">
+    <footer id="contact-footer" className="relative bg-forest-deep overflow-hidden">
+      <ParticleBackground density={500} speed={0.3} opacity={0.2} />
       <div className="flex items-center justify-center py-24 border-b border-white/5">
         <div className="text-center">
           <h2 className="text-6xl md:text-8xl font-display tracking-[0.3em] uppercase text-gold">

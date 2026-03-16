@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ParticleBackground } from "@/components/ui/particle-background";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -51,9 +52,10 @@ export function ProcessOrbit() {
   return (
     <div
       ref={containerRef}
-      className="relative bg-forest"
+      className="relative bg-forest overflow-hidden"
       style={{ height: `${(STEPS.length + 1) * 50}vh` }}
     >
+      <ParticleBackground />
       {/* Sticky inner — stays centered while outer scrolls */}
       <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center px-8">
         <div className="w-full max-w-[1400px]">

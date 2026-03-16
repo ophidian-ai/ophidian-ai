@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { ParticleBackground } from "@/components/ui/particle-background";
 
 const IMAGES = [
   { src: "/images/gallery/forest-mist.jpg", width: 520, height: 416, alt: "Forest mist" },
@@ -18,7 +19,8 @@ export function ImageCarousel() {
   const doubled = [...IMAGES, ...IMAGES];
 
   return (
-    <section className="bg-forest py-16 overflow-hidden">
+    <section className="relative bg-forest py-16 overflow-hidden">
+      <ParticleBackground density={600} speed={0.3} opacity={0.2} />
       <div className="group relative">
         <div className="flex gap-4 animate-scroll-x group-hover:[animation-play-state:paused]">
           {doubled.map((img, i) => (

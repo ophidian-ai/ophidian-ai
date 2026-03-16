@@ -4,6 +4,7 @@ import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { GlassButton } from "@/components/ui/glass-button";
+import { ParticleBackground } from "@/components/ui/particle-background";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -30,6 +31,7 @@ export function BrandStatement() {
 
   return (
     <section ref={sectionRef} className="relative min-h-screen flex flex-col items-center justify-center bg-forest overflow-hidden">
+      <ParticleBackground glow />
       <div className="absolute inset-0 opacity-10">
         <svg viewBox="0 0 1440 900" className="w-full h-full" preserveAspectRatio="none">
           {[...Array(12)].map((_, i) => (
