@@ -22,9 +22,9 @@ export default function Home() {
         <MissionStatement />
         <ImageCarousel />
         <Manifesto />
+        <PortfolioGrid />
         <ProcessOrbit />
         <BrandStatement />
-        <PortfolioGrid />
         <ServicesGrid />
         <TestimonialsStagger />
         <PricingCards />

@@ -19,8 +19,7 @@ const STEPS = [
 
 export function ProcessOrbit() {
   const [active, setActive] = useState(0);
-  const outerRef = useRef<HTMLDivElement>(null);
-  const innerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const getPosition = (index: number, total: number) => {
     const angle = (Math.PI * index) / (total - 1) - Math.PI;
@@ -31,17 +30,12 @@ export function ProcessOrbit() {
   };
 
   useEffect(() => {
-    if (!outerRef.current || !innerRef.current) return;
+    if (!containerRef.current) return;
 
-    // Use the outer tall container as the trigger/scroller,
-    // and pin the inner viewport-sized content within it.
     const st = ScrollTrigger.create({
-      trigger: outerRef.current,
+      trigger: containerRef.current,
       start: "top top",
       end: "bottom bottom",
-      pin: innerRef.current,
-      pinSpacing: false, // outer container already provides the scroll runway
-      scrub: true,
       onUpdate: (self) => {
         const stepIndex = Math.min(
           STEPS.length - 1,
@@ -56,14 +50,12 @@ export function ProcessOrbit() {
 
   return (
     <div
-      ref={outerRef}
+      ref={containerRef}
       className="relative bg-forest"
-      style={{ height: `${STEPS.length * 100}vh` }}
+      style={{ height: `${(STEPS.length + 1) * 50}vh` }}
     >
-      <div
-        ref={innerRef}
-        className="h-screen w-full flex flex-col items-center justify-center px-8"
-      >
+      {/* Sticky inner — stays centered while outer scrolls */}
+      <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center px-8">
         <div className="w-full max-w-[1400px]">
           <h2 className="text-3xl md:text-5xl font-display text-text-light mb-12 md:mb-20">
             Your path starts here
@@ -138,17 +130,11 @@ export function ProcessOrbit() {
             </svg>
           </div>
 
-          <div className="max-w-2xl mx-auto text-center">
-            <h3
-              key={`title-${active}`}
-              className="text-2xl md:text-3xl font-display italic text-text-light mb-4 animate-fade-up"
-            >
+          <div className="max-w-2xl mx-auto text-center min-h-[100px]">
+            <h3 className="text-2xl md:text-3xl font-display italic text-text-light mb-4">
               {STEPS[active].title}
             </h3>
-            <p
-              key={`desc-${active}`}
-              className="text-text-muted text-lg leading-relaxed animate-fade-up delay-100"
-            >
+            <p className="text-text-muted text-lg leading-relaxed">
               {STEPS[active].desc}
             </p>
           </div>
