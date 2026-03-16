@@ -47,15 +47,28 @@ export function HeroVideo() {
         <video autoPlay muted loop playsInline className="w-full h-full object-cover">
           <source src="/video/hero-card-video.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60" />
+        {/* Layered overlays for text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/70" />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "radial-gradient(ellipse at center, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 65%, transparent 100%)",
+          }}
+        />
       </div>
 
       <div ref={overlayRef} className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-8">
-        <Image src="/images/logo_icon.png" alt="OphidianAI" width={80} height={80} className="mb-8" />
-        <h1 className="text-4xl md:text-6xl font-display text-white mb-6">
-          Ophidian<span className="text-venom">AI</span>
+        <Image src="/images/logo_icon.png" alt="OphidianAI" width={80} height={80} className="mb-8 drop-shadow-lg" />
+        <h1
+          className="text-4xl md:text-6xl font-display text-white mb-6"
+          style={{ textShadow: "0 2px 20px rgba(0,0,0,0.5)" }}
+        >
+          Ophidian<span className="text-venom" style={{ textShadow: "0 0 30px rgba(57,255,20,0.3)" }}>AI</span>
         </h1>
-        <p className="text-lg md:text-xl text-white/80 max-w-xl mb-10 font-light">
+        <p
+          className="text-lg md:text-xl text-white/90 max-w-xl mb-10 font-light"
+          style={{ textShadow: "0 1px 12px rgba(0,0,0,0.6)" }}
+        >
           Where the natural world meets innovation.
         </p>
         <a href="#contact" className="px-8 py-3 rounded-full text-sm font-medium bg-venom text-forest-deep hover:bg-venom/90 transition-colors">
