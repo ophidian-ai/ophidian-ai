@@ -9,7 +9,7 @@ import { BrandStatement } from "@/components/sections/BrandStatement";
 import { PortfolioGrid } from "@/components/sections/PortfolioGrid";
 import { ServicesGrid } from "@/components/sections/ServicesGrid";
 import { TestimonialsStagger } from "@/components/sections/TestimonialsStagger";
-import { PricingTabs } from "@/components/sections/PricingTabs";
+import { PricingCards } from "@/components/sections/PricingCards";
 import { FAQNested } from "@/components/sections/FAQNested";
 import { ContactSection } from "@/components/sections/ContactSection";
 
@@ -27,7 +27,7 @@ export default function Home() {
         <PortfolioGrid />
         <ServicesGrid />
         <TestimonialsStagger />
-        <PricingTabs />
+        <PricingCards />
         <FAQNested />
         <ContactSection />
       </main>
