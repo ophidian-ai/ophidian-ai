@@ -258,7 +258,7 @@ export function PricingCards() {
     <section
       id="pricing"
       ref={sectionRef}
-      className="relative w-full overflow-hidden bg-forest-deep py-24 lg:py-32"
+      className="relative w-full overflow-hidden bg-forest py-24 lg:py-32"
     >
       {/* sparkles background */}
       <div className="pointer-events-none absolute inset-0 h-full w-full">
@@ -355,7 +355,7 @@ export function PricingCards() {
               transition={{ duration: 0.3 }}
               className="flex justify-center mb-10"
             >
-              <div className="relative flex rounded-full bg-forest border border-white/10 p-1">
+              <div className="relative flex rounded-full bg-forest-deep border border-white/10 p-1">
                 <button
                   type="button"
                   onClick={() => setIsYearly(false)}
@@ -463,8 +463,8 @@ function PricingCard({ plan, index, isRecurring, isYearly }: PricingCardProps) {
       className={cn(
         "group relative flex flex-col rounded-2xl border p-8 transition-all duration-300",
         plan.popular
-          ? "border-gold bg-forest shadow-[0_0_40px_rgba(196,162,101,0.15)] scale-[1.02]"
-          : "border-white/10 bg-forest hover:border-gold/30"
+          ? "border-gold bg-forest-deep shadow-[0_0_40px_rgba(196,162,101,0.15)] scale-[1.02]"
+          : "border-white/10 bg-forest-deep hover:border-gold/30"
       )}
     >
       {plan.popular && (
