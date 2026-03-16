@@ -15,7 +15,7 @@ export function ContactSection() {
               </div>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-sage-accent/15 flex items-center justify-center"><Mail className="w-5 h-5 text-sage-accent" /></div>
-                <div><p className="text-sm text-text-muted">Email</p><a href="mailto:eric@ophidianai.com" className="text-text-light hover:text-sage-accent transition-colors">eric@ophidianai.com</a></div>
+                <div><p className="text-sm text-text-muted">Email</p><a href="mailto:eric.lefler@ophidianai.com" className="text-text-light hover:text-sage-accent transition-colors">eric.lefler@ophidianai.com</a></div>
               </div>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-sage-accent/15 flex items-center justify-center"><MapPin className="w-5 h-5 text-sage-accent" /></div>
@@ -30,7 +30,7 @@ export function ContactSection() {
           <div className="bg-forest-deep rounded-2xl p-8 md:p-12 border border-white/5 flex flex-col justify-center">
             <h3 className="text-2xl font-display text-text-light mb-4">Let&apos;s talk about your project</h3>
             <p className="text-text-muted mb-8 leading-relaxed">Book a free 30-minute discovery call. We&apos;ll discuss your goals, explore what&apos;s possible, and outline next steps — no pressure, no commitment.</p>
-            <a href="mailto:eric@ophidianai.com?subject=Project%20Inquiry" className="inline-flex self-start px-8 py-3 rounded-full text-sm font-medium bg-gold text-forest-deep hover:bg-gold-light transition-colors">Start a Conversation</a>
+            <a href="mailto:eric.lefler@ophidianai.com?subject=Project%20Inquiry" className="inline-flex self-start px-8 py-3 rounded-full text-sm font-medium bg-gold text-forest-deep hover:bg-gold-light transition-colors">Start a Conversation</a>
           </div>
         </div>
       </div>

@@ -20,8 +20,8 @@ export function FooterLava() {
             <a href="tel:+18125551234" className="flex items-center gap-2 hover:text-text-light transition-colors">
               <Phone className="w-4 h-4" /> (812) 555-1234
             </a>
-            <a href="mailto:eric@ophidianai.com" className="flex items-center gap-2 hover:text-text-light transition-colors">
-              <Mail className="w-4 h-4" /> eric@ophidianai.com
+            <a href="mailto:eric.lefler@ophidianai.com" className="flex items-center gap-2 hover:text-text-light transition-colors">
+              <Mail className="w-4 h-4" /> eric.lefler@ophidianai.com
             </a>
           </div>
         </div>

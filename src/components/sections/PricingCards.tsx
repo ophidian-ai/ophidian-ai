@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef } from "react";
-import { motion, useInView } from "motion/react";
+import React, { useRef, useState } from "react";
+import { motion, AnimatePresence, useInView } from "motion/react";
 import NumberFlow from "@number-flow/react";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -9,73 +9,237 @@ import { SparklesCore } from "@/components/ui/sparkles";
 import { VerticalCutReveal } from "@/components/ui/vertical-cut-reveal";
 
 /* ------------------------------------------------------------------ */
-/*  Plan data                                                         */
+/*  Plan data per service category                                     */
 /* ------------------------------------------------------------------ */
 
 interface Plan {
   name: string;
   price: number;
+  yearlyPrice?: number;
   description: string;
   features: string[];
   popular?: boolean;
 }
 
-const plans: Plan[] = [
+interface ServiceCategory {
+  label: string;
+  recurring?: boolean;
+  plans: Plan[];
+}
+
+const CATEGORIES: ServiceCategory[] = [
   {
-    name: "Starter Website",
-    price: 2500,
-    description:
-      "Custom-built website for small businesses getting online for the first time.",
-    features: [
-      "Custom responsive design",
-      "SEO foundation",
-      "Mobile-first development",
-      "Contact form integration",
-      "Google Analytics setup",
-      "30 days post-launch support",
+    label: "Websites",
+    plans: [
+      {
+        name: "Landing Page",
+        price: 1500,
+        description: "A focused single-page site to capture leads and drive conversions.",
+        features: [
+          "Custom responsive design",
+          "Mobile-first development",
+          "Contact form integration",
+          "SEO foundation",
+          "Google Analytics setup",
+          "14 days post-launch support",
+        ],
+      },
+      {
+        name: "Business Website",
+        price: 2500,
+        description: "A full multi-page website built to establish your digital presence.",
+        features: [
+          "Everything in Landing Page, plus:",
+          "Up to 8 custom pages",
+          "Content management system",
+          "Blog or news section",
+          "Performance optimization",
+          "30 days post-launch support",
+        ],
+        popular: true,
+      },
+      {
+        name: "Premium Build",
+        price: 5000,
+        description: "A bespoke site with advanced features, animations, and integrations.",
+        features: [
+          "Everything in Business, plus:",
+          "Custom animations & interactions",
+          "E-commerce or booking system",
+          "Third-party API integrations",
+          "Advanced SEO strategy",
+          "60 days post-launch support",
+        ],
+      },
     ],
   },
   {
-    name: "Growth Package",
-    price: 4500,
-    description:
-      "Full-service digital presence with SEO, social media, and ongoing optimization.",
-    features: [
-      "Everything in Starter, plus:",
-      "Monthly SEO optimization",
-      "Social media management",
-      "Content strategy",
-      "Performance monitoring",
-      "Priority support",
+    label: "SEO",
+    recurring: true,
+    plans: [
+      {
+        name: "SEO Audit",
+        price: 400,
+        yearlyPrice: 400,
+        description: "A comprehensive one-time audit with actionable recommendations.",
+        features: [
+          "Technical SEO analysis",
+          "On-page optimization report",
+          "Competitor benchmarking",
+          "Keyword opportunity map",
+          "Branded PDF report",
+          "30-minute review call",
+        ],
+      },
+      {
+        name: "SEO Growth",
+        price: 250,
+        yearlyPrice: 2500,
+        description: "Monthly optimization to steadily improve your search rankings.",
+        features: [
+          "Everything in Audit, plus:",
+          "Monthly on-page updates",
+          "Google Business Profile management",
+          "Monthly performance reports",
+          "Keyword tracking dashboard",
+          "Priority support",
+        ],
+        popular: true,
+      },
+      {
+        name: "SEO Domination",
+        price: 500,
+        yearlyPrice: 5000,
+        description: "Aggressive growth strategy for businesses ready to own their market.",
+        features: [
+          "Everything in Growth, plus:",
+          "Content strategy & creation",
+          "Link building outreach",
+          "Local SEO optimization",
+          "Quarterly strategy reviews",
+          "Dedicated SEO specialist",
+        ],
+      },
     ],
-    popular: true,
   },
   {
-    name: "AI Integration",
-    price: 8000,
-    description:
-      "Custom AI solutions, automation, and intelligent integrations for scaling businesses.",
-    features: [
-      "Everything in Growth, plus:",
-      "Custom AI chatbot",
-      "Workflow automation",
-      "CRM integration",
-      "Analytics dashboard",
-      "Dedicated account manager",
+    label: "Social Media",
+    recurring: true,
+    plans: [
+      {
+        name: "Essentials",
+        price: 250,
+        yearlyPrice: 2500,
+        description: "Consistent social presence without the time investment.",
+        features: [
+          "3 posts per week",
+          "2 platforms managed",
+          "Content calendar",
+          "Basic analytics report",
+          "Brand voice development",
+          "Monthly review call",
+        ],
+      },
+      {
+        name: "Growth",
+        price: 450,
+        yearlyPrice: 4500,
+        description: "Expanded reach with more content, more platforms, more engagement.",
+        features: [
+          "Everything in Essentials, plus:",
+          "5 posts per week",
+          "4 platforms managed",
+          "Community management",
+          "Monthly video content",
+          "Detailed analytics dashboard",
+        ],
+        popular: true,
+      },
+      {
+        name: "Pro",
+        price: 700,
+        yearlyPrice: 7000,
+        description: "Full-service social media management for maximum impact.",
+        features: [
+          "Everything in Growth, plus:",
+          "Daily posting",
+          "All platforms managed",
+          "Paid ad management",
+          "Influencer outreach",
+          "Weekly strategy calls",
+        ],
+      },
+    ],
+  },
+  {
+    label: "AI Services",
+    plans: [
+      {
+        name: "AI Starter",
+        price: 3000,
+        description: "Add intelligent automation to your existing workflows.",
+        features: [
+          "Workflow analysis & mapping",
+          "Single automation build",
+          "Chatbot integration",
+          "Training & documentation",
+          "30 days of support",
+          "Performance monitoring",
+        ],
+      },
+      {
+        name: "AI Growth",
+        price: 6000,
+        description: "Multiple AI integrations working together across your business.",
+        features: [
+          "Everything in Starter, plus:",
+          "Up to 3 automation workflows",
+          "CRM integration",
+          "Custom AI agent",
+          "Analytics dashboard",
+          "60 days of support",
+        ],
+        popular: true,
+      },
+      {
+        name: "AI Enterprise",
+        price: 12000,
+        description: "End-to-end AI transformation for businesses ready to scale.",
+        features: [
+          "Everything in Growth, plus:",
+          "Unlimited automation workflows",
+          "Voice agent integration",
+          "Custom model fine-tuning",
+          "Dedicated account manager",
+          "Ongoing maintenance & updates",
+        ],
+      },
     ],
   },
 ];
 
 /* ------------------------------------------------------------------ */
-/*  PricingCards section                                               */
+/*  PricingCards section                                                */
 /* ------------------------------------------------------------------ */
 
 export function PricingCards() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const [activeTab, setActiveTab] = useState(0);
+  const [direction, setDirection] = useState(0);
+  const [isYearly, setIsYearly] = useState(false);
+
+  const handleTabChange = (newIndex: number) => {
+    setDirection(newIndex > activeTab ? 1 : -1);
+    setActiveTab(newIndex);
+  };
+
+  const currentCategory = CATEGORIES[activeTab];
+  const isRecurring = currentCategory.recurring ?? false;
 
   return (
     <section
+      id="pricing"
       ref={sectionRef}
       className="relative w-full overflow-hidden bg-forest-deep py-24 lg:py-32"
     >
@@ -92,18 +256,17 @@ export function PricingCards() {
         />
       </div>
 
-      {/* radial glow behind cards */}
+      {/* radial glow */}
       <div
         className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[900px] rounded-full opacity-40"
         style={{
-          background:
-            "radial-gradient(ellipse at center, rgba(196,162,101,0.15) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse at center, rgba(196,162,101,0.15) 0%, transparent 70%)",
         }}
       />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* heading */}
-        <div className="mb-16 text-center">
+        <div className="mb-12 text-center">
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -131,45 +294,152 @@ export function PricingCards() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="mx-auto mt-4 max-w-2xl text-text-muted"
           >
-            Transparent project-based pricing. No hidden fees, no recurring
-            lock-ins.
+            Transparent pricing. No hidden fees.
           </motion.p>
         </div>
 
-        {/* cards */}
-        <div className="grid gap-8 md:grid-cols-3">
-          {plans.map((plan, index) => (
-            <PricingCard
-              key={plan.name}
-              plan={plan}
-              index={index}
-              isInView={isInView}
-            />
+        {/* tabs */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="flex flex-wrap justify-center gap-2 mb-12"
+        >
+          {CATEGORIES.map((cat, i) => (
+            <button
+              key={cat.label}
+              onClick={() => handleTabChange(i)}
+              className={cn(
+                "relative px-6 py-2.5 rounded-full text-sm font-medium transition-colors",
+                i === activeTab
+                  ? "text-forest-deep"
+                  : "text-text-muted hover:text-text-light"
+              )}
+            >
+              {i === activeTab && (
+                <motion.span
+                  layoutId="pricing-tab"
+                  className="absolute inset-0 rounded-full bg-gold"
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+              <span className="relative z-10">{cat.label}</span>
+            </button>
           ))}
+        </motion.div>
+
+        {/* monthly/yearly toggle for recurring services */}
+        <AnimatePresence>
+          {isRecurring && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="flex justify-center mb-10"
+            >
+              <div className="relative flex rounded-full bg-forest border border-white/10 p-1">
+                <button
+                  type="button"
+                  onClick={() => setIsYearly(false)}
+                  className={cn(
+                    "relative z-10 rounded-full px-6 py-2 text-sm font-medium transition-colors",
+                    !isYearly ? "text-forest-deep" : "text-text-muted"
+                  )}
+                >
+                  {!isYearly && (
+                    <motion.span
+                      layoutId="billing-toggle"
+                      className="absolute inset-0 rounded-full bg-gold"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative">Monthly</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsYearly(true)}
+                  className={cn(
+                    "relative z-10 rounded-full px-6 py-2 text-sm font-medium transition-colors",
+                    isYearly ? "text-forest-deep" : "text-text-muted"
+                  )}
+                >
+                  {isYearly && (
+                    <motion.span
+                      layoutId="billing-toggle"
+                      className="absolute inset-0 rounded-full bg-gold"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative">Yearly</span>
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* cards with directional animation */}
+        <div className="relative min-h-[520px]">
+          <AnimatePresence mode="wait" custom={direction}>
+            <motion.div
+              key={activeTab}
+              custom={direction}
+              variants={{
+                enter: (d: number) => ({ x: d * 300, opacity: 0 }),
+                center: { x: 0, opacity: 1 },
+                exit: (d: number) => ({ x: d * -300, opacity: 0 }),
+              }}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: "spring", stiffness: 300, damping: 30 },
+                opacity: { duration: 0.25 },
+              }}
+              className="grid gap-8 md:grid-cols-3"
+            >
+              {currentCategory.plans.map((plan, index) => (
+                <PricingCard
+                  key={plan.name}
+                  plan={plan}
+                  index={index}
+                  isRecurring={isRecurring}
+                  isYearly={isYearly}
+                />
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </div>
+
+        {/* footer note */}
+        <p className="text-sm text-text-muted/60 mt-8 text-center">
+          Prices vary depending on scope and complexity.
+        </p>
       </div>
     </section>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/*  Individual pricing card                                           */
+/*  Individual pricing card                                            */
 /* ------------------------------------------------------------------ */
 
 interface PricingCardProps {
   plan: Plan;
   index: number;
-  isInView: boolean;
+  isRecurring: boolean;
+  isYearly: boolean;
 }
 
-function PricingCard({ plan, index, isInView }: PricingCardProps) {
+function PricingCard({ plan, index, isRecurring, isYearly }: PricingCardProps) {
+  const displayPrice = isRecurring && isYearly && plan.yearlyPrice ? plan.yearlyPrice : plan.price;
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{
-        duration: 0.6,
-        delay: 0.2 + index * 0.15,
+        duration: 0.4,
+        delay: index * 0.1,
         ease: [0.16, 1, 0.3, 1],
       }}
       className={cn(
@@ -179,7 +449,6 @@ function PricingCard({ plan, index, isInView }: PricingCardProps) {
           : "border-white/10 bg-forest hover:border-gold/30"
       )}
     >
-      {/* popular badge */}
       {plan.popular && (
         <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
           <span className="inline-flex items-center rounded-full bg-gradient-to-r from-gold to-gold-light px-4 py-1 text-xs font-semibold uppercase tracking-wider text-forest-deep">
@@ -188,44 +457,40 @@ function PricingCard({ plan, index, isInView }: PricingCardProps) {
         </div>
       )}
 
-      {/* plan name */}
       <h3 className="text-xl font-semibold text-text-light">{plan.name}</h3>
 
-      {/* price */}
       <div className="mt-4 flex items-baseline gap-1">
-        <span className="text-sm text-text-muted">Starting at</span>
+        <span className="text-sm text-text-muted">
+          {isRecurring ? (isYearly ? "Per year" : "Per month") : "Starting at"}
+        </span>
       </div>
       <div className="mt-1 flex items-baseline gap-1">
         <span className="text-4xl font-bold text-text-light">$</span>
         <span className="text-5xl font-bold text-text-light">
-          {isInView ? (
-            <NumberFlow
-              value={plan.price}
-              format={{ useGrouping: true }}
-              transformTiming={{
-                duration: 750,
-                easing: "cubic-bezier(0.16, 1, 0.3, 1)",
-              }}
-              spinTiming={{
-                duration: 750,
-                easing: "cubic-bezier(0.16, 1, 0.3, 1)",
-              }}
-            />
-          ) : (
-            plan.price.toLocaleString()
-          )}
+          <NumberFlow
+            value={displayPrice}
+            format={{ useGrouping: true }}
+            transformTiming={{
+              duration: 750,
+              easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+            }}
+            spinTiming={{
+              duration: 750,
+              easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+            }}
+          />
         </span>
+        {isRecurring && (
+          <span className="text-text-muted text-sm">/{isYearly ? "yr" : "mo"}</span>
+        )}
       </div>
 
-      {/* description */}
       <p className="mt-4 text-sm leading-relaxed text-text-muted">
         {plan.description}
       </p>
 
-      {/* divider */}
       <div className="my-6 h-px bg-white/10" />
 
-      {/* features */}
       <ul className="flex-1 space-y-3">
         {plan.features.map((feature) => (
           <li key={feature} className="flex items-start gap-3 text-sm">
@@ -240,7 +505,6 @@ function PricingCard({ plan, index, isInView }: PricingCardProps) {
         ))}
       </ul>
 
-      {/* CTA button */}
       <a
         href="#contact"
         className={cn(
@@ -253,14 +517,12 @@ function PricingCard({ plan, index, isInView }: PricingCardProps) {
         Get Started
       </a>
 
-      {/* hover glow for non-popular cards */}
       {!plan.popular && (
         <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100">
           <div
             className="absolute inset-0 rounded-2xl"
             style={{
-              background:
-                "radial-gradient(ellipse at 50% 0%, rgba(196,162,101,0.06) 0%, transparent 70%)",
+              background: "radial-gradient(ellipse at 50% 0%, rgba(196,162,101,0.06) 0%, transparent 70%)",
             }}
           />
         </div>
