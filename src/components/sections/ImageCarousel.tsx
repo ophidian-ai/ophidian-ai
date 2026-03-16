@@ -27,7 +27,7 @@ export function ImageCarousel() {
             <div
               key={i}
               className="flex-shrink-0 overflow-hidden rounded-lg"
-              style={{ width: img.width / 1.5, height: img.height / 1.5 }}
+              style={{ width: Math.round(img.width / 2.2), height: Math.round(img.height / 2.2) }}
             >
               <Image
                 src={img.src}
@@ -40,8 +40,8 @@ export function ImageCarousel() {
           ))}
         </div>
       </div>
-      <div className="max-w-4xl mx-auto text-center mt-24 px-8">
-        <p className="text-2xl md:text-4xl font-display italic text-text-muted">
+      <div className="max-w-4xl mx-auto text-center mt-12 sm:mt-24 px-4 sm:px-8">
+        <p className="text-xl sm:text-2xl md:text-4xl font-display italic text-text-muted">
           So that your business thrives at every stage.
         </p>
       </div>

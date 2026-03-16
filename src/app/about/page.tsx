@@ -48,7 +48,7 @@ export default function AboutPage() {
       <div className="grain">
         <section className="py-24 md:py-32">
           <Container width="default">
-            <div className="flex flex-col items-start gap-12 lg:flex-row lg:gap-16 animate-fade-up">
+            <div className="flex flex-col items-start gap-8 sm:gap-12 lg:flex-row lg:gap-16 animate-fade-up">
               <div className="w-full lg:w-1/2">
                 {isEditMode ? (
                   <>

@@ -7,7 +7,7 @@ export function FooterLava() {
       <ParticleBackground density={500} speed={0.3} opacity={0.2} />
       <div className="flex items-center justify-center py-24 border-b border-white/5">
         <div className="text-center">
-          <h2 className="text-6xl md:text-8xl font-display tracking-[0.3em] uppercase text-gold">
+          <h2 className="text-3xl sm:text-6xl md:text-8xl font-display tracking-[0.15em] sm:tracking-[0.3em] uppercase text-gold">
             OphidianAI
           </h2>
           <p className="mt-4 text-lg tracking-[0.2em] uppercase text-gold/70">
@@ -15,7 +15,7 @@ export function FooterLava() {
           </p>
         </div>
       </div>
-      <div className="max-w-[1400px] mx-auto px-8 py-16 grid grid-cols-1 md:grid-cols-4 gap-12">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-12 sm:py-16 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12">
         <div>
           <h3 className="text-sm font-display tracking-wider uppercase text-text-light mb-4">Contacts</h3>
           <div className="space-y-3 text-text-muted text-sm">

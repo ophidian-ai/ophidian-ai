@@ -125,7 +125,7 @@ export function NavLava() {
             : "bg-transparent"
         )}
       >
-        <nav className="max-w-[1400px] mx-auto flex items-center justify-between px-8 py-4">
+        <nav className="max-w-[1400px] mx-auto flex items-center justify-between px-4 sm:px-8 py-4">
           <Link href="/" className="flex items-center gap-3">
             <Image
               src="/images/logo_icon.png"
@@ -207,7 +207,7 @@ export function NavLava() {
       {/* Mobile drawer */}
       <div
         className={cn(
-          "fixed top-0 right-0 z-40 h-full w-72 transform bg-forest-deep/95 backdrop-blur-xl border-l border-white/5 transition-transform duration-300 ease-out md:hidden",
+          "fixed top-0 right-0 z-40 h-full w-[min(18rem,calc(100%-4rem))] transform bg-forest-deep/95 backdrop-blur-xl border-l border-white/5 transition-transform duration-300 ease-out md:hidden",
           isOpen ? "translate-x-0" : "translate-x-full"
         )}
       >

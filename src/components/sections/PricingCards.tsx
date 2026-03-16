@@ -275,7 +275,7 @@ export function PricingCards() {
 
       {/* radial glow */}
       <div
-        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[900px] rounded-full opacity-40"
+        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-full max-w-[900px] rounded-full opacity-40"
         style={{
           background: "radial-gradient(ellipse at center, rgba(196,162,101,0.15) 0%, transparent 70%)",
         }}
@@ -293,7 +293,7 @@ export function PricingCards() {
             Pricing
           </motion.p>
 
-          <h2 className="text-4xl font-bold text-text-light md:text-5xl">
+          <h2 className="text-2xl sm:text-4xl font-bold text-text-light md:text-5xl">
             {isInView && (
               <VerticalCutReveal
                 splitBy="words"

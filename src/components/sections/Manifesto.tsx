@@ -3,8 +3,8 @@ import Image from "next/image";
 export function Manifesto() {
   return (
     <section className="bg-sage py-24 md:py-32">
-      <div className="max-w-[1400px] mx-auto px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-4">
               <div className="rounded-lg overflow-hidden">

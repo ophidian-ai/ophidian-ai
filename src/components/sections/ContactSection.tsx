@@ -6,9 +6,9 @@ export function ContactSection() {
   return (
     <section id="contact" className="relative bg-forest py-24 md:py-32 overflow-hidden">
       <ParticleBackground density={600} />
-      <div className="relative z-10 max-w-[1400px] mx-auto px-8">
-        <h2 className="text-3xl md:text-5xl font-display text-text-light mb-16">We are right here.</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-8">
+        <h2 className="text-2xl sm:text-3xl md:text-5xl font-display text-text-light mb-10 sm:mb-16">We are right here.</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
           <div className="space-y-8">
             <p className="text-text-muted text-lg leading-relaxed">Ready to get started? Reach out and we&apos;ll set up a free discovery conversation to understand your needs.</p>
             <div className="space-y-6">
@@ -30,7 +30,7 @@ export function ContactSection() {
               </div>
             </div>
           </div>
-          <div className="bg-forest-deep rounded-2xl p-8 md:p-12 border border-white/5 flex flex-col justify-center">
+          <div className="bg-forest-deep rounded-2xl p-6 sm:p-8 md:p-12 border border-white/5 flex flex-col justify-center">
             <h3 className="text-2xl font-display text-text-light mb-4">Let&apos;s talk about your project</h3>
             <p className="text-text-muted mb-8 leading-relaxed">Book a free 30-minute discovery call. We&apos;ll discuss your goals, explore what&apos;s possible, and outline next steps — no pressure, no commitment.</p>
             <GlassButton size="default" href="mailto:eric.lefler@ophidianai.com?subject=Project%20Inquiry">Start a Conversation</GlassButton>

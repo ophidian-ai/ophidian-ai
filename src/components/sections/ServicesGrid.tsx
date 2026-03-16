@@ -23,11 +23,11 @@ export function ServicesGrid() {
 
   return (
     <section id="services" className="bg-sage py-24 md:py-32">
-      <div className="max-w-[1400px] mx-auto px-8">
-        <h2 className="text-3xl md:text-5xl font-display text-text-dark mb-16">Services</h2>
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-8">
+        <h2 className="text-2xl sm:text-3xl md:text-5xl font-display text-text-dark mb-10 sm:mb-16">Services</h2>
         {wide.map((service) => (
           <div key={service.num} className="relative overflow-hidden rounded-lg mb-6 cursor-pointer group">
-            <div className="aspect-[3/1] overflow-hidden">
+            <div className="aspect-[2/1] sm:aspect-[3/1] overflow-hidden">
               <Image src={service.image} alt={service.title} width={1290} height={300} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
             </div>
             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors" />
@@ -37,10 +37,10 @@ export function ServicesGrid() {
                 <ArrowUpRight className="w-5 h-5 text-white group-hover:text-forest-deep" />
               </div>
             </div>
-            <h3 className="absolute bottom-6 left-6 text-2xl md:text-3xl font-display text-white">{service.title}</h3>
+            <h3 className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 text-xl sm:text-2xl md:text-3xl font-display text-white">{service.title}</h3>
           </div>
         ))}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-12">
           {cards.map((service) => (
             <div key={service.num} className="relative overflow-hidden rounded-lg cursor-pointer group aspect-[3/4]">
               <Image src={service.image} alt={service.title} width={600} height={820} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
@@ -51,14 +51,14 @@ export function ServicesGrid() {
                   <ArrowUpRight className="w-4 h-4 text-white group-hover:text-forest-deep" />
                 </div>
               </div>
-              <h3 className="absolute bottom-4 left-4 right-4 text-lg font-display text-white">{service.title}</h3>
+              <h3 className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 text-sm sm:text-lg font-display text-white">{service.title}</h3>
             </div>
           ))}
         </div>
         <div className="border-t border-forest/10">
           {SECONDARY_SERVICES.map((service) => (
             <div key={service.num} className="flex items-center justify-between py-5 border-b border-forest/10 cursor-pointer group">
-              <div className="flex items-center gap-8">
+              <div className="flex items-center gap-4 sm:gap-8">
                 <span className="text-sm text-text-dark/40 font-mono">{service.num}</span>
                 <h3 className="text-lg md:text-xl font-display text-text-dark group-hover:text-gold transition-colors">{service.title}</h3>
               </div>

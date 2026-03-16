@@ -45,8 +45,8 @@ export function BrandStatement() {
           ))}
         </svg>
       </div>
-      <div className="relative z-10 text-center px-8">
-        <p className="text-4xl md:text-6xl lg:text-7xl font-display text-text-light leading-tight">
+      <div className="relative z-10 text-center px-4 sm:px-8">
+        <p className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-display text-text-light leading-tight">
           <span className="brand-word inline-block">That&apos;s</span>{" "}
           <span className="brand-word inline-block">us</span>{" "}
           <span className="brand-word inline-block">&mdash;</span>{" "}
@@ -55,7 +55,7 @@ export function BrandStatement() {
           <span className="brand-word inline-block">.</span>
         </p>
       </div>
-      <div className="relative z-10 mt-16 text-center">
+      <div className="relative z-10 mt-10 sm:mt-16 text-center">
         <p className="text-text-muted text-lg mb-8">Ready to bring your vision to life?</p>
         <GlassButton size="default" href="#contact">
           Get Started

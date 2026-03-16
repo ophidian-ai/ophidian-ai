@@ -60,8 +60,8 @@ export function HeroVideo() {
         />
       </div>
 
-      <div ref={overlayRef} className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-8">
-        <Image src="/images/logo_icon.png" alt="OphidianAI" width={80} height={80} className="mb-8 drop-shadow-lg" />
+      <div ref={overlayRef} className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4 sm:px-8">
+        <Image src="/images/logo_icon.png" alt="OphidianAI" width={80} height={80} className="mb-8 drop-shadow-lg w-14 h-14 md:w-20 md:h-20" />
         <h1
           className="text-4xl md:text-6xl font-display text-white mb-6"
           style={{ textShadow: "0 2px 20px rgba(0,0,0,0.5)" }}
@@ -79,8 +79,8 @@ export function HeroVideo() {
         </GlassButton>
       </div>
 
-      <div ref={taglineRef} className="absolute bottom-[10%] left-0 right-0 z-10 text-center px-8">
-        <p className="text-3xl md:text-5xl font-display italic text-text-light">
+      <div ref={taglineRef} className="absolute bottom-[10%] left-0 right-0 z-10 text-center px-4 sm:px-8">
+        <p className="text-2xl sm:text-3xl md:text-5xl font-display italic text-text-light">
           <span className="tagline-word inline-block opacity-0">Intelligence.</span>{" "}
           <span className="tagline-word inline-block opacity-0">Engineered.</span>
         </p>

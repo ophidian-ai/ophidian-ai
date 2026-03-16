@@ -85,11 +85,11 @@ export function PortfolioGrid() {
           {/* Track -- first card centered via padding */}
           <div
             ref={trackRef}
-            className="flex gap-8"
+            className="flex gap-4 sm:gap-8"
             style={{
               willChange: "transform",
-              paddingLeft: "calc(50vw - min(35vw, 450px))",
-              paddingRight: "calc(50vw - min(35vw, 450px))",
+              paddingLeft: "calc(50vw - min(42vw, 450px))",
+              paddingRight: "calc(50vw - min(42vw, 450px))",
             }}
           >
             {PROJECTS.map((project, i) => (
@@ -97,7 +97,7 @@ export function PortfolioGrid() {
                 key={i}
                 href={project.href}
                 className="group relative flex-shrink-0 overflow-hidden rounded-2xl bg-sage-light transition-all duration-300 hover:shadow-2xl"
-                style={{ width: "min(70vw, 900px)" }}
+                style={{ width: "min(80vw, 900px)" }}
               >
                 <div className="aspect-[16/10] overflow-hidden">
                   <Image

@@ -28,8 +28,8 @@ export function FAQNested() {
 
   return (
     <section id="faq" className="bg-sage py-24 md:py-32">
-      <div className="max-w-[1000px] mx-auto px-8">
-        <h2 className="text-3xl md:text-5xl font-display text-text-dark mb-16">Before you start, you might want to know more.</h2>
+      <div className="max-w-[1000px] mx-auto px-4 sm:px-8">
+        <h2 className="text-2xl sm:text-3xl md:text-5xl font-display text-text-dark mb-10 sm:mb-16">Before you start, you might want to know more.</h2>
         <div className="space-y-2">
           {FAQ_GROUPS.map((group, gi) => (
             <div key={group.title} className="border-b border-forest/10">
