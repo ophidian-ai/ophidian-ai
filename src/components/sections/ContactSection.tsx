@@ -1,4 +1,5 @@
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { GlassButton } from "@/components/ui/glass-button";
 
 export function ContactSection() {
   return (
@@ -30,7 +31,7 @@ export function ContactSection() {
           <div className="bg-forest-deep rounded-2xl p-8 md:p-12 border border-white/5 flex flex-col justify-center">
             <h3 className="text-2xl font-display text-text-light mb-4">Let&apos;s talk about your project</h3>
             <p className="text-text-muted mb-8 leading-relaxed">Book a free 30-minute discovery call. We&apos;ll discuss your goals, explore what&apos;s possible, and outline next steps — no pressure, no commitment.</p>
-            <a href="mailto:eric.lefler@ophidianai.com?subject=Project%20Inquiry" className="inline-flex self-start px-8 py-3 rounded-full text-sm font-medium bg-gold text-forest-deep hover:bg-gold-light transition-colors">Start a Conversation</a>
+            <GlassButton size="default" href="mailto:eric.lefler@ophidianai.com?subject=Project%20Inquiry">Start a Conversation</GlassButton>
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { GlassButton } from "@/components/ui/glass-button";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -54,9 +55,9 @@ export function BrandStatement() {
       </div>
       <div className="relative z-10 mt-16 text-center">
         <p className="text-text-muted text-lg mb-8">Ready to bring your vision to life?</p>
-        <a href="#contact" className="inline-flex px-8 py-3 rounded-full text-sm font-medium bg-gold text-forest-deep hover:bg-gold-light transition-colors">
+        <GlassButton size="default" href="#contact">
           Get Started
-        </a>
+        </GlassButton>
       </div>
     </section>
   );

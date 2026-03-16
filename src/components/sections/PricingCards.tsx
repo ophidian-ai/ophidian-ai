@@ -7,6 +7,7 @@ import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SparklesCore } from "@/components/ui/sparkles";
 import { VerticalCutReveal } from "@/components/ui/vertical-cut-reveal";
+import { GlassButton } from "@/components/ui/glass-button";
 import { getPricing } from "@/app/actions/pricing";
 import type { PricingCategory } from "@/lib/stripe-catalog";
 
@@ -522,17 +523,11 @@ function PricingCard({ plan, index, isRecurring, isYearly }: PricingCardProps) {
         ))}
       </ul>
 
-      <a
-        href="#contact"
-        className={cn(
-          "mt-8 inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold transition-all duration-300",
-          plan.popular
-            ? "bg-gradient-to-r from-gold to-gold-light text-forest-deep hover:shadow-[0_0_24px_rgba(196,162,101,0.4)]"
-            : "border border-white/10 text-text-light hover:border-gold/40 hover:text-gold"
-        )}
-      >
-        Get Started
-      </a>
+      <div className="mt-8">
+        <GlassButton size="sm" href="#contact">
+          Get Started
+        </GlassButton>
+      </div>
 
       {!plan.popular && (
         <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100">

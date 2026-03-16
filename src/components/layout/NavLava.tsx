@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { AccountPopover } from "@/components/ui/account-popover";
+import { GlassButton } from "@/components/ui/glass-button";
 import { createClient } from "@/lib/supabase/client";
 
 const NAV_LINKS = [
@@ -155,12 +156,9 @@ export function NavLava() {
 
           {/* Desktop CTA + Account */}
           <div className="hidden md:flex items-center gap-3">
-            <Link
-              href={isHomepage ? "#contact" : "/contact"}
-              className="px-6 py-2.5 rounded-full text-sm font-medium bg-gold text-forest-deep hover:bg-gold-light transition-colors"
-            >
+            <GlassButton size="sm" href={isHomepage ? "#contact" : "/contact"}>
               Get Started
-            </Link>
+            </GlassButton>
             <AccountPopover user={authUser} />
           </div>
 
@@ -225,29 +223,17 @@ export function NavLava() {
             </Link>
           ))}
           <div className="mt-4 border-t border-white/10 pt-4 space-y-3">
-            <Link
-              href={isHomepage ? "#contact" : "/contact"}
-              onClick={closeMenu}
-              className="block w-full text-center px-6 py-3 rounded-full text-sm font-medium bg-gold text-forest-deep hover:bg-gold-light transition-colors"
-            >
+            <GlassButton size="default" href={isHomepage ? "#contact" : "/contact"} onClick={closeMenu} className="w-full">
               Get Started
-            </Link>
+            </GlassButton>
             {authUser ? (
-              <Link
-                href="/dashboard"
-                onClick={closeMenu}
-                className="block w-full text-center px-6 py-3 rounded-full text-sm font-medium border border-white/10 text-text-light hover:border-gold/40 transition-colors"
-              >
+              <GlassButton size="default" href="/dashboard" onClick={closeMenu} className="w-full">
                 Dashboard
-              </Link>
+              </GlassButton>
             ) : (
-              <Link
-                href="/sign-in"
-                onClick={closeMenu}
-                className="block w-full text-center px-6 py-3 rounded-full text-sm font-medium border border-white/10 text-text-light hover:border-gold/40 transition-colors"
-              >
+              <GlassButton size="default" href="/sign-in" onClick={closeMenu} className="w-full">
                 Sign In
-              </Link>
+              </GlassButton>
             )}
           </div>
         </div>

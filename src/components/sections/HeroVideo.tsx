@@ -4,6 +4,7 @@ import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import { GlassButton } from "@/components/ui/glass-button";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -71,9 +72,9 @@ export function HeroVideo() {
         >
           Where the natural world meets innovation.
         </p>
-        <a href="#contact" className="px-8 py-3 rounded-full text-sm font-medium bg-gold text-forest-deep hover:bg-gold-light transition-colors">
+        <GlassButton size="default" href="#contact">
           Get Started
-        </a>
+        </GlassButton>
       </div>
 
       <div ref={taglineRef} className="absolute bottom-[10%] left-0 right-0 z-10 text-center px-8">

@@ -4,7 +4,9 @@ import { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const STEPS = [
   { num: 1, title: "Discovery", desc: "We learn your business inside and out. Goals, audience, constraints — everything that shapes the right solution." },
@@ -17,48 +19,51 @@ const STEPS = [
 
 export function ProcessOrbit() {
   const [active, setActive] = useState(0);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const outerRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
 
   const getPosition = (index: number, total: number) => {
     const angle = (Math.PI * index) / (total - 1) - Math.PI;
-    const rx = 340;
-    const ry = 160;
-    const cx = 400;
-    const cy = 200;
-    return { x: cx + rx * Math.cos(angle), y: cy + ry * Math.sin(angle) };
+    return {
+      x: 400 + 340 * Math.cos(angle),
+      y: 200 + 160 * Math.sin(angle),
+    };
   };
 
   useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
+    if (!outerRef.current || !innerRef.current) return;
 
-    const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: el,
-        start: "top top",
-        end: "+=300%",
-        pin: true,
-        pinSpacing: true,
-        scrub: 0.5,
-        onUpdate: (self) => {
-          const stepIndex = Math.min(
-            STEPS.length - 1,
-            Math.floor(self.progress * STEPS.length)
-          );
-          setActive(stepIndex);
-        },
-      });
+    // Use the outer tall container as the trigger/scroller,
+    // and pin the inner viewport-sized content within it.
+    const st = ScrollTrigger.create({
+      trigger: outerRef.current,
+      start: "top top",
+      end: "bottom bottom",
+      pin: innerRef.current,
+      pinSpacing: false, // outer container already provides the scroll runway
+      scrub: true,
+      onUpdate: (self) => {
+        const stepIndex = Math.min(
+          STEPS.length - 1,
+          Math.floor(self.progress * STEPS.length)
+        );
+        setActive(stepIndex);
+      },
     });
 
-    return () => ctx.revert();
+    return () => st.kill();
   }, []);
 
   return (
     <div
-      ref={sectionRef}
-      className="h-screen w-full bg-forest"
+      ref={outerRef}
+      className="relative bg-forest"
+      style={{ height: `${STEPS.length * 100}vh` }}
     >
-      <div className="h-full w-full flex flex-col items-center justify-center px-8">
+      <div
+        ref={innerRef}
+        className="h-screen w-full flex flex-col items-center justify-center px-8"
+      >
         <div className="w-full max-w-[1400px]">
           <h2 className="text-3xl md:text-5xl font-display text-text-light mb-12 md:mb-20">
             Your path starts here
