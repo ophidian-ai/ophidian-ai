@@ -55,9 +55,9 @@ export function ProcessOrbit() {
       className="relative bg-forest overflow-hidden"
       style={{ height: `${(STEPS.length + 1) * 50}vh` }}
     >
-      <ParticleBackground />
       {/* Sticky inner — stays centered while outer scrolls */}
       <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center px-8">
+        <ParticleBackground />
         <div className="w-full max-w-[1400px]">
           <h2 className="text-3xl md:text-5xl font-display text-text-light mb-12 md:mb-20">
             Your path starts here
