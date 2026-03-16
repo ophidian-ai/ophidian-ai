@@ -1,6 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useEffect, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const STEPS = [
   { num: 1, title: "Discovery", desc: "We learn your business inside and out. Goals, audience, constraints — everything that shapes the right solution." },
@@ -13,6 +17,7 @@ const STEPS = [
 
 export function ProcessOrbit() {
   const [active, setActive] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
 
   const getPosition = (index: number, total: number) => {
     const angle = (Math.PI * index) / (total - 1) - Math.PI;
@@ -23,35 +28,119 @@ export function ProcessOrbit() {
     return { x: cx + rx * Math.cos(angle), y: cy + ry * Math.sin(angle) };
   };
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "top top",
+        end: "+=300%",
+        pin: true,
+        scrub: 1,
+        onUpdate: (self) => {
+          // Map scroll progress (0-1) to step index (0-5)
+          const stepIndex = Math.min(
+            STEPS.length - 1,
+            Math.floor(self.progress * STEPS.length)
+          );
+          setActive(stepIndex);
+        },
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="bg-forest py-24 md:py-32">
+    <section ref={sectionRef} className="bg-forest py-24 md:py-32 min-h-screen flex flex-col justify-center">
       <div className="max-w-[1400px] mx-auto px-8">
         <h2 className="text-3xl md:text-5xl font-display text-text-light mb-20">Your path starts here</h2>
         <div className="relative max-w-[800px] mx-auto mb-16">
           <svg viewBox="0 0 800 400" className="w-full">
+            {/* Ellipse track */}
             <ellipse cx="400" cy="200" rx="340" ry="160" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+
+            {/* Progress arc — lights up as steps progress */}
+            {STEPS.map((_, i) => {
+              if (i >= active) return null;
+              const p1 = getPosition(i, STEPS.length);
+              const p2 = getPosition(i + 1, STEPS.length);
+              return (
+                <line
+                  key={`progress-${i}`}
+                  x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y}
+                  stroke="var(--color-venom)"
+                  strokeWidth="2"
+                  opacity="0.4"
+                  className="transition-opacity duration-500"
+                />
+              );
+            })}
+
+            {/* Inactive connection lines */}
             {STEPS.map((_, i) => {
               if (i === STEPS.length - 1) return null;
               const p1 = getPosition(i, STEPS.length);
               const p2 = getPosition(i + 1, STEPS.length);
-              return <line key={`line-${i}`} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke="rgba(255,255,255,0.08)" strokeWidth="1" />;
+              return (
+                <line
+                  key={`line-${i}`}
+                  x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y}
+                  stroke="rgba(255,255,255,0.08)"
+                  strokeWidth="1"
+                />
+              );
             })}
+
+            {/* Step dots */}
             {STEPS.map((step, i) => {
               const pos = getPosition(i, STEPS.length);
               const isActive = i === active;
+              const isCompleted = i < active;
               return (
                 <g key={step.num} onClick={() => setActive(i)} className="cursor-pointer">
-                  <circle cx={pos.x} cy={pos.y} r={isActive ? 24 : 18} fill={isActive ? "var(--color-venom)" : "var(--color-forest-deep)"} stroke={isActive ? "var(--color-venom)" : "rgba(255,255,255,0.2)"} strokeWidth="1.5" className="transition-all duration-300" />
-                  {isActive && <circle cx={pos.x} cy={pos.y} r={32} fill="none" stroke="var(--color-venom)" strokeWidth="1" opacity="0.3" />}
-                  <text x={pos.x} y={pos.y + 5} textAnchor="middle" fill={isActive ? "var(--color-forest-deep)" : "var(--color-text-light)"} fontSize="14" fontWeight="600">{step.num}</text>
+                  <circle
+                    cx={pos.x} cy={pos.y}
+                    r={isActive ? 24 : 18}
+                    fill={isActive ? "var(--color-venom)" : isCompleted ? "var(--color-venom)" : "var(--color-forest-deep)"}
+                    stroke={isActive || isCompleted ? "var(--color-venom)" : "rgba(255,255,255,0.2)"}
+                    strokeWidth="1.5"
+                    opacity={isCompleted && !isActive ? 0.5 : 1}
+                    className="transition-all duration-500"
+                  />
+                  {isActive && (
+                    <circle
+                      cx={pos.x} cy={pos.y} r={32}
+                      fill="none" stroke="var(--color-venom)" strokeWidth="1" opacity="0.3"
+                    />
+                  )}
+                  <text
+                    x={pos.x} y={pos.y + 5}
+                    textAnchor="middle"
+                    fill={isActive || isCompleted ? "var(--color-forest-deep)" : "var(--color-text-light)"}
+                    fontSize="14" fontWeight="600"
+                  >
+                    {step.num}
+                  </text>
                 </g>
               );
             })}
           </svg>
         </div>
+
+        {/* Active step content with fade transition */}
         <div className="max-w-2xl mx-auto text-center">
-          <h3 className="text-2xl md:text-3xl font-display italic text-text-light mb-4">{STEPS[active].title}</h3>
-          <p className="text-text-muted text-lg leading-relaxed">{STEPS[active].desc}</p>
+          <h3
+            key={`title-${active}`}
+            className="text-2xl md:text-3xl font-display italic text-text-light mb-4 animate-fade-up"
+          >
+            {STEPS[active].title}
+          </h3>
+          <p
+            key={`desc-${active}`}
+            className="text-text-muted text-lg leading-relaxed animate-fade-up delay-100"
+          >
+            {STEPS[active].desc}
+          </p>
         </div>
       </div>
     </section>
