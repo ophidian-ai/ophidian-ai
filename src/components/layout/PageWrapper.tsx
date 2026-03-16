@@ -1,5 +1,5 @@
-import { NavMain } from "./NavMain";
-import { FooterMain } from "./FooterMain";
+import { NavLava } from "./NavLava";
+import { FooterLava } from "./FooterLava";
 
 interface PageWrapperProps {
   children: React.ReactNode;
@@ -9,9 +9,9 @@ interface PageWrapperProps {
 export function PageWrapper({ children, className }: PageWrapperProps) {
   return (
     <>
-      <NavMain />
+      <NavLava />
       <main className={`pt-20 ${className ?? ""}`}>{children}</main>
-      <FooterMain />
+      <FooterLava />
     </>
   );
 }

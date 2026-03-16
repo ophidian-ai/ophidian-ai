@@ -51,8 +51,9 @@ export function ProcessOrbit() {
   }, []);
 
   return (
-    <div ref={pinRef} className="h-screen w-full bg-forest overflow-hidden">
-      <div className="h-full w-full flex flex-col items-center justify-center px-8">
+    <div className="relative z-10 bg-forest">
+      <div ref={pinRef} className="h-screen w-full overflow-hidden">
+        <div className="h-full w-full flex flex-col items-center justify-center px-8">
         <div className="w-full max-w-[1400px]">
           <h2 className="text-3xl md:text-5xl font-display text-text-light mb-12 md:mb-20">
             Your path starts here
@@ -147,6 +148,7 @@ export function ProcessOrbit() {
             </p>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
