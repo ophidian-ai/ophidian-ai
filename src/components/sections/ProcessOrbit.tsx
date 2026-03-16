@@ -17,7 +17,7 @@ const STEPS = [
 
 export function ProcessOrbit() {
   const [active, setActive] = useState(0);
-  const pinRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   const getPosition = (index: number, total: number) => {
     const angle = (Math.PI * index) / (total - 1) - Math.PI;
@@ -29,9 +29,12 @@ export function ProcessOrbit() {
   };
 
   useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
-        trigger: pinRef.current,
+        trigger: el,
         start: "top top",
         end: "+=300%",
         pin: true,
@@ -45,15 +48,17 @@ export function ProcessOrbit() {
           setActive(stepIndex);
         },
       });
-    }, pinRef);
+    });
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <div className="relative z-10 bg-forest">
-      <div ref={pinRef} className="h-screen w-full overflow-hidden">
-        <div className="h-full w-full flex flex-col items-center justify-center px-8">
+    <div
+      ref={sectionRef}
+      className="h-screen w-full bg-forest"
+    >
+      <div className="h-full w-full flex flex-col items-center justify-center px-8">
         <div className="w-full max-w-[1400px]">
           <h2 className="text-3xl md:text-5xl font-display text-text-light mb-12 md:mb-20">
             Your path starts here
@@ -61,10 +66,8 @@ export function ProcessOrbit() {
 
           <div className="relative max-w-[800px] mx-auto mb-12 md:mb-16">
             <svg viewBox="0 0 800 400" className="w-full">
-              {/* Ellipse track */}
               <ellipse cx="400" cy="200" rx="340" ry="160" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
 
-              {/* Progress arc */}
               {STEPS.map((_, i) => {
                 if (i >= active) return null;
                 const p1 = getPosition(i, STEPS.length);
@@ -81,7 +84,6 @@ export function ProcessOrbit() {
                 );
               })}
 
-              {/* Inactive connection lines */}
               {STEPS.map((_, i) => {
                 if (i === STEPS.length - 1) return null;
                 const p1 = getPosition(i, STEPS.length);
@@ -96,7 +98,6 @@ export function ProcessOrbit() {
                 );
               })}
 
-              {/* Step dots */}
               {STEPS.map((step, i) => {
                 const pos = getPosition(i, STEPS.length);
                 const isActive = i === active;
@@ -132,7 +133,6 @@ export function ProcessOrbit() {
             </svg>
           </div>
 
-          {/* Active step content */}
           <div className="max-w-2xl mx-auto text-center">
             <h3
               key={`title-${active}`}
@@ -148,7 +148,6 @@ export function ProcessOrbit() {
             </p>
           </div>
         </div>
-      </div>
       </div>
     </div>
   );
