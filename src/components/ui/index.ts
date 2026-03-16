@@ -21,6 +21,3 @@ export type { IconProps } from "./Icon";
 
 export { Input, default as InputDefault } from "./Input";
 export type { InputProps } from "./Input";
-
-export { SplitText } from "./SplitText";
-export type { SplitTextProps } from "./SplitText";
