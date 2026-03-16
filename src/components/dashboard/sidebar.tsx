@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { UserRole } from "@/lib/supabase/types";
 import type { DashboardModule } from "@/lib/modules";
+import { useSidebar } from "./dashboard-shell";
 import {
   LayoutDashboard,
   FolderKanban,
@@ -19,6 +20,8 @@ import {
   FileSignature,
   DollarSign,
   LogOut,
+  Menu,
+  X,
   type LucideIcon,
 } from "lucide-react";
 
@@ -86,6 +89,7 @@ interface SidebarProps {
 export function Sidebar({ role, modules }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const { open, toggle, close } = useSidebar();
   const modulesSet = new Set(modules);
 
   const navItems = role === "admin" ? adminNavItems : clientNavItems;
@@ -109,48 +113,77 @@ export function Sidebar({ role, modules }: SidebarProps) {
   }
 
   return (
-    <aside className="w-64 h-screen fixed left-0 top-0 bg-background/80 backdrop-blur-xl border-r border-primary/10 flex flex-col z-30">
-      <div className="p-6 flex items-center gap-2">
-        <Link href="/" className="flex items-center gap-2">
-          <Image
-            src="/images/logo_icon.png"
-            alt="OphidianAI"
-            width={32}
-            height={32}
-            className="h-8 w-8"
-          />
-          <span className="text-lg font-semibold text-foreground tracking-tight">
-            OphidianAI
-          </span>
-        </Link>
-      </div>
+    <>
+      {/* Toggle button -- always visible */}
+      <button
+        onClick={toggle}
+        aria-label={open ? "Close sidebar" : "Open sidebar"}
+        className="fixed top-4 left-4 z-50 flex h-10 w-10 items-center justify-center rounded-lg bg-background/80 backdrop-blur-sm border border-primary/10 text-foreground-muted hover:text-foreground hover:bg-white/5 transition-colors md:top-5 md:left-5 cursor-pointer"
+      >
+        {open ? <X size={20} /> : <Menu size={20} />}
+      </button>
 
-      <nav className="flex-1 px-3 space-y-1">
-        {visibleItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-              isActive(item.href)
-                ? "bg-primary/10 text-primary"
-                : "text-foreground-muted hover:text-foreground hover:bg-white/5"
-            }`}
-          >
-            <item.icon size={18} />
-            {item.label}
+      {/* Mobile backdrop */}
+      {open && (
+        <div
+          onClick={close}
+          className="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm md:hidden"
+        />
+      )}
+
+      {/* Sidebar panel */}
+      <aside
+        className={`fixed left-0 top-0 z-40 h-screen w-64 bg-background/80 backdrop-blur-xl border-r border-primary/10 flex flex-col transition-transform duration-300 ease-in-out ${
+          open ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        {/* Logo -- padded to clear toggle button */}
+        <div className="p-6 pt-16 flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src="/images/logo_icon.png"
+              alt="OphidianAI"
+              width={32}
+              height={32}
+              className="h-8 w-8"
+            />
+            <span className="text-lg font-semibold text-foreground tracking-tight">
+              OphidianAI
+            </span>
           </Link>
-        ))}
-      </nav>
+        </div>
 
-      <div className="p-3 border-t border-primary/10">
-        <button
-          onClick={handleSignOut}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-white/5 transition-colors cursor-pointer"
-        >
-          <LogOut size={18} />
-          Sign Out
-        </button>
-      </div>
-    </aside>
+        <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
+          {visibleItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => {
+                // Close sidebar on mobile after navigation
+                if (window.innerWidth < 768) close();
+              }}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                isActive(item.href)
+                  ? "bg-primary/10 text-primary"
+                  : "text-foreground-muted hover:text-foreground hover:bg-white/5"
+              }`}
+            >
+              <item.icon size={18} />
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="p-3 border-t border-primary/10">
+          <button
+            onClick={handleSignOut}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-white/5 transition-colors cursor-pointer"
+          >
+            <LogOut size={18} />
+            Sign Out
+          </button>
+        </div>
+      </aside>
+    </>
   );
 }
