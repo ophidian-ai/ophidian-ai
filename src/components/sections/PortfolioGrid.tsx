@@ -19,6 +19,9 @@ const PROJECTS = [
   { title: "Coming Soon", tags: ["Social Media"], image: "/images/gallery/fjord.jpg", href: "#" },
 ];
 
+// Card takes up 70% of the viewport (capped at 900px), centered
+const GAP_PX = 32; // gap between cards
+
 export function PortfolioGrid() {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -27,72 +30,101 @@ export function PortfolioGrid() {
     if (!containerRef.current || !trackRef.current) return;
 
     const track = trackRef.current;
-    const scrollWidth = track.scrollWidth - window.innerWidth;
+    // Total scrollable distance = full track width minus one viewport
+    const totalSlide = track.scrollWidth - window.innerWidth;
 
     const st = ScrollTrigger.create({
       trigger: containerRef.current,
       start: "top top",
       end: "bottom bottom",
       onUpdate: (self) => {
-        gsap.set(track, { x: -scrollWidth * self.progress });
+        // Cards finish scrolling at 85% progress, last 15% is dwell + exit
+        const cardProgress = Math.min(1, self.progress / 0.85);
+        gsap.set(track, { x: -totalSlide * cardProgress });
       },
     });
 
     return () => st.kill();
   }, []);
 
+  // Each card gets 100vh of scroll, plus 2 screens for dwell on last card + exit
+  const scrollRunway = (PROJECTS.length + 2) * 100;
+
   return (
     <div
       ref={containerRef}
       id="portfolio"
       className="relative bg-sage"
-      style={{ height: `${Math.max(200, PROJECTS.length * 50)}vh` }}
+      style={{ height: `${scrollRunway}vh` }}
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center">
-        {/* Header */}
-        <div className="px-8 md:px-16 pt-8 pb-8">
-          <h2 className="text-3xl md:text-5xl font-display text-text-dark">
-            Our work speaks for itself.
-          </h2>
-        </div>
+        {/* Horizontal scrolling area with edge blur */}
+        <div className="relative flex-1 flex flex-col justify-center">
+          {/* Header — inside scroll area, above cards, high z-index above blur */}
+          <div className="px-8 md:px-16 mb-8 relative z-20">
+            <h2 className="text-3xl md:text-5xl font-display text-text-dark">
+              Our work speaks for itself.
+            </h2>
+          </div>
 
-        {/* Horizontal scrolling track */}
-        <div className="flex-1 flex items-center overflow-hidden">
+          {/* Left blur edge */}
+          <div
+            className="absolute left-0 top-0 bottom-0 w-32 md:w-64 z-10 pointer-events-none"
+            style={{
+              background: "linear-gradient(to right, var(--color-sage) 20%, transparent 100%)",
+            }}
+          />
+          {/* Right blur edge */}
+          <div
+            className="absolute right-0 top-0 bottom-0 w-32 md:w-64 z-10 pointer-events-none"
+            style={{
+              background: "linear-gradient(to left, var(--color-sage) 20%, transparent 100%)",
+            }}
+          />
+
+          {/* Track -- first card centered via padding */}
           <div
             ref={trackRef}
-            className="flex gap-6 px-8 md:px-16"
-            style={{ willChange: "transform" }}
+            className="flex gap-8"
+            style={{
+              willChange: "transform",
+              paddingLeft: "calc(50vw - min(35vw, 450px))",
+              paddingRight: "calc(50vw - min(35vw, 450px))",
+            }}
           >
             {PROJECTS.map((project, i) => (
               <a
                 key={i}
                 href={project.href}
-                className="group relative flex-shrink-0 w-[400px] md:w-[500px] overflow-hidden rounded-xl bg-sage-light transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                className="group relative flex-shrink-0 overflow-hidden rounded-2xl bg-sage-light transition-all duration-300 hover:shadow-2xl"
+                style={{ width: "min(70vw, 900px)" }}
               >
-                <div className="aspect-[4/3] overflow-hidden">
+                <div className="aspect-[16/10] overflow-hidden">
                   <Image
                     src={project.image}
                     alt={project.title}
-                    width={600}
-                    height={450}
+                    width={1200}
+                    height={750}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
-                <div className="p-6 flex items-start justify-between">
+                <div className="p-6 md:p-8 flex items-start justify-between">
                   <div>
-                    <h3 className="text-lg font-semibold text-text-dark">{project.title}</h3>
-                    <div className="flex gap-2 mt-2">
+                    <h3 className="text-xl md:text-2xl font-semibold text-text-dark">{project.title}</h3>
+                    <div className="flex gap-2 mt-3">
                       {project.tags.map((tag) => (
-                        <span key={tag} className="text-xs px-2 py-1 rounded-full bg-forest/10 text-forest">
+                        <span key={tag} className="text-xs px-3 py-1 rounded-full bg-forest/10 text-forest font-medium">
                           {tag}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <ArrowUpRight className="w-5 h-5 text-text-dark/40 group-hover:text-gold transition-colors" />
+                  <ArrowUpRight className="w-6 h-6 text-text-dark/40 group-hover:text-gold transition-colors" />
                 </div>
               </a>
             ))}
+            {/* Phantom spacer -- forces last card to center before scroll exits */}
+            <div className="flex-shrink-0" style={{ width: "calc(50vw - min(35vw, 450px))" }} aria-hidden="true" />
           </div>
         </div>
       </div>
