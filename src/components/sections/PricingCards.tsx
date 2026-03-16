@@ -16,6 +16,7 @@ interface Plan {
   name: string;
   price: number;
   yearlyPrice?: number;
+  oneTime?: boolean;
   description: string;
   features: string[];
   popular?: boolean;
@@ -80,7 +81,7 @@ const CATEGORIES: ServiceCategory[] = [
       {
         name: "SEO Audit",
         price: 400,
-        yearlyPrice: 400,
+        oneTime: true,
         description: "A comprehensive one-time audit with actionable recommendations.",
         features: [
           "Technical SEO analysis",
@@ -432,7 +433,8 @@ interface PricingCardProps {
 }
 
 function PricingCard({ plan, index, isRecurring, isYearly }: PricingCardProps) {
-  const displayPrice = isRecurring && isYearly && plan.yearlyPrice ? plan.yearlyPrice : plan.price;
+  const isOneTime = plan.oneTime ?? false;
+  const displayPrice = isRecurring && !isOneTime && isYearly && plan.yearlyPrice ? plan.yearlyPrice : plan.price;
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -461,7 +463,7 @@ function PricingCard({ plan, index, isRecurring, isYearly }: PricingCardProps) {
 
       <div className="mt-4 flex items-baseline gap-1">
         <span className="text-sm text-text-muted">
-          {isRecurring ? (isYearly ? "Per year" : "Per month") : "Starting at"}
+          {isOneTime ? "One-time" : isRecurring ? (isYearly ? "Per year" : "Per month") : "Starting at"}
         </span>
       </div>
       <div className="mt-1 flex items-baseline gap-1">
@@ -480,7 +482,7 @@ function PricingCard({ plan, index, isRecurring, isYearly }: PricingCardProps) {
             }}
           />
         </span>
-        {isRecurring && (
+        {isRecurring && !isOneTime && (
           <span className="text-text-muted text-sm">/{isYearly ? "yr" : "mo"}</span>
         )}
       </div>

@@ -35,9 +35,10 @@ export function ProcessOrbit() {
         start: "top top",
         end: "+=300%",
         pin: true,
-        scrub: 1,
+        pinSpacing: true,
+        anticipatePin: 1,
+        scrub: 0.5,
         onUpdate: (self) => {
-          // Map scroll progress (0-1) to step index (0-5)
           const stepIndex = Math.min(
             STEPS.length - 1,
             Math.floor(self.progress * STEPS.length)
