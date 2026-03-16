@@ -27,9 +27,11 @@
   --color-forest-deep: #0F1F14;
   --color-sage: #D4DFD0;
   --color-sage-light: #E8EDE5;
-  --color-venom: #39FF14;
+  --color-sage-accent: #7A9E7E;
+  --color-venom: #39FF14; /* legacy — kept for dashboard compatibility */
   --color-teal: #0DB1B2;
   --color-gold: #C4A265;
+  --color-gold-light: #D4B87A;
   --color-text-light: #F1F5F9;
   --color-text-muted: #94A3B8;
   --color-text-dark: #1B2E21;

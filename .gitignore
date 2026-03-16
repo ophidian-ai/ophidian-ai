@@ -32,3 +32,4 @@ supabase/.temp/
 
 # Scroll-scrub raw generation assets (keep frames committed for Vercel deploy)
 scripts/output/
+.superpowers/

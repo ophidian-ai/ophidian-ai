@@ -55,7 +55,7 @@ export function NavLava() {
                 className={cn(
                   "text-sm tracking-wide transition-colors",
                   activeSection === href.slice(1)
-                    ? "text-text-light border-b border-venom pb-1"
+                    ? "text-text-light border-b border-gold pb-1"
                     : "text-text-muted hover:text-text-light"
                 )}
               >
@@ -66,7 +66,7 @@ export function NavLava() {
         </ul>
         <a
           href="#contact"
-          className="hidden md:inline-flex px-6 py-2.5 rounded-full text-sm font-medium bg-venom text-forest-deep hover:bg-venom/90 transition-colors"
+          className="hidden md:inline-flex px-6 py-2.5 rounded-full text-sm font-medium bg-gold text-forest-deep hover:bg-gold-light transition-colors"
         >
           Get Started
         </a>

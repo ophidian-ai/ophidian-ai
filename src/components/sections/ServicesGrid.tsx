@@ -33,7 +33,7 @@ export function ServicesGrid() {
             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors" />
             <div className="absolute top-6 left-6 text-sage text-lg font-display">{service.num}</div>
             <div className="absolute top-6 right-6">
-              <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center group-hover:bg-venom transition-colors">
+              <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center group-hover:bg-gold transition-colors">
                 <ArrowUpRight className="w-5 h-5 text-white group-hover:text-forest-deep" />
               </div>
             </div>
@@ -47,7 +47,7 @@ export function ServicesGrid() {
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors" />
               <div className="absolute top-4 left-4 text-sage text-sm font-display">{service.num}</div>
               <div className="absolute top-4 right-4">
-                <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur flex items-center justify-center group-hover:bg-venom transition-colors">
+                <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur flex items-center justify-center group-hover:bg-gold transition-colors">
                   <ArrowUpRight className="w-4 h-4 text-white group-hover:text-forest-deep" />
                 </div>
               </div>
@@ -60,9 +60,9 @@ export function ServicesGrid() {
             <div key={service.num} className="flex items-center justify-between py-5 border-b border-forest/10 cursor-pointer group">
               <div className="flex items-center gap-8">
                 <span className="text-sm text-text-dark/40 font-mono">{service.num}</span>
-                <h3 className="text-lg md:text-xl font-display text-text-dark group-hover:text-venom transition-colors">{service.title}</h3>
+                <h3 className="text-lg md:text-xl font-display text-text-dark group-hover:text-gold transition-colors">{service.title}</h3>
               </div>
-              <div className="w-8 h-8 rounded-full border border-forest/20 flex items-center justify-center group-hover:bg-venom group-hover:border-venom transition-colors">
+              <div className="w-8 h-8 rounded-full border border-forest/20 flex items-center justify-center group-hover:bg-gold group-hover:border-gold transition-colors">
                 <ArrowUpRight className="w-4 h-4 text-text-dark/40 group-hover:text-forest-deep" />
               </div>
             </div>

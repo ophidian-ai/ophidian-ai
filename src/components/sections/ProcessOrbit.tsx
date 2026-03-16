@@ -68,7 +68,7 @@ export function ProcessOrbit() {
                 <line
                   key={`progress-${i}`}
                   x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y}
-                  stroke="var(--color-venom)"
+                  stroke="var(--color-gold)"
                   strokeWidth="2"
                   opacity="0.4"
                   className="transition-opacity duration-500"
@@ -101,8 +101,8 @@ export function ProcessOrbit() {
                   <circle
                     cx={pos.x} cy={pos.y}
                     r={isActive ? 24 : 18}
-                    fill={isActive ? "var(--color-venom)" : isCompleted ? "var(--color-venom)" : "var(--color-forest-deep)"}
-                    stroke={isActive || isCompleted ? "var(--color-venom)" : "rgba(255,255,255,0.2)"}
+                    fill={isActive ? "var(--color-gold)" : isCompleted ? "var(--color-gold)" : "var(--color-forest-deep)"}
+                    stroke={isActive || isCompleted ? "var(--color-gold)" : "rgba(255,255,255,0.2)"}
                     strokeWidth="1.5"
                     opacity={isCompleted && !isActive ? 0.5 : 1}
                     className="transition-all duration-500"
@@ -110,7 +110,7 @@ export function ProcessOrbit() {
                   {isActive && (
                     <circle
                       cx={pos.x} cy={pos.y} r={32}
-                      fill="none" stroke="var(--color-venom)" strokeWidth="1" opacity="0.3"
+                      fill="none" stroke="var(--color-gold)" strokeWidth="1" opacity="0.3"
                     />
                   )}
                   <text

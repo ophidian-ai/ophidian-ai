@@ -63,7 +63,7 @@ export function HeroVideo() {
           className="text-4xl md:text-6xl font-display text-white mb-6"
           style={{ textShadow: "0 2px 20px rgba(0,0,0,0.5)" }}
         >
-          Ophidian<span className="text-venom" style={{ textShadow: "0 0 30px rgba(57,255,20,0.3)" }}>AI</span>
+          Ophidian<span className="text-gold" style={{ textShadow: "0 0 30px rgba(196,162,101,0.4)" }}>AI</span>
         </h1>
         <p
           className="text-lg md:text-xl text-white/90 max-w-xl mb-10 font-light"
@@ -71,7 +71,7 @@ export function HeroVideo() {
         >
           Where the natural world meets innovation.
         </p>
-        <a href="#contact" className="px-8 py-3 rounded-full text-sm font-medium bg-venom text-forest-deep hover:bg-venom/90 transition-colors">
+        <a href="#contact" className="px-8 py-3 rounded-full text-sm font-medium bg-gold text-forest-deep hover:bg-gold-light transition-colors">
           Get Started
         </a>
       </div>

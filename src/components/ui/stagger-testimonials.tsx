@@ -37,8 +37,8 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ position, testimonial
       className={cn(
         "absolute left-1/2 top-1/2 cursor-pointer border-2 p-8 transition-all duration-500 ease-in-out",
         isCenter
-          ? "z-10 bg-venom text-forest-deep border-venom"
-          : "z-0 bg-forest-deep text-text-light border-border-subtle hover:border-venom/50"
+          ? "z-10 bg-gold text-forest-deep border-gold"
+          : "z-0 bg-forest-deep text-text-light border-border-subtle hover:border-gold/50"
       )}
       style={{
         width: cardSize,
@@ -111,10 +111,10 @@ export const StaggerTestimonials: React.FC = () => {
         );
       })}
       <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
-        <button onClick={() => handleMove(-1)} className="flex h-14 w-14 items-center justify-center text-2xl transition-colors bg-forest border-2 border-border-subtle hover:bg-venom hover:text-forest-deep" aria-label="Previous testimonial">
+        <button onClick={() => handleMove(-1)} className="flex h-14 w-14 items-center justify-center text-2xl transition-colors bg-forest border-2 border-border-subtle hover:bg-gold hover:text-forest-deep" aria-label="Previous testimonial">
           <ChevronLeft />
         </button>
-        <button onClick={() => handleMove(1)} className="flex h-14 w-14 items-center justify-center text-2xl transition-colors bg-forest border-2 border-border-subtle hover:bg-venom hover:text-forest-deep" aria-label="Next testimonial">
+        <button onClick={() => handleMove(1)} className="flex h-14 w-14 items-center justify-center text-2xl transition-colors bg-forest border-2 border-border-subtle hover:bg-gold hover:text-forest-deep" aria-label="Next testimonial">
           <ChevronRight />
         </button>
       </div>

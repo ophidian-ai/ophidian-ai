@@ -30,13 +30,13 @@ export function PricingTabs() {
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
             <div>
               <h3 className="text-2xl font-display text-text-dark mb-2">{TABS[activeTab].title}</h3>
-              <p className="text-3xl font-semibold text-venom">{TABS[activeTab].price}</p>
+              <p className="text-3xl font-semibold text-gold">{TABS[activeTab].price}</p>
             </div>
           </div>
           <ul className="mt-8 space-y-4">
             {TABS[activeTab].features.map((feature) => (
               <li key={feature} className="flex items-start gap-3 text-text-dark/80">
-                <Check className="w-5 h-5 text-venom flex-shrink-0 mt-0.5" />
+                <Check className="w-5 h-5 text-sage-accent flex-shrink-0 mt-0.5" />
                 <span>{feature}</span>
               </li>
             ))}

@@ -36,7 +36,7 @@ export function PortfolioGrid() {
                     ))}
                   </div>
                 </div>
-                <ArrowUpRight className="w-5 h-5 text-text-dark/40 group-hover:text-venom transition-colors" />
+                <ArrowUpRight className="w-5 h-5 text-text-dark/40 group-hover:text-gold transition-colors" />
               </div>
             </a>
           ))}

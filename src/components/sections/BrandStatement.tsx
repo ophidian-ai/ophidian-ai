@@ -36,7 +36,7 @@ export function BrandStatement() {
               key={i}
               d={`M${-100 + i * 40},${450 + Math.sin(i) * 100} Q${360 + i * 20},${200 + i * 30} ${720 + i * 10},${400 + Math.cos(i) * 80} T${1540 + i * 20},${350 + i * 25}`}
               fill="none"
-              stroke="var(--color-venom)"
+              stroke="var(--color-sage-accent)"
               strokeWidth="1"
             />
           ))}
@@ -48,13 +48,13 @@ export function BrandStatement() {
           <span className="brand-word inline-block">us</span>{" "}
           <span className="brand-word inline-block">&mdash;</span>{" "}
           <span className="brand-word inline-block">Ophidian</span>
-          <span className="brand-word inline-block text-venom">AI</span>
+          <span className="brand-word inline-block text-gold">AI</span>
           <span className="brand-word inline-block">.</span>
         </p>
       </div>
       <div className="relative z-10 mt-16 text-center">
         <p className="text-text-muted text-lg mb-8">Ready to bring your vision to life?</p>
-        <a href="#contact" className="inline-flex px-8 py-3 rounded-full text-sm font-medium bg-venom text-forest-deep hover:bg-venom/90 transition-colors">
+        <a href="#contact" className="inline-flex px-8 py-3 rounded-full text-sm font-medium bg-gold text-forest-deep hover:bg-gold-light transition-colors">
           Get Started
         </a>
       </div>
