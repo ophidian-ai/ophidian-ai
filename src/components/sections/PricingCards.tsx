@@ -452,14 +452,7 @@ function PricingCard({ plan, index, isRecurring, isYearly }: PricingCardProps) {
   const isOneTime = plan.oneTime ?? false;
   const displayPrice = isRecurring && !isOneTime && isYearly && plan.yearlyPrice ? plan.yearlyPrice : plan.price;
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.4,
-        delay: index * 0.1,
-        ease: [0.16, 1, 0.3, 1],
-      }}
+    <div
       className={cn(
         "group relative flex flex-col rounded-2xl border p-8 transition-all duration-300",
         plan.popular
@@ -539,6 +532,6 @@ function PricingCard({ plan, index, isRecurring, isYearly }: PricingCardProps) {
           />
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }
