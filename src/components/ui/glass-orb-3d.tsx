@@ -13,9 +13,9 @@ function RibbonBackground() {
     () => ({
       u_time: { value: 0 },
       u_speed: { value: 2.0 },
-      u_c1: { value: new THREE.Color("#39FF14") },
-      u_c2: { value: new THREE.Color("#0DB1B2") },
-      u_c3: { value: new THREE.Color("#5FFF42") },
+      u_c1: { value: new THREE.Color("#C4A265") },
+      u_c2: { value: new THREE.Color("#7A9E7E") },
+      u_c3: { value: new THREE.Color("#D4B87A") },
     }),
     []
   )
@@ -279,7 +279,7 @@ export function GlassOrb3D({ size = "192px", className }: GlassOrb3DProps) {
         borderRadius: "50%",
         overflow: "hidden",
         boxShadow:
-          "0 0 15px rgba(57, 255, 20, 0.15), 0 0 30px rgba(13, 177, 178, 0.08)",
+          "0 0 15px rgba(196, 162, 101, 0.15), 0 0 30px rgba(122, 158, 126, 0.08)",
       }}
     >
       <Canvas

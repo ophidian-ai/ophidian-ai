@@ -25,7 +25,7 @@ type DateRange = "7d" | "30d" | "90d";
 
 const RANGE_DAYS: Record<DateRange, number> = { "7d": 7, "30d": 30, "90d": 90 };
 
-const PIE_COLORS = ["#39FF14", "#0DB1B2", "#6366F1", "#F59E0B", "#EF4444", "#8B5CF6"];
+const PIE_COLORS = ["#C4A265", "#7A9E7E", "#6366F1", "#F59E0B", "#EF4444", "#8B5CF6"];
 
 export default function AnalyticsPage() {
   const { modules, clientId } = useDashboard();
@@ -199,8 +199,8 @@ function AnalyticsContent({ clientId }: { clientId: string | null }) {
                 <AreaChart data={chartData}>
                   <defs>
                     <linearGradient id="viewsGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#39FF14" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#39FF14" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#C4A265" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#C4A265" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
@@ -217,7 +217,7 @@ function AnalyticsContent({ clientId }: { clientId: string | null }) {
                   <Area
                     type="monotone"
                     dataKey="page_views"
-                    stroke="#39FF14"
+                    stroke="#C4A265"
                     fill="url(#viewsGradient)"
                     strokeWidth={2}
                   />
@@ -252,7 +252,7 @@ function AnalyticsContent({ clientId }: { clientId: string | null }) {
                           color: "#fff",
                         }}
                       />
-                      <Bar dataKey="views" fill="#0DB1B2" radius={[0, 4, 4, 0]} />
+                      <Bar dataKey="views" fill="#7A9E7E" radius={[0, 4, 4, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>

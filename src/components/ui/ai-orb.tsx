@@ -87,7 +87,7 @@ export function AIChatWidget() {
     <div className="fixed bottom-6 right-6 z-50">
       {/* Chat panel */}
       {isOpen && (
-        <div className="absolute bottom-16 right-0 w-80 sm:w-96 rounded-xl border border-primary/15 bg-surface/60 backdrop-blur-2xl shadow-[0_0_30px_rgba(13,177,178,0.1),0_0_60px_rgba(57,255,20,0.05)] overflow-hidden animate-fade-up">
+        <div className="absolute bottom-16 right-0 w-80 sm:w-96 rounded-xl border border-primary/15 bg-surface/60 backdrop-blur-2xl shadow-[0_0_30px_rgba(122,158,126,0.1),0_0_60px_rgba(196,162,101,0.05)] overflow-hidden animate-fade-up">
           {/* Header */}
           <div className="flex items-center justify-between border-b border-primary/10 px-4 py-3">
             <div className="flex items-center gap-2">
@@ -156,7 +156,7 @@ export function AIChatWidget() {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="group relative flex h-14 w-14 items-center justify-center rounded-full overflow-hidden shadow-glow hover:shadow-[0_0_30px_rgba(57,255,20,0.4)] transition-all duration-300"
+        className="group relative flex h-14 w-14 items-center justify-center rounded-full overflow-hidden shadow-glow hover:shadow-[0_0_30px_rgba(196,162,101,0.4)] transition-all duration-300"
         aria-label={isOpen ? "Close chat" : "Open chat"}
       >
         {isOpen ? (
