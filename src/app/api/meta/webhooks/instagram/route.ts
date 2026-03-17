@@ -16,24 +16,6 @@ export async function GET(request: NextRequest) {
   const token = url.searchParams.get("hub.verify_token");
   const challenge = url.searchParams.get("hub.challenge");
 
-  console.log("[Instagram Webhook] GET request:", {
-    url: request.url,
-    mode,
-    token: token ? token.substring(0, 10) + "..." : null,
-    challenge,
-    expectedToken: VERIFY_TOKEN.substring(0, 10) + "...",
-    match: token === VERIFY_TOKEN,
-  });
-
-  // Debug: temporarily return what we see
-  if (!mode && !token && !challenge) {
-    return NextResponse.json({
-      debug: true,
-      url: request.url,
-      allParams: Object.fromEntries(url.searchParams.entries()),
-    });
-  }
-
   if (mode === "subscribe" && token === VERIFY_TOKEN) {
     return new NextResponse(challenge, {
       status: 200,
@@ -41,10 +23,7 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  return NextResponse.json({
-    error: "Forbidden",
-    debug: { mode, tokenReceived: !!token, tokenMatch: token === VERIFY_TOKEN },
-  }, { status: 403 });
+  return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 }
 
 export async function POST(request: NextRequest) {
