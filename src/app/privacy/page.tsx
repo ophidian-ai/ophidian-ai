@@ -13,7 +13,7 @@ export default function PrivacyPage() {
               Privacy Policy
             </Heading>
             <Text variant="small" className="mb-12">
-              Effective date: March 9, 2026
+              Effective date: March 16, 2026
             </Text>
 
             <div className="space-y-10">
@@ -59,6 +59,13 @@ export default function PrivacyPage() {
                     Account credentials if you create an account on our
                     platform, managed through Supabase authentication.
                   </li>
+                  <li>
+                    Social media account access granted through Meta (Facebook
+                    and Instagram) when you authorize our social media management
+                    services. This includes your Facebook Page access tokens,
+                    Instagram Professional account identifiers, and the
+                    permissions you grant to our application.
+                  </li>
                 </ul>
 
                 <Heading level={3} className="mb-2 text-lg font-medium">
@@ -74,6 +81,32 @@ export default function PrivacyPage() {
                   <li>
                     Server logs that may include your IP address, request
                     timestamps, and pages visited.
+                  </li>
+                </ul>
+
+                <Heading level={3} className="mb-2 text-lg font-medium">
+                  Information from Third-Party Platforms
+                </Heading>
+                <Text variant="body" className="mb-2">
+                  When you connect your Facebook Page or Instagram Professional
+                  account to our social media management services, we may receive
+                  the following data from Meta:
+                </Text>
+                <ul className="list-disc space-y-2 pl-6 text-foreground-muted">
+                  <li>
+                    Your Facebook Page name, ID, and associated metadata.
+                  </li>
+                  <li>
+                    Your Instagram Professional account profile information,
+                    including username, profile picture, and account type.
+                  </li>
+                  <li>
+                    Content you have published on your connected accounts
+                    (posts, media, captions) to inform our content strategy.
+                  </li>
+                  <li>
+                    Engagement metrics and insights (likes, comments, reach,
+                    impressions) from your connected accounts.
                   </li>
                 </ul>
               </div>
@@ -103,6 +136,15 @@ export default function PrivacyPage() {
                   <li>
                     Analyze website usage to improve our site and service
                     offerings.
+                  </li>
+                  <li>
+                    Publish content (posts, images, videos, reels, stories) to
+                    your Facebook Page and Instagram Professional account on your
+                    behalf as part of our social media management services.
+                  </li>
+                  <li>
+                    Monitor engagement metrics on your connected social media
+                    accounts to inform content strategy and reporting.
                   </li>
                   <li>
                     Comply with legal obligations and protect our rights.
@@ -165,6 +207,21 @@ export default function PrivacyPage() {
                     <strong className="text-foreground">Vercel</strong> --
                     Website hosting and analytics.
                   </li>
+                  <li>
+                    <strong className="text-foreground">Meta Platforms</strong>{" "}
+                    -- Facebook and Instagram APIs for social media management
+                    services. When you connect your accounts, data is exchanged
+                    between our application and Meta in accordance with{" "}
+                    <a
+                      href="https://www.facebook.com/privacy/policy/"
+                      className="text-primary hover:underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Meta&apos;s Privacy Policy
+                    </a>
+                    .
+                  </li>
                 </ul>
               </div>
 
@@ -192,10 +249,102 @@ export default function PrivacyPage() {
                 </ul>
               </div>
 
+              {/* Meta Platform Data */}
+              <div>
+                <Heading level={2} className="mb-3 text-xl font-semibold">
+                  7. Meta Platform Data (Facebook &amp; Instagram)
+                </Heading>
+                <Text variant="body" className="mb-3">
+                  If you use our social media management services and connect
+                  your Facebook Page or Instagram Professional account, the
+                  following additional terms apply:
+                </Text>
+                <Heading level={3} className="mb-2 text-lg font-medium">
+                  What We Access
+                </Heading>
+                <ul className="mb-4 list-disc space-y-2 pl-6 text-foreground-muted">
+                  <li>
+                    Your Facebook Page and Instagram Professional account
+                    profile information, content, and engagement metrics.
+                  </li>
+                  <li>
+                    The ability to publish content (posts, images, videos,
+                    reels, stories) to your connected accounts on your behalf.
+                  </li>
+                  <li>
+                    The ability to read and respond to comments on your
+                    connected accounts.
+                  </li>
+                </ul>
+                <Heading level={3} className="mb-2 text-lg font-medium">
+                  How We Store It
+                </Heading>
+                <ul className="mb-4 list-disc space-y-2 pl-6 text-foreground-muted">
+                  <li>
+                    Access tokens are stored encrypted at rest and transmitted
+                    only over HTTPS.
+                  </li>
+                  <li>
+                    We store the minimum data necessary to provide the service
+                    (account IDs, tokens, and scheduling data).
+                  </li>
+                  <li>
+                    We do not sell, share, or transfer Meta platform data to
+                    third parties, except as required to provide our services to
+                    you.
+                  </li>
+                </ul>
+                <Heading level={3} className="mb-2 text-lg font-medium">
+                  Revoking Access
+                </Heading>
+                <Text variant="body" className="mb-3">
+                  You may disconnect your Facebook or Instagram account from our
+                  services at any time by:
+                </Text>
+                <ul className="mb-4 list-disc space-y-2 pl-6 text-foreground-muted">
+                  <li>
+                    Removing our app from your Facebook Settings under Apps and
+                    Websites.
+                  </li>
+                  <li>
+                    Contacting us at{" "}
+                    <a
+                      href="mailto:eric.lefler@ophidianai.com"
+                      className="text-primary hover:underline"
+                    >
+                      eric.lefler@ophidianai.com
+                    </a>{" "}
+                    to request disconnection.
+                  </li>
+                </ul>
+                <Text variant="body" className="mb-3">
+                  When you revoke access, we will delete all stored Meta
+                  platform data associated with your account within 30 days.
+                </Text>
+                <Heading level={3} className="mb-2 text-lg font-medium">
+                  Data Deletion Requests
+                </Heading>
+                <Text variant="body">
+                  In compliance with Meta Platform Terms, we provide a data
+                  deletion callback. When you remove our app from your Facebook
+                  account, Meta notifies us and we automatically initiate
+                  deletion of all data received from Meta on your behalf. You
+                  may also request deletion directly by emailing{" "}
+                  <a
+                    href="mailto:eric.lefler@ophidianai.com"
+                    className="text-primary hover:underline"
+                  >
+                    eric.lefler@ophidianai.com
+                  </a>
+                  . We will confirm deletion within 30 days and provide a
+                  confirmation code for your records.
+                </Text>
+              </div>
+
               {/* Data Security */}
               <div>
                 <Heading level={2} className="mb-3 text-xl font-semibold">
-                  7. Data Security
+                  8. Data Security
                 </Heading>
                 <Text variant="body">
                   We implement reasonable technical and organizational measures
@@ -210,7 +359,7 @@ export default function PrivacyPage() {
               {/* Data Retention */}
               <div>
                 <Heading level={2} className="mb-3 text-xl font-semibold">
-                  8. Data Retention
+                  9. Data Retention
                 </Heading>
                 <Text variant="body">
                   We retain your personal information for as long as necessary to
@@ -224,7 +373,7 @@ export default function PrivacyPage() {
               {/* Your Rights */}
               <div>
                 <Heading level={2} className="mb-3 text-xl font-semibold">
-                  9. Your Rights
+                  10. Your Rights
                 </Heading>
                 <Text variant="body" className="mb-3">
                   Depending on your location, you may have the right to:
@@ -259,7 +408,7 @@ export default function PrivacyPage() {
               {/* Children */}
               <div>
                 <Heading level={2} className="mb-3 text-xl font-semibold">
-                  10. Children&apos;s Privacy
+                  11. Children&apos;s Privacy
                 </Heading>
                 <Text variant="body">
                   Our services are not directed at individuals under 18. We do
@@ -272,7 +421,7 @@ export default function PrivacyPage() {
               {/* Changes */}
               <div>
                 <Heading level={2} className="mb-3 text-xl font-semibold">
-                  11. Changes to This Policy
+                  12. Changes to This Policy
                 </Heading>
                 <Text variant="body">
                   We may update this Privacy Policy from time to time. When we
@@ -285,7 +434,7 @@ export default function PrivacyPage() {
               {/* Contact */}
               <div>
                 <Heading level={2} className="mb-3 text-xl font-semibold">
-                  12. Contact Us
+                  13. Contact Us
                 </Heading>
                 <Text variant="body">
                   If you have questions about this Privacy Policy or how we

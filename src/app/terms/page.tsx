@@ -13,7 +13,7 @@ export default function TermsPage() {
               Terms of Service
             </Heading>
             <Text variant="small" className="mb-12">
-              Effective date: March 9, 2026
+              Effective date: March 16, 2026
             </Text>
 
             <div className="space-y-10">
@@ -50,6 +50,14 @@ export default function TermsPage() {
                   <li>
                     AI consulting and strategic implementation.
                   </li>
+                  <li>
+                    Social media management, including content creation and
+                    publishing to Facebook Pages and Instagram Professional
+                    accounts on your behalf.
+                  </li>
+                  <li>
+                    SEO auditing, optimization, and ongoing management.
+                  </li>
                 </ul>
                 <Text variant="body" className="mt-3">
                   The specific scope, deliverables, and timeline for any project
@@ -74,10 +82,52 @@ export default function TermsPage() {
                 </Text>
               </div>
 
+              {/* Social Media Management */}
+              <div>
+                <Heading level={2} className="mb-3 text-xl font-semibold">
+                  4. Social Media Management Services
+                </Heading>
+                <Text variant="body" className="mb-3">
+                  If you engage our social media management services, the
+                  following additional terms apply:
+                </Text>
+                <ul className="list-disc space-y-2 pl-6 text-foreground-muted">
+                  <li>
+                    You authorize OphidianAI to access, manage, and publish
+                    content to your connected Facebook Page(s) and Instagram
+                    Professional account(s) on your behalf.
+                  </li>
+                  <li>
+                    You remain the owner of all content published to your
+                    accounts. OphidianAI retains the right to use content we
+                    created for you in our portfolio unless you request otherwise
+                    in writing.
+                  </li>
+                  <li>
+                    You are responsible for ensuring that any content you provide
+                    to us for publishing does not violate any third-party rights,
+                    applicable laws, or the terms of service of Facebook,
+                    Instagram, or any other platform.
+                  </li>
+                  <li>
+                    OphidianAI will comply with Meta Platform Terms and Developer
+                    Policies in all interactions with Facebook and Instagram
+                    APIs. We will not use your data for purposes beyond providing
+                    the agreed-upon services.
+                  </li>
+                  <li>
+                    You may revoke our access to your social media accounts at
+                    any time by removing our application from your Facebook
+                    Settings or by providing written notice. Revocation does not
+                    affect content already published.
+                  </li>
+                </ul>
+              </div>
+
               {/* Acceptable Use */}
               <div>
                 <Heading level={2} className="mb-3 text-xl font-semibold">
-                  4. Acceptable Use
+                  5. Acceptable Use
                 </Heading>
                 <Text variant="body" className="mb-3">
                   You agree not to:
@@ -113,7 +163,7 @@ export default function TermsPage() {
               {/* Payment Terms */}
               <div>
                 <Heading level={2} className="mb-3 text-xl font-semibold">
-                  5. Payment Terms
+                  6. Payment Terms
                 </Heading>
                 <Text variant="body" className="mb-3">
                   Payment terms are outlined in each project proposal or
@@ -148,7 +198,7 @@ export default function TermsPage() {
               {/* Intellectual Property */}
               <div>
                 <Heading level={2} className="mb-3 text-xl font-semibold">
-                  6. Intellectual Property
+                  7. Intellectual Property
                 </Heading>
                 <Heading level={3} className="mb-2 text-lg font-medium">
                   Our Property
@@ -176,7 +226,7 @@ export default function TermsPage() {
               {/* Confidentiality */}
               <div>
                 <Heading level={2} className="mb-3 text-xl font-semibold">
-                  7. Confidentiality
+                  8. Confidentiality
                 </Heading>
                 <Text variant="body">
                   Both parties agree to keep confidential any proprietary or
@@ -190,7 +240,7 @@ export default function TermsPage() {
               {/* Limitation of Liability */}
               <div>
                 <Heading level={2} className="mb-3 text-xl font-semibold">
-                  8. Limitation of Liability
+                  9. Limitation of Liability
                 </Heading>
                 <Text variant="body" className="mb-3">
                   To the maximum extent permitted by law:
@@ -222,7 +272,7 @@ export default function TermsPage() {
               {/* Indemnification */}
               <div>
                 <Heading level={2} className="mb-3 text-xl font-semibold">
-                  9. Indemnification
+                  10. Indemnification
                 </Heading>
                 <Text variant="body">
                   You agree to indemnify and hold OphidianAI harmless from any
@@ -235,7 +285,7 @@ export default function TermsPage() {
               {/* Termination */}
               <div>
                 <Heading level={2} className="mb-3 text-xl font-semibold">
-                  10. Termination
+                  11. Termination
                 </Heading>
                 <Text variant="body" className="mb-3">
                   Either party may terminate a service agreement with 30
@@ -261,7 +311,7 @@ export default function TermsPage() {
               {/* Governing Law */}
               <div>
                 <Heading level={2} className="mb-3 text-xl font-semibold">
-                  11. Governing Law
+                  12. Governing Law
                 </Heading>
                 <Text variant="body">
                   These Terms are governed by the laws of the State of Indiana,
@@ -274,7 +324,7 @@ export default function TermsPage() {
               {/* Changes */}
               <div>
                 <Heading level={2} className="mb-3 text-xl font-semibold">
-                  12. Changes to These Terms
+                  13. Changes to These Terms
                 </Heading>
                 <Text variant="body">
                   We may update these Terms from time to time. When we do, we
@@ -288,7 +338,7 @@ export default function TermsPage() {
               {/* Contact */}
               <div>
                 <Heading level={2} className="mb-3 text-xl font-semibold">
-                  13. Contact Us
+                  14. Contact Us
                 </Heading>
                 <Text variant="body">
                   If you have questions about these Terms, contact us at:
