@@ -11,18 +11,28 @@ import crypto from "crypto";
 const VERIFY_TOKEN = process.env.META_WEBHOOK_VERIFY_TOKEN || "ophidianai_webhook_verify_2026";
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
+  const url = new URL(request.url);
+  const mode = url.searchParams.get("hub.mode");
+  const token = url.searchParams.get("hub.verify_token");
+  const challenge = url.searchParams.get("hub.challenge");
 
-  const mode = searchParams.get("hub.mode");
-  const token = searchParams.get("hub.verify_token");
-  const challenge = searchParams.get("hub.challenge");
+  console.log("[Instagram Webhook] GET request:", {
+    url: request.url,
+    mode,
+    token: token ? token.substring(0, 10) + "..." : null,
+    challenge,
+    expectedToken: VERIFY_TOKEN.substring(0, 10) + "...",
+    match: token === VERIFY_TOKEN,
+  });
 
   if (mode === "subscribe" && token === VERIFY_TOKEN) {
     console.log("[Instagram Webhook] Verification successful");
-    return new NextResponse(challenge, { status: 200 });
+    return new NextResponse(challenge, {
+      status: 200,
+      headers: { "Content-Type": "text/plain" },
+    });
   }
 
-  console.error("[Instagram Webhook] Verification failed");
   return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 }
 
