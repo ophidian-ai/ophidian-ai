@@ -133,6 +133,19 @@ const SERVICE_TEMPLATES: Record<ServiceType, ServiceTemplate> = {
     ],
     basePrice: "100",
   },
+  social_media: {
+    scope: "AI-driven social media management for Facebook, Instagram, and Threads. Includes content creation, scheduling, publishing, comment monitoring, and monthly performance reporting.",
+    timeline: "Month-to-month",
+    deliverables: [
+      "Content calendar with planned posts",
+      "AI-generated posts (images, captions, hashtags)",
+      "Scheduled publishing to Facebook and Instagram",
+      "Comment and message monitoring",
+      "Monthly engagement report",
+      "Hashtag and trend research",
+    ],
+    basePrice: "250",
+  },
 };
 
 const DISCOUNT_OPTIONS: DiscountOption[] = [

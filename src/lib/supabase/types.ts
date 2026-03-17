@@ -9,7 +9,8 @@ export type ServiceType =
   | "web_ecommerce"
   | "seo_cleanup"
   | "seo_growth"
-  | "maintenance";
+  | "maintenance"
+  | "social_media";
 
 export type ServiceStatus = "active" | "completed" | "cancelled";
 export type ProjectStatus = "active" | "launched" | "on_hold" | "cancelled" | "completed";

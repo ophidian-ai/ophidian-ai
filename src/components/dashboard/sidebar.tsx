@@ -19,6 +19,7 @@ import {
   Users,
   FileSignature,
   DollarSign,
+  Share2,
   LogOut,
   Menu,
   X,
@@ -59,6 +60,12 @@ const clientNavItems: NavItem[] = [
     module: "content_requests",
   },
   {
+    icon: Share2,
+    label: "Social Media",
+    href: "/dashboard/social",
+    module: "social_media",
+  },
+  {
     icon: FileSignature,
     label: "Proposals",
     href: "/dashboard/proposals",
@@ -78,6 +85,7 @@ const adminNavItems: NavItem[] = [
     href: "/dashboard/admin/proposals",
   },
   { icon: DollarSign, label: "Revenue", href: "/dashboard/admin/revenue" },
+  { icon: Share2, label: "Social Media", href: "/dashboard/social" },
   { icon: Settings, label: "Account Settings", href: "/dashboard/account" },
 ];
 

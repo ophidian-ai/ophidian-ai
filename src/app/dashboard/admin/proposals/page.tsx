@@ -37,6 +37,7 @@ const SERVICE_LABELS: Record<ServiceType, string> = {
   seo_cleanup: "SEO Cleanup",
   seo_growth: "SEO Growth",
   maintenance: "Maintenance",
+  social_media: "Social Media",
 };
 
 function formatCurrency(cents: number): string {

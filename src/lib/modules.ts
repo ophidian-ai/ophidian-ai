@@ -8,6 +8,7 @@ export type DashboardModule =
   | "content_requests"
   | "analytics"
   | "seo_performance"
+  | "social_media"
   | "reports"
   | "billing"
   | "proposals";
@@ -19,6 +20,7 @@ const SERVICE_MODULE_MAP: Record<ServiceType, DashboardModule[]> = {
   seo_cleanup: ["seo_performance", "proposals", "billing", "reports"],
   seo_growth: ["seo_performance", "content_requests", "billing", "reports"],
   maintenance: ["content_requests", "analytics", "billing", "reports"],
+  social_media: ["social_media", "analytics", "content_requests", "billing", "reports"],
 };
 
 // Modules that activate only when a project reaches "live" phase

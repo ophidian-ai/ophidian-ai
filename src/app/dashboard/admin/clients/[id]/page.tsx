@@ -41,6 +41,7 @@ const SERVICE_LABELS: Record<ServiceType, string> = {
   seo_cleanup: "SEO Cleanup",
   seo_growth: "SEO Growth",
   maintenance: "Maintenance",
+  social_media: "Social Media",
 };
 
 const SERVICE_COLORS: Record<ServiceType, string> = {
@@ -50,6 +51,7 @@ const SERVICE_COLORS: Record<ServiceType, string> = {
   seo_cleanup: "bg-blue-500/15 text-blue-400 border-blue-500/30",
   seo_growth: "bg-indigo-500/15 text-indigo-400 border-indigo-500/30",
   maintenance: "bg-amber-500/15 text-amber-400 border-amber-500/30",
+  social_media: "bg-purple-500/15 text-purple-400 border-purple-500/30",
 };
 
 const STATUS_COLORS: Record<string, string> = {
