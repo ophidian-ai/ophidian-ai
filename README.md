@@ -5,8 +5,8 @@ Company website for OphidianAI. Marketing site with service descriptions, pricin
 
 ## Status
 - **Phase:** Live (post-launch)
-- **URL:** ophidian-ai.vercel.app
-- **Custom Domain:** Not yet connected
+- **URL:** ophidianai.com
+- **Custom Domain:** ophidianai.com
 
 ## Tech Stack
 - Next.js 15, React 19, TypeScript, Tailwind CSS 4, App Router
@@ -28,8 +28,6 @@ The website source code lives at the **repo root** (`src/`, `public/`, config fi
 
 ## Pending
 - [ ] Set RESEND_API_KEY in Vercel env vars (contact form)
-- [ ] Connect custom domain (ophidianai.com)
 - [ ] Stripe subscription checkout
 - [ ] Blog content sprint (4-5 more posts)
 - [ ] Calendly integration
-- [ ] Privacy/Terms pages

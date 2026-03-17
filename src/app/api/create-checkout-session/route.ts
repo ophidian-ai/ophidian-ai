@@ -42,8 +42,8 @@ export async function POST(request: NextRequest) {
       subscription_data: {
         metadata: { service_type: planId.startsWith("seo_") ? "seo_growth" : "maintenance" },
       },
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://ophidian-ai.vercel.app"}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://ophidian-ai.vercel.app"}/pricing`,
+      success_url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://ophidianai.com"}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://ophidianai.com"}/pricing`,
     });
 
     return NextResponse.json({ url: session.url });
