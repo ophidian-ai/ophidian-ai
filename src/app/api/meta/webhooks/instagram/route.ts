@@ -25,15 +25,26 @@ export async function GET(request: NextRequest) {
     match: token === VERIFY_TOKEN,
   });
 
+  // Debug: temporarily return what we see
+  if (!mode && !token && !challenge) {
+    return NextResponse.json({
+      debug: true,
+      url: request.url,
+      allParams: Object.fromEntries(url.searchParams.entries()),
+    });
+  }
+
   if (mode === "subscribe" && token === VERIFY_TOKEN) {
-    console.log("[Instagram Webhook] Verification successful");
     return new NextResponse(challenge, {
       status: 200,
       headers: { "Content-Type": "text/plain" },
     });
   }
 
-  return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  return NextResponse.json({
+    error: "Forbidden",
+    debug: { mode, tokenReceived: !!token, tokenMatch: token === VERIFY_TOKEN },
+  }, { status: 403 });
 }
 
 export async function POST(request: NextRequest) {
