@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Web Design & SEO Services",
+  title: "Web Design, SEO & AI Growth Services",
   description:
-    "Professional web design and SEO services for small businesses. Custom websites starting at $2,200. Free SEO audits available.",
+    "Professional web design, SEO, and AI-powered growth services for small businesses. Custom websites, AI chatbots, content generation, email marketing, and more.",
 };
 
 export default function ServicesLayout({

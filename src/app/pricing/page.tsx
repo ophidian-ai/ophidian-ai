@@ -10,6 +10,7 @@ import { GlassButton } from "@/components/ui/glass-button";
 import { GlowCard } from "@/components/ui/spotlight-card";
 import { usePageContent } from "@/lib/use-page-content";
 import { useEditMode } from "@/lib/edit-mode-context";
+import Link from "next/link";
 
 /* ------------------------------------------------------------------ */
 /* Web Design Plans                                                    */
@@ -134,6 +135,8 @@ const defaultFaqItems = [
   { question: "What is included in monthly maintenance?", answer: "Maintenance covers hosting, SSL certificates, security monitoring, uptime checks, and minor content updates (text changes, image swaps, etc.). It does not include major redesigns or new page builds -- those are quoted separately." },
   { question: "Can I cancel maintenance at any time?", answer: "Yes. Maintenance is month-to-month with no long-term contracts. Cancel anytime with 30 days notice. Your site stays live -- you just handle updates yourself." },
   { question: "What makes the SEO audit free?", answer: "We use the audit to show you exactly where your site stands and where the opportunities are. There is no obligation to buy anything after the audit. If you want help implementing the recommendations, we will quote that separately." },
+  { question: "What is included in the AI Growth plan setup fee?", answer: "The setup fee covers onboarding your business data (FAQs, services, pricing, brand voice), configuring integrations, building your AI chatbot knowledge base, and initial content calendar creation. It is a one-time cost." },
+  { question: "Can I buy AI products individually?", answer: "Yes. Every AI product is available a la carte at standalone pricing. However, our tier plans offer significant savings -- the Growth plan at $497/mo includes over $1,200 worth of standalone services." },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -248,6 +251,117 @@ export default function PricingPage() {
           </div>
         </section>
 
+        {/* ---- AI Growth Tiers ---- */}
+        <section className="relative py-20 overflow-x-hidden">
+          <div className="text-center mb-12 max-w-3xl mx-auto space-y-4 px-4">
+            <Heading level={2} gradient>AI Growth Plans</Heading>
+            <Text variant="lead">Recurring AI services that grow your business month after month.</Text>
+          </div>
+
+          <div className="grid md:grid-cols-3 max-w-5xl gap-6 py-6 mx-auto px-4 items-start">
+            {[
+              {
+                name: "Essentials",
+                price: "$297/mo",
+                setup: "$500 setup",
+                description: "AI chatbot, content, and SEO reporting to jumpstart your digital presence.",
+                features: [
+                  "AI chatbot (website)",
+                  "4 blog posts + 12 social posts/mo",
+                  "Monthly SEO audit & report",
+                  "Monthly analytics PDF",
+                ],
+                cta: "Get Started",
+                href: "/contact?service=ai_essentials",
+                popular: false,
+              },
+              {
+                name: "Growth",
+                price: "$497/mo",
+                setup: "$1,000 setup",
+                description: "Managed SEO, email campaigns, and review management to accelerate growth.",
+                features: [
+                  "Everything in Essentials, plus:",
+                  "Advanced chatbot (website + 1 channel)",
+                  "8 blogs + 20 social posts/mo",
+                  "Managed SEO with optimization",
+                  "2 email campaigns/mo",
+                  "Review monitoring + AI responses",
+                  "Live analytics dashboard",
+                ],
+                cta: "Get Started",
+                href: "/contact?service=ai_growth",
+                popular: true,
+              },
+              {
+                name: "Pro",
+                price: "$797/mo",
+                setup: "$1,500 setup",
+                description: "Full-service AI growth with ads, CRM, and content strategy.",
+                features: [
+                  "Everything in Growth, plus:",
+                  "Multi-channel chatbot",
+                  "12 blogs + 30 social + video scripts",
+                  "Full SEO + content strategy",
+                  "4 email campaigns + automations",
+                  "Review generation campaigns",
+                  "Google + Meta ad management",
+                  "CRM pipeline + lead scoring",
+                  "Dashboard + AI-written insights",
+                ],
+                cta: "Get Started",
+                href: "/contact?service=ai_pro",
+                popular: false,
+              },
+            ].map((plan) => (
+              <GlowCard
+                key={plan.name}
+                className={`relative text-foreground glass rounded-2xl border p-8 ${
+                  plan.popular
+                    ? "shadow-[0px_-8px_60px_0px_rgba(57,255,20,0.3)] z-20 border-primary/30"
+                    : "border-primary/10 z-10"
+                }`}
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="text-2xl font-semibold">{plan.name}</h3>
+                  {plan.popular && (
+                    <span className="text-xs bg-primary/20 text-primary px-2 py-1 rounded-full">
+                      Popular
+                    </span>
+                  )}
+                </div>
+                <p className="text-3xl font-bold text-foreground mb-1">{plan.price}</p>
+                <p className="text-xs text-foreground-muted mb-2">{plan.setup}</p>
+                <p className="text-sm text-foreground-muted mb-6">{plan.description}</p>
+
+                <GlassButton size="lg" href={plan.href} className="w-full mb-6">
+                  {plan.cta}
+                </GlassButton>
+
+                <div className="space-y-3 pt-4 border-t border-primary/10">
+                  <h4 className="font-medium text-base mb-3">Includes:</h4>
+                  <ul className="space-y-2">
+                    {plan.features.map((feature, fi) => (
+                      <li key={fi} className="flex items-center gap-2">
+                        <span className="h-2.5 w-2.5 bg-primary/50 rounded-full shrink-0" />
+                        <span className="text-sm text-foreground-muted">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </GlowCard>
+            ))}
+          </div>
+
+          {/* A la carte note */}
+          <div className="max-w-3xl mx-auto mt-8 px-4 text-center">
+            <Text variant="small">
+              Need just one product? All AI services are available{" "}
+              <Link href="/services" className="text-primary hover:underline">a la carte</Link>.
+            </Text>
+          </div>
+        </section>
+
         {/* ---- Add-ons ---- */}
         <section className="pb-20 px-4">
           <Container width="default">
@@ -274,7 +388,7 @@ export default function PricingPage() {
                   {content["pricing_faq_heading"] || "Frequently Asked Questions"}
                 </h2>
                 <p className="mt-4 text-lg text-foreground-muted">
-                  {content["pricing_faq_subtitle"] || "Everything you need to know about our web design and SEO services."}
+                  {content["pricing_faq_subtitle"] || "Everything you need to know about our web design, SEO, and AI growth services."}
                 </p>
               </div>
               <div className="space-y-6 max-w-3xl">
@@ -294,7 +408,7 @@ export default function PricingPage() {
         ) : (
           <FAQAccordion
             heading={content["pricing_faq_heading"] || "Frequently Asked Questions"}
-            subtitle={content["pricing_faq_subtitle"] || "Everything you need to know about our web design and SEO services."}
+            subtitle={content["pricing_faq_subtitle"] || "Everything you need to know about our web design, SEO, and AI growth services."}
             items={resolvedFaqItems}
           />
         )}

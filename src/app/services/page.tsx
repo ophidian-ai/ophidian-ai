@@ -14,6 +14,8 @@ import { EditableText } from "@/components/editable/editable-text";
 import { EditableImage } from "@/components/editable/editable-image";
 import { useEditMode } from "@/lib/edit-mode-context";
 
+import Link from "next/link";
+
 const serviceSchema = {
   "@context": "https://schema.org",
   "@type": "ItemList",
@@ -21,8 +23,22 @@ const serviceSchema = {
     { "@type": "Service", position: 1, name: "Custom Web Design", description: "Modern, mobile-first websites designed and built for small businesses.", provider: { "@type": "Organization", name: "OphidianAI" } },
     { "@type": "Service", position: 2, name: "E-Commerce Solutions", description: "Full online stores with product catalogs, secure checkout, and inventory management.", provider: { "@type": "Organization", name: "OphidianAI" } },
     { "@type": "Service", position: 3, name: "Search Engine Optimization", description: "Get found on Google with technical SEO, keyword research, and ongoing optimization.", provider: { "@type": "Organization", name: "OphidianAI" } },
+    { "@type": "Service", position: 4, name: "AI Chatbot", description: "Custom AI chatbot trained on your business data for lead capture and customer support.", provider: { "@type": "Organization", name: "OphidianAI" } },
+    { "@type": "Service", position: 5, name: "AI Content Generation", description: "Blog posts, social media, and email sequences written in your brand voice.", provider: { "@type": "Organization", name: "OphidianAI" } },
+    { "@type": "Service", position: 6, name: "AI Email Marketing", description: "Personalized email campaigns and automated sequences.", provider: { "@type": "Organization", name: "OphidianAI" } },
+    { "@type": "Service", position: 7, name: "Review Management", description: "Multi-platform review monitoring, AI responses, and review generation.", provider: { "@type": "Organization", name: "OphidianAI" } },
   ],
 };
+
+const aiProducts = [
+  { title: "AI Chatbot", description: "Custom chatbot trained on your business data. Captures leads, books appointments, and answers questions 24/7.", href: "/services/ai-chatbot", price: "$149/mo" },
+  { title: "Content Generation", description: "Blog posts, social media, and email sequences written in your brand voice by AI.", href: "/services/content-generation", price: "$149/mo" },
+  { title: "SEO Automation", description: "Automated audits, keyword tracking, content optimization, and monthly reporting.", href: "/services/seo-automation", price: "$299/mo" },
+  { title: "Email Marketing", description: "AI-personalized campaigns, automated sequences, and send-time optimization.", href: "/services/email-marketing", price: "$249/mo" },
+  { title: "Review Management", description: "Multi-platform monitoring, AI response drafts, and review generation campaigns.", href: "/services/review-management", price: "$249/mo" },
+  { title: "Ad Management", description: "Google Ads and Meta Ads with AI-optimized bidding and creative testing.", href: "/services/ad-management", price: "$399/mo" },
+  { title: "CRM Automation", description: "Lead scoring, automated follow-ups, and pipeline management powered by AI.", href: "/services/crm-automation", price: "$297/mo" },
+];
 
 /* Monitor icon */
 const iconMonitor = (
@@ -175,6 +191,41 @@ export default function ServicesPage() {
             }))}
           />
         )}
+
+        {/* ---- AI Growth Products ---- */}
+        <section className="py-24 md:py-32">
+          <Container width="default">
+            <div className="mb-16 max-w-2xl animate-fade-up">
+              <Heading level={2} gradient>
+                AI Growth Products
+              </Heading>
+              <Text variant="lead" className="mt-4">
+                Recurring AI services that keep growing your business month after month. Available standalone or bundled into a plan.
+              </Text>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {aiProducts.map((product) => (
+                <Link key={product.title} href={product.href} className="group">
+                  <GlowCard className="glass rounded-2xl border border-primary/10 p-8 h-full transition-all duration-300 group-hover:border-primary/30">
+                    <div className="flex items-start justify-between mb-3">
+                      <Heading level={4} className="group-hover:text-primary transition-colors">
+                        {product.title}
+                      </Heading>
+                      <span className="text-sm font-semibold text-primary shrink-0 ml-2">{product.price}</span>
+                    </div>
+                    <Text variant="small">{product.description}</Text>
+                    <div className="mt-4 text-sm font-medium text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                      Learn more &rarr;
+                    </div>
+                  </GlowCard>
+                </Link>
+              ))}
+            </div>
+            <div className="mt-12 text-center">
+              <GlassButton size="lg" href="/pricing">Compare All Plans</GlassButton>
+            </div>
+          </Container>
+        </section>
 
         {isEditMode ? (
           <section className="py-20 md:py-24 relative overflow-hidden">
