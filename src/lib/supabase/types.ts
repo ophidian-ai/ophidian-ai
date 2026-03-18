@@ -248,3 +248,15 @@ export interface PendingIrisTask {
   created_at: string;
   completed_at: string | null;
 }
+
+// Chatbot types
+export type {
+  ChatbotTier,
+  LeadCaptureMode,
+  ChatbotConfig,
+  ChatbotConversation,
+  ChatbotMessage,
+  ChatbotLead,
+  ChatbotAnalytics,
+  ChatbotWebhookFailure,
+} from "./chatbot-types";
