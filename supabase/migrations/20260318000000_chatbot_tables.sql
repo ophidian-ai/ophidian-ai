@@ -267,12 +267,31 @@ CREATE POLICY client_select_chatbot_analytics
     WHERE client_id IN (SELECT id FROM clients WHERE profile_id = auth.uid())
   ));
 
--- Anon insert for widget visitors --------------------------------------------
+-- Anon access for widget visitors ---------------------------------------------
+
+CREATE POLICY anon_select_active_chatbot_configs
+  ON chatbot_configs
+  FOR SELECT
+  TO anon
+  USING (active = true);
 
 CREATE POLICY anon_insert_chatbot_conversations
   ON chatbot_conversations
   FOR INSERT
   TO anon
+  WITH CHECK (true);
+
+CREATE POLICY anon_select_chatbot_conversations
+  ON chatbot_conversations
+  FOR SELECT
+  TO anon
+  USING (true);
+
+CREATE POLICY anon_update_chatbot_conversations
+  ON chatbot_conversations
+  FOR UPDATE
+  TO anon
+  USING (true)
   WITH CHECK (true);
 
 CREATE POLICY anon_insert_chatbot_messages
@@ -281,8 +300,25 @@ CREATE POLICY anon_insert_chatbot_messages
   TO anon
   WITH CHECK (true);
 
+CREATE POLICY anon_select_chatbot_messages
+  ON chatbot_messages
+  FOR SELECT
+  TO anon
+  USING (true);
+
 CREATE POLICY anon_insert_chatbot_leads
   ON chatbot_leads
   FOR INSERT
   TO anon
   WITH CHECK (true);
+
+CREATE POLICY anon_update_chatbot_leads
+  ON chatbot_leads
+  FOR UPDATE
+  TO anon
+  USING (true)
+  WITH CHECK (true);
+
+-- Grant anon execute on RPC functions used by the widget
+GRANT EXECUTE ON FUNCTION increment_and_check_cap(UUID, INT) TO anon;
+GRANT EXECUTE ON FUNCTION increment_daily_leads(UUID, DATE) TO anon;
