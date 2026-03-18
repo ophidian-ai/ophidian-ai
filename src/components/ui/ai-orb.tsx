@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils"
 import { useState, useRef, useEffect, Component, type ReactNode } from "react"
 import { X, Send } from "lucide-react"
 import dynamic from "next/dynamic"
+import { useChat } from "@ai-sdk/react"
+import { DefaultChatTransport } from "ai"
 
 // Lazy-load Three.js glass orb (saves ~183KB from initial bundle)
 const GlassOrb3D = dynamic(
@@ -45,42 +47,43 @@ class WebGLErrorBoundary extends Component<
   }
 }
 
-interface ChatMessage {
-  role: "user" | "assistant"
-  content: string
-}
-
 export function AIChatWidget() {
   const [isOpen, setIsOpen] = useState(false)
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      role: "assistant",
-      content: "Hi! I'm Iris, your OphidianAI assistant. How can I help you today?",
-    },
-  ])
+  const [sessionId] = useState(() => typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2))
   const [input, setInput] = useState("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
+  const { messages: chatMessages, sendMessage, status } = useChat({
+    id: sessionId,
+    transport: new DefaultChatTransport({
+      api: "/api/chat/ophidianai-demo",
+      body: { sessionId },
+    }),
+  })
+
+  function getMessageText(m: (typeof chatMessages)[number]): string {
+    if (!m.parts) return ""
+    return m.parts
+      .filter((p): p is { type: "text"; text: string } => p.type === "text")
+      .map((p) => p.text)
+      .join("")
+  }
+
+  const allMessages = [
+    { id: "greeting", role: "assistant" as const, content: "Hi! I'm Iris, your OphidianAI assistant. How can I help you today?" },
+    ...chatMessages.map((m) => ({ id: m.id, role: m.role, content: getMessageText(m) })),
+  ]
+
+  const isStreaming = status === "streaming" || status === "submitted"
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [messages])
+  }, [allMessages])
 
   const handleSend = () => {
-    if (!input.trim()) return
-    const userMsg: ChatMessage = { role: "user", content: input.trim() }
-    setMessages((prev) => [...prev, userMsg])
+    if (!input.trim() || isStreaming) return
+    sendMessage({ text: input.trim() })
     setInput("")
-
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content:
-            "Thanks for reaching out! Our team will get back to you shortly. In the meantime, feel free to explore our services or book a discovery call.",
-        },
-      ])
-    }, 1000)
   }
 
   return (
@@ -108,19 +111,27 @@ export function AIChatWidget() {
 
           {/* Messages */}
           <div className="h-72 overflow-y-auto p-4 space-y-3">
-            {messages.map((msg, i) => (
-              <div
-                key={i}
-                className={cn(
-                  "max-w-[85%] rounded-lg px-3 py-2 text-sm",
-                  msg.role === "assistant"
-                    ? "bg-primary/10 text-foreground"
-                    : "ml-auto bg-primary/20 text-foreground"
-                )}
-              >
-                {msg.content}
+            {allMessages.map((msg) => {
+              if (!msg.content) return null
+              return (
+                <div
+                  key={msg.id}
+                  className={cn(
+                    "max-w-[85%] rounded-lg px-3 py-2 text-sm",
+                    msg.role === "assistant"
+                      ? "bg-primary/10 text-foreground"
+                      : "ml-auto bg-primary/20 text-foreground"
+                  )}
+                >
+                  {msg.content}
+                </div>
+              )
+            })}
+            {isStreaming && allMessages[allMessages.length - 1]?.role === "user" && (
+              <div className="max-w-[85%] rounded-lg px-3 py-2 text-sm bg-primary/10 text-foreground-muted animate-pulse">
+                Typing...
               </div>
-            ))}
+            )}
             <div ref={messagesEndRef} />
           </div>
 
@@ -142,7 +153,8 @@ export function AIChatWidget() {
               />
               <button
                 type="submit"
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors"
+                disabled={isStreaming || !input.trim()}
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Send message"
               >
                 <Send className="h-4 w-4" />

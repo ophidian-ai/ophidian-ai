@@ -3,7 +3,6 @@
 import { PageWrapper } from "@/components/layout/PageWrapper";
 import { AIProductHero } from "@/components/sections/AIProductHero";
 import { CTABanner } from "@/components/sections/CTABanner";
-import { DemoWidget } from "./demo-widget";
 
 const product = {
   title: "AI Chatbot",
@@ -47,7 +46,6 @@ export default function AIChatbotPage() {
         subtitle="Book a free consultation and we will demo a chatbot trained on your business."
         cta={{ label: "Get Started", href: "/contact?service=ai_chatbot" }}
       />
-      <DemoWidget />
     </PageWrapper>
   );
 }
