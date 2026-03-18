@@ -3,6 +3,7 @@
 import { PageWrapper } from "@/components/layout/PageWrapper";
 import { AIProductHero } from "@/components/sections/AIProductHero";
 import { CTABanner } from "@/components/sections/CTABanner";
+import { DemoWidget } from "./demo-widget";
 
 const product = {
   title: "AI Chatbot",
@@ -35,11 +36,18 @@ export default function AIChatbotPage() {
   return (
     <PageWrapper>
       <AIProductHero product={product} />
+      <section className="mx-auto max-w-4xl px-6 py-16 text-center">
+        <h2 className="mb-4 text-3xl font-bold tracking-tight">Try it now</h2>
+        <p className="text-muted-foreground text-lg">
+          Click the chat button in the bottom-right corner to see our AI chatbot in action.
+        </p>
+      </section>
       <CTABanner
         headline="Ready to add an AI chatbot?"
         subtitle="Book a free consultation and we will demo a chatbot trained on your business."
         cta={{ label: "Get Started", href: "/contact?service=ai_chatbot" }}
       />
+      <DemoWidget />
     </PageWrapper>
   );
 }
