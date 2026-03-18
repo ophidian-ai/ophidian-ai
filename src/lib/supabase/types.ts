@@ -186,6 +186,58 @@ export interface ProposalRevision {
   resolved_at: string | null;
 }
 
+export type ContentBatchStatus = "draft" | "review" | "approved" | "scheduled" | "published";
+export type ContentPlatform = "facebook" | "instagram" | "linkedin" | "tiktok";
+export type ContentPillar =
+  | "proof_of_work"
+  | "ai_education"
+  | "website_tips"
+  | "showcase"
+  | "local_relevance"
+  | "behind_the_scenes";
+export type ImageSource = "compositor" | "excalidraw" | "nano_banana" | "pexels";
+
+export interface ContentBatch {
+  id: string;
+  client_id: string | null;
+  batch_label: string;
+  status: ContentBatchStatus;
+  period_start: string;
+  period_end: string;
+  post_count: number;
+  created_at: string;
+  approved_at: string | null;
+  published_at: string | null;
+}
+
+export interface PlatformMetrics {
+  likes?: number;
+  shares?: number;
+  comments?: number;
+  reach?: number;
+  saves?: number;   // Instagram
+  views?: number;   // TikTok
+}
+
+export interface ContentPost {
+  id: string;
+  batch_id: string;
+  post_number: number;
+  pillar: ContentPillar;
+  hook: string;
+  body: string;
+  cta: string;
+  hashtags: string[];
+  platforms: ContentPlatform[];
+  image_source: ImageSource;
+  image_prompt: string | null;
+  image_urls: Record<ContentPlatform, string> | null;
+  scheduled_date: string | null;
+  published_urls: Record<ContentPlatform, string> | null;
+  platform_metrics: Partial<Record<ContentPlatform, PlatformMetrics>> | null;
+  created_at: string;
+}
+
 export interface PendingIrisTask {
   id: string;
   task_type: string;
