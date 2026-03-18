@@ -42,7 +42,9 @@ export async function provisionDemo(req: DemoRequest): Promise<DemoResult> {
       text: chunk.text,
       source: chunk.source,
     }));
-    await namespace.upsertRecords(records);
+    for (const record of records) {
+      await namespace.upsertRecords({ records: [record] });
+    }
   }
 
   // Auto-generate system prompt if not provided

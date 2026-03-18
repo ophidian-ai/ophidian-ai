@@ -52,9 +52,12 @@ export async function queryKnowledgeBase(
     return [];
   }
 
-  return results.result.hits.map((hit) => ({
-    text: (hit.fields?.text ?? hit.fields?.chunk_text ?? "") as string,
-    score: hit._score,
-    source: hit.fields?.source as string | undefined,
-  }));
+  return results.result.hits.map((hit) => {
+    const fields = hit.fields as Record<string, unknown> | undefined;
+    return {
+      text: ((fields?.text ?? fields?.chunk_text ?? "") as string),
+      score: hit._score,
+      source: fields?.source as string | undefined,
+    };
+  });
 }

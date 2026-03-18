@@ -29,15 +29,22 @@ export function ChatWidget({ slug, greeting, theme, leadCapture, tier, showBrand
       api: `/api/chat/${slug}`,
       body: { sessionId },
     }),
-    initialMessages: [
-      {
-        id: "greeting",
-        role: "assistant",
-        content: greeting,
-        parts: [{ type: "text", text: greeting }],
-      },
-    ],
   });
+
+  // Extract text content from AI SDK v6 UIMessage parts
+  function getMessageText(m: (typeof messages)[number]): string {
+    if (!m.parts) return "";
+    return m.parts
+      .filter((p): p is { type: "text"; text: string } => p.type === "text")
+      .map((p) => p.text)
+      .join("");
+  }
+
+  // Greeting shown as a static first message (initialMessages removed in AI SDK v6)
+  const allMessages = [
+    { id: "greeting", role: "assistant" as const, content: greeting },
+    ...messages.map((m) => ({ id: m.id, role: m.role, content: getMessageText(m) })),
+  ];
 
   const isStreaming = status === "streaming" || status === "submitted";
 
@@ -59,11 +66,11 @@ export function ChatWidget({ slug, greeting, theme, leadCapture, tier, showBrand
   // Intent-based lead capture
   useEffect(() => {
     if (!leadCapture.enabled || leadCapture.mode !== "intent" || leadCaptured) return;
-    const lastAssistantMessage = [...messages].reverse().find((m) => m.role === "assistant");
-    if (lastAssistantMessage?.content?.includes("[LEAD_CAPTURE_SIGNAL]") && !showLeadForm) {
+    const lastAssistant = [...allMessages].reverse().find((m) => m.role === "assistant");
+    if (lastAssistant?.content?.includes("[LEAD_CAPTURE_SIGNAL]") && !showLeadForm) {
       setShowLeadForm(true);
     }
-  }, [messages, leadCapture, leadCaptured, showLeadForm]);
+  }, [allMessages, leadCapture, leadCaptured, showLeadForm]);
 
   // PostMessage resize
   useEffect(() => {
@@ -93,13 +100,13 @@ export function ChatWidget({ slug, greeting, theme, leadCapture, tier, showBrand
     e.preventDefault();
     const trimmed = inputValue.trim();
     if (!trimmed || isStreaming) return;
-    sendMessage({ role: "user", content: trimmed });
+    sendMessage({ text: trimmed });
     setInputValue("");
   };
 
   const stripSignal = (content: string) => content.replace(/\[LEAD_CAPTURE_SIGNAL\]/g, "").trim();
 
-  const showTypingIndicator = isStreaming && messages.length > 0 && messages[messages.length - 1].role === "user";
+  const showTypingIndicator = isStreaming && allMessages.length > 1 && allMessages[allMessages.length - 1].role === "user";
 
   return (
     <div
@@ -148,7 +155,7 @@ export function ChatWidget({ slug, greeting, theme, leadCapture, tier, showBrand
           position: "relative",
         }}
       >
-        {messages.map((message) => {
+        {allMessages.map((message) => {
           const displayContent = stripSignal(message.content);
           if (!displayContent) return null;
           const isUser = message.role === "user";
@@ -209,8 +216,9 @@ export function ChatWidget({ slug, greeting, theme, leadCapture, tier, showBrand
           <div style={{ position: "relative" }}>
             <LeadCaptureForm
               fields={leadCapture.fields}
+              mode={leadCapture.mode}
               onSubmit={handleLeadSubmit}
-              onDismiss={handleLeadDismiss}
+              onDismiss={leadCapture.mode === "message_count" ? handleLeadDismiss : undefined}
               primaryColor={theme.primaryColor}
             />
           </div>

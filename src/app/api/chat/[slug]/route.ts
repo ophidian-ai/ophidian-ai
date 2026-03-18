@@ -122,6 +122,7 @@ export async function POST(
     sanitizedMessages.map((m) => ({
       role: m.role as "user" | "assistant",
       content: m.content,
+      parts: [{ type: "text" as const, text: m.content }],
     }))
   );
 
