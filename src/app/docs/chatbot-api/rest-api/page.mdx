@@ -1,0 +1,153 @@
+# REST API Reference
+
+Direct API access for server-side integrations or custom chat UIs.
+
+## Authentication
+
+All requests require a Bearer token in the `Authorization` header. Your API key is provided during account setup and is available in the dashboard under **Settings > API Keys**.
+
+```
+Authorization: Bearer your-api-key
+```
+
+## Endpoints
+
+### POST /api/chat/[slug]
+
+Send a message and receive a streaming response.
+
+**Request body:**
+
+```json
+{
+  "messages": [
+    { "role": "user", "content": "What are your hours?" }
+  ],
+  "sessionId": "550e8400-e29b-41d4-a716-446655440000"
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `messages` | array | Yes | Conversation history in `{ role, content }` format |
+| `sessionId` | string | Yes | UUID identifying this conversation session |
+
+**Response:** Server-sent events (SSE) stream. Each event contains a partial response chunk. The stream ends with `data: [DONE]`.
+
+**cURL example:**
+
+```bash
+curl -X POST https://ophidianai.com/api/chat/your-slug \
+  -H "Authorization: Bearer your-api-key" \
+  -H "Content-Type: application/json" \
+  -H "Accept: text/event-stream" \
+  -d '{"messages":[{"role":"user","content":"Hello"}],"sessionId":"uuid-here"}'
+```
+
+**JavaScript fetch example:**
+
+```js
+const res = await fetch('https://ophidianai.com/api/chat/your-slug', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer your-api-key',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    messages: [{ role: 'user', content: 'Hello' }],
+    sessionId: crypto.randomUUID(),
+  }),
+});
+
+const reader = res.body.getReader();
+const decoder = new TextDecoder();
+
+while (true) {
+  const { done, value } = await reader.read();
+  if (done) break;
+  console.log(decoder.decode(value));
+}
+```
+
+---
+
+### POST /api/chat/[slug]/leads
+
+Capture a lead from a conversation.
+
+**Request body:**
+
+```json
+{
+  "conversationId": "550e8400-e29b-41d4-a716-446655440000",
+  "name": "Jane Smith",
+  "email": "jane@example.com",
+  "phone": "555-867-5309"
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `conversationId` | string | Yes | The session ID from the chat conversation |
+| `name` | string | No | Contact name |
+| `email` | string | No | Contact email |
+| `phone` | string | No | Contact phone number |
+
+At least one of `name`, `email`, or `phone` is required.
+
+**cURL example:**
+
+```bash
+curl -X POST https://ophidianai.com/api/chat/your-slug/leads \
+  -H "Authorization: Bearer your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{"conversationId":"uuid-here","name":"Jane Smith","email":"jane@example.com"}'
+```
+
+**Response:**
+
+```json
+{ "success": true, "leadId": "lead_abc123" }
+```
+
+---
+
+## Rate Limits
+
+| Tier | Requests / minute | Concurrent sessions |
+|------|-------------------|---------------------|
+| Starter | 30 | 5 |
+| Growth | 120 | 25 |
+| Pro | 600 | 100 |
+
+Rate limit headers are included in every response:
+
+```
+X-RateLimit-Limit: 120
+X-RateLimit-Remaining: 117
+X-RateLimit-Reset: 1710000060
+```
+
+---
+
+## Error Codes
+
+| HTTP Status | Code | Description |
+|-------------|------|-------------|
+| 400 | `invalid_request` | Missing or malformed request body |
+| 401 | `unauthorized` | Missing or invalid API key |
+| 404 | `client_not_found` | No chatbot configured for this slug |
+| 422 | `validation_error` | Request body failed validation |
+| 429 | `rate_limited` | Too many requests — retry after `Retry-After` header |
+| 500 | `internal_error` | Unexpected server error |
+
+Error responses follow a consistent format:
+
+```json
+{
+  "error": {
+    "code": "rate_limited",
+    "message": "Too many requests. Retry after 14 seconds."
+  }
+}
+```

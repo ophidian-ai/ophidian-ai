@@ -1,0 +1,61 @@
+# Getting Started
+
+Add the OphidianAI chatbot widget to any website with a single script tag. No build step required.
+
+## Embed Script
+
+```html
+<script src="https://ophidianai.com/chat/embed.js" data-client="your-slug"></script>
+```
+
+Place the script tag before the closing `</body>` tag. Replace `your-slug` with the client slug provided during setup.
+
+## Script Attributes
+
+| Attribute | Required | Description |
+|-----------|----------|-------------|
+| `data-client` | Yes | Your client slug (provided during setup) |
+| `data-position` | No | Widget position: `bottom-right` (default) or `bottom-left` |
+| `data-color` | No | Primary color hex (e.g. `#39ff14`) |
+
+## JavaScript API
+
+Once the script loads, `window.OphidianChat` is available globally.
+
+```js
+// Open the chat widget
+window.OphidianChat.open();
+
+// Close the chat widget
+window.OphidianChat.close();
+
+// Remove the widget from the page entirely
+window.OphidianChat.destroy();
+
+// Listen for widget events
+window.OphidianChat.on(event, callback);
+```
+
+### Waiting for the widget to load
+
+The script loads asynchronously. Wait for the `ophidianchat:ready` event before calling API methods:
+
+```js
+window.addEventListener('ophidianchat:ready', () => {
+  window.OphidianChat.open();
+});
+```
+
+## Content Security Policy
+
+If your site has a `Content-Security-Policy` header, add the following directive to allow the widget iframe to load:
+
+```
+frame-src https://ophidianai.com;
+```
+
+If you also load the embed script from a strict `script-src` policy, add:
+
+```
+script-src https://ophidianai.com;
+```

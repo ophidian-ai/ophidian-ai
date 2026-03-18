@@ -1,0 +1,121 @@
+# Events & Webhooks
+
+OphidianAI can notify your server when key events occur in the chat widget.
+
+## Available Events
+
+| Event | Description | Tier |
+|-------|-------------|------|
+| `lead.captured` | A visitor submitted their contact info | All tiers |
+| `conversation.completed` | A conversation session ended | Pro |
+
+---
+
+## Webhook Payload
+
+All webhook events share the same envelope structure:
+
+```json
+{
+  "id": "evt_abc123",
+  "event": "lead.captured",
+  "timestamp": "2026-03-18T14:32:00Z",
+  "clientSlug": "your-slug",
+  "data": { }
+}
+```
+
+### lead.captured
+
+```json
+{
+  "id": "evt_abc123",
+  "event": "lead.captured",
+  "timestamp": "2026-03-18T14:32:00Z",
+  "clientSlug": "your-slug",
+  "data": {
+    "leadId": "lead_xyz789",
+    "conversationId": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "phone": "555-867-5309",
+    "capturedAt": "2026-03-18T14:31:55Z"
+  }
+}
+```
+
+### conversation.completed
+
+```json
+{
+  "id": "evt_def456",
+  "event": "conversation.completed",
+  "timestamp": "2026-03-18T14:45:00Z",
+  "clientSlug": "your-slug",
+  "data": {
+    "conversationId": "550e8400-e29b-41d4-a716-446655440000",
+    "messageCount": 8,
+    "leadCaptured": true,
+    "startedAt": "2026-03-18T14:32:00Z",
+    "endedAt": "2026-03-18T14:44:58Z"
+  }
+}
+```
+
+---
+
+## Signature Verification
+
+Every webhook request includes an `X-OphidianAI-Signature` header. Verify this signature to confirm the request came from OphidianAI and was not tampered with.
+
+The signature is an HMAC-SHA256 digest of the raw request body, using your webhook secret as the key. The value is prefixed with `sha256=`.
+
+**Node.js verification example:**
+
+```js
+import crypto from 'crypto';
+
+function verifyWebhook(rawBody, signatureHeader, secret) {
+  const expected = 'sha256=' + crypto
+    .createHmac('sha256', secret)
+    .update(rawBody)
+    .digest('hex');
+
+  return crypto.timingSafeEqual(
+    Buffer.from(signatureHeader),
+    Buffer.from(expected)
+  );
+}
+
+// In your request handler:
+app.post('/webhooks/ophidianai', (req, res) => {
+  const sig = req.headers['x-ophidianai-signature'];
+  const valid = verifyWebhook(req.rawBody, sig, process.env.WEBHOOK_SECRET);
+
+  if (!valid) {
+    return res.status(401).send('Invalid signature');
+  }
+
+  const event = JSON.parse(req.rawBody);
+  // handle event...
+  res.sendStatus(200);
+});
+```
+
+Your webhook secret is available in the dashboard under **Settings > Webhooks**.
+
+---
+
+## Retry Policy
+
+If your endpoint does not return a `2xx` status within 10 seconds, OphidianAI will retry the delivery up to 3 times with exponential backoff:
+
+| Attempt | Delay |
+|---------|-------|
+| 1st retry | 1 minute |
+| 2nd retry | 5 minutes |
+| 3rd retry | 30 minutes |
+
+After 3 failed attempts, the event is marked as failed and no further retries are made. Failed events are visible in the dashboard under **Settings > Webhooks > Event Log**.
+
+Respond with `200 OK` as quickly as possible. Process events asynchronously if needed to avoid timeouts.

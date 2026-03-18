@@ -1,0 +1,68 @@
+# Theming
+
+Customize the chatbot widget's appearance to match your brand.
+
+## Admin Dashboard
+
+The primary way to configure theming is through the OphidianAI dashboard under **Chatbot > Appearance**. Changes made here apply immediately without touching your embed code.
+
+| Setting | Description |
+|---------|-------------|
+| Primary color | Accent color for buttons, links, and the launcher icon |
+| Widget title | Text shown in the chat header |
+| Greeting message | Opening message shown to new visitors |
+| Logo | Your company logo shown in the chat header |
+| Position | Where the launcher button appears on the page |
+| Dark / Light mode | Color scheme for the widget |
+
+---
+
+## Script Tag Overrides
+
+You can override select settings directly in the embed script tag. Script tag values take precedence over dashboard settings.
+
+```html
+<script
+  src="https://ophidianai.com/chat/embed.js"
+  data-client="your-slug"
+  data-color="#39ff14"
+  data-position="bottom-left"
+></script>
+```
+
+| Attribute | Description |
+|-----------|-------------|
+| `data-color` | Primary color as a hex value (e.g. `#39ff14`) |
+| `data-position` | `bottom-right` (default) or `bottom-left` |
+
+Script tag overrides are useful when the same widget is embedded on multiple domains or environments that need different branding.
+
+---
+
+## Logo Requirements
+
+Logos are configured in the dashboard. Requirements:
+
+- Format: PNG or SVG (PNG recommended for broadest compatibility)
+- Minimum size: 64 x 64 px
+- Recommended size: 128 x 128 px
+- Max file size: 500 KB
+- Background: transparent preferred
+
+The logo appears in the chat header and is scaled to fit a 32 x 32 px display area.
+
+---
+
+## Light / Dark Mode
+
+The widget supports light and dark color schemes. The default follows the visitor's OS preference (`prefers-color-scheme`).
+
+To force a specific mode, set it in the dashboard under **Chatbot > Appearance > Color Scheme**:
+
+| Option | Behavior |
+|--------|----------|
+| Auto (default) | Matches the visitor's OS preference |
+| Light | Always renders in light mode |
+| Dark | Always renders in dark mode |
+
+Custom `data-color` values apply to both modes. OphidianAI automatically adjusts contrast for legibility based on the chosen mode.
