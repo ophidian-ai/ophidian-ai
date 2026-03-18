@@ -1,12 +1,25 @@
 {
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/chat/:path*",
       "headers": [
         {
-          "key": "X-Frame-Options",
-          "value": "DENY"
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
         },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "script-src 'self'; img-src 'self' https://*.vercel-storage.com https://ophidianai.com; connect-src 'self'; style-src 'self' 'unsafe-inline'; frame-ancestors *"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
         {
           "key": "X-Content-Type-Options",
           "value": "nosniff"

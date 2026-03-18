@@ -10,6 +10,16 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "randomuser.me" },
     ],
   },
+  async headers() {
+    return [
+      {
+        source: "/((?!chat/).*)",
+        headers: [
+          { key: "X-Frame-Options", value: "DENY" },
+        ],
+      },
+    ];
+  },
 };
 
 const withMDX = createMDX({});
