@@ -18,7 +18,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "script-src 'self'; img-src 'self' https://*.vercel-storage.com https://ophidianai.com; connect-src 'self'; style-src 'self' 'unsafe-inline'; frame-ancestors *"
+          "value": "script-src 'self' 'unsafe-inline'; img-src 'self' https://*.vercel-storage.com https://ophidianai.com; connect-src 'self'; style-src 'self' 'unsafe-inline'; frame-ancestors *"
         }
       ]
     },
