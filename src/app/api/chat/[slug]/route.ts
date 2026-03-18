@@ -46,6 +46,7 @@ export async function POST(
 ) {
   const { slug } = await params;
 
+  try {
   const config = await loadConfig(slug);
   if (!config) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -170,4 +171,11 @@ export async function POST(
   });
 
   return response;
+  } catch (error) {
+    console.error("[chat-api] Unhandled error:", error);
+    return NextResponse.json(
+      { error: "Internal server error", details: error instanceof Error ? error.message : String(error) },
+      { status: 500 }
+    );
+  }
 }
