@@ -9,9 +9,21 @@ export type DashboardModule =
   | "analytics"
   | "seo_performance"
   | "social_media"
+  | "content_engine"
   | "reports"
   | "billing"
-  | "proposals";
+  | "proposals"
+  | "chatbot";
+
+export interface AdminModule {
+  label: string;
+  path: string;
+  adminOnly: true;
+}
+
+export const adminModules: AdminModule[] = [
+  { label: "AI Chatbot", path: "/dashboard/admin/chatbot", adminOnly: true },
+];
 
 const SERVICE_MODULE_MAP: Record<ServiceType, DashboardModule[]> = {
   web_starter: ["project_tracker", "proposals", "billing", "reports"],
@@ -20,7 +32,7 @@ const SERVICE_MODULE_MAP: Record<ServiceType, DashboardModule[]> = {
   seo_cleanup: ["seo_performance", "proposals", "billing", "reports"],
   seo_growth: ["seo_performance", "content_requests", "billing", "reports"],
   maintenance: ["content_requests", "analytics", "billing", "reports"],
-  social_media: ["social_media", "analytics", "content_requests", "billing", "reports"],
+  social_media: ["social_media", "content_engine", "analytics", "content_requests", "billing", "reports"],
 };
 
 // Modules that activate only when a project reaches "live" phase

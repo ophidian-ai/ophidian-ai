@@ -20,6 +20,8 @@ import {
   FileSignature,
   DollarSign,
   Share2,
+  Sparkles,
+  MessageSquare,
   LogOut,
   Menu,
   X,
@@ -66,6 +68,12 @@ const clientNavItems: NavItem[] = [
     module: "social_media",
   },
   {
+    icon: Sparkles,
+    label: "Content Engine",
+    href: "/dashboard/content-engine",
+    module: "content_engine",
+  },
+  {
     icon: FileSignature,
     label: "Proposals",
     href: "/dashboard/proposals",
@@ -86,6 +94,8 @@ const adminNavItems: NavItem[] = [
   },
   { icon: DollarSign, label: "Revenue", href: "/dashboard/admin/revenue" },
   { icon: Share2, label: "Social Media", href: "/dashboard/social" },
+  { icon: Sparkles, label: "Content Engine", href: "/dashboard/content-engine" },
+  { icon: MessageSquare, label: "AI Chatbot", href: "/dashboard/admin/chatbot" },
   { icon: Settings, label: "Account Settings", href: "/dashboard/account" },
 ];
 
