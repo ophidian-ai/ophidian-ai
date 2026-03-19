@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import type { ChatbotConfig } from "@/lib/supabase/chatbot-types";
+import { onChatbotLeadCaptured } from "@/lib/crm/event-bus";
 
 export interface LeadData {
   conversationId: string;
@@ -142,6 +143,20 @@ export async function captureLead(
       }
     } catch (err) {
       console.error("[lead-capture] Failed to send notification email:", err);
+    }
+  }
+
+  // 5. Fire CRM event bus (non-critical)
+  if (config.client_id) {
+    try {
+      await onChatbotLeadCaptured(config.client_id, {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        conversationId: data.conversationId,
+      });
+    } catch (e) {
+      console.error("[lead-capture] CRM event bus error:", e);
     }
   }
 }
