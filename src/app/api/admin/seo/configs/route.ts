@@ -49,23 +49,23 @@ export async function POST(request: NextRequest) {
   }
 
   const {
-    url,
+    website_url,
     delivery_email,
     tier,
-    target_keywords,
+    keywords,
     competitors,
     ...rest
   } = body as {
-    url?: string;
+    website_url?: string;
     delivery_email?: string;
     tier?: SeoTier;
-    target_keywords?: string[];
+    keywords?: string[];
     competitors?: Array<{ name: string; url: string }>;
     [key: string]: unknown;
   };
 
-  if (!url || typeof url !== "string") {
-    return NextResponse.json({ error: "url is required" }, { status: 400 });
+  if (!website_url || typeof website_url !== "string") {
+    return NextResponse.json({ error: "website_url is required" }, { status: 400 });
   }
   if (!delivery_email || typeof delivery_email !== "string") {
     return NextResponse.json(
@@ -78,15 +78,15 @@ export async function POST(request: NextRequest) {
     tier && VALID_TIERS.includes(tier) ? tier : "essentials";
   const tierDefaults = SEO_TIER_DEFAULTS[resolvedTier];
 
-  const resolvedKeywords = Array.isArray(target_keywords)
-    ? target_keywords
+  const resolvedKeywords = Array.isArray(keywords)
+    ? keywords
     : [];
   const resolvedCompetitors = Array.isArray(competitors) ? competitors : [];
 
   if (resolvedKeywords.length > tierDefaults.maxKeywords) {
     return NextResponse.json(
       {
-        error: `target_keywords exceeds limit of ${tierDefaults.maxKeywords} for tier "${resolvedTier}"`,
+        error: `keywords exceeds limit of ${tierDefaults.maxKeywords} for tier "${resolvedTier}"`,
       },
       { status: 400 }
     );
@@ -101,10 +101,10 @@ export async function POST(request: NextRequest) {
   }
 
   const insertPayload = {
-    url,
+    website_url,
     delivery_email,
     tier: resolvedTier,
-    target_keywords: resolvedKeywords,
+    keywords: resolvedKeywords,
     competitors: resolvedCompetitors,
     ...rest,
   };

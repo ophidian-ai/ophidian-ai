@@ -16,10 +16,10 @@ interface Competitor {
 }
 
 interface FormState {
-  url: string;
+  website_url: string;
   client_id: string;
   tier: SeoTier;
-  target_keywords: string;
+  keywords: string;
   industry: string;
   location: string;
   gbp_url: string;
@@ -27,10 +27,10 @@ interface FormState {
 }
 
 const INITIAL_FORM: FormState = {
-  url: "",
+  website_url: "",
   client_id: "",
   tier: "essentials",
-  target_keywords: "",
+  keywords: "",
   industry: "",
   location: "",
   gbp_url: "",
@@ -101,7 +101,7 @@ export default function NewSeoConfigPage() {
     setSubmitting(true);
     setError(null);
 
-    const keywords = form.target_keywords
+    const keywords = form.keywords
       .split(",")
       .map((k) => k.trim())
       .filter(Boolean);
@@ -109,10 +109,10 @@ export default function NewSeoConfigPage() {
     const filteredCompetitors = competitors.filter((c) => c.url.trim());
 
     const payload = {
-      url: form.url.trim(),
+      website_url: form.website_url.trim(),
       client_id: form.client_id || null,
       tier: form.tier,
-      target_keywords: keywords,
+      keywords,
       competitors: filteredCompetitors,
       industry: form.industry.trim() || null,
       location: form.location.trim() || null,
@@ -162,15 +162,15 @@ export default function NewSeoConfigPage() {
           </h2>
 
           <div>
-            <label htmlFor="url" className={LABEL_CLASS}>
+            <label htmlFor="website_url" className={LABEL_CLASS}>
               Website URL <span className="text-red-400">*</span>
             </label>
             <input
-              id="url"
+              id="website_url"
               type="url"
               required
-              value={form.url}
-              onChange={(e) => set("url", e.target.value)}
+              value={form.website_url}
+              onChange={(e) => set("website_url", e.target.value)}
               placeholder="https://acme.com"
               className={FIELD_CLASS}
             />
@@ -238,14 +238,14 @@ export default function NewSeoConfigPage() {
           </h2>
 
           <div>
-            <label htmlFor="target_keywords" className={LABEL_CLASS}>
+            <label htmlFor="keywords" className={LABEL_CLASS}>
               Target Keywords
             </label>
             <textarea
-              id="target_keywords"
+              id="keywords"
               rows={3}
-              value={form.target_keywords}
-              onChange={(e) => set("target_keywords", e.target.value)}
+              value={form.keywords}
+              onChange={(e) => set("keywords", e.target.value)}
               placeholder="plumber columbus ohio, emergency plumbing, drain cleaning"
               className={`${FIELD_CLASS} resize-y`}
             />

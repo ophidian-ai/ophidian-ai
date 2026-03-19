@@ -81,12 +81,12 @@ export async function POST(
     }
 
     // Run audit
-    const audit = await runSiteAudit(seoConfig.url, seoConfig.tier);
+    const audit = await runSiteAudit(seoConfig.website_url, seoConfig.tier);
 
     // Check keyword rankings
     const rankings = await checkKeywordRanks(
-      seoConfig.url,
-      seoConfig.target_keywords,
+      seoConfig.website_url,
+      seoConfig.keywords,
       seoConfig.competitors
     );
 
@@ -109,7 +109,7 @@ export async function POST(
     // Content freshness (Growth/Pro only)
     let freshnessResults = null;
     if (tierDefaults.contentFreshnessAlerts) {
-      freshnessResults = await scanContentFreshness(seoConfig.url);
+      freshnessResults = await scanContentFreshness(seoConfig.website_url);
     }
 
     // GBP draft (Growth/Pro only)
@@ -130,7 +130,7 @@ export async function POST(
       )[0];
 
       if (mostRecentPage) {
-        const gbpDraft = await generateGbpDraft(mostRecentPage.url, seoConfig.target_keywords, seoConfig);
+        const gbpDraft = await generateGbpDraft(mostRecentPage.url, seoConfig.keywords, seoConfig);
         await storeGbpDraft(seoConfig.id, mostRecentPage.url, gbpDraft.content, gbpDraft.keywordsUsed);
       }
     }

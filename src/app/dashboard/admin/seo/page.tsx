@@ -10,9 +10,9 @@ import { Search, Plus, ExternalLink } from "lucide-react";
 
 interface SeoConfig {
   id: string;
-  url: string;
+  website_url: string;
   tier: string;
-  target_keywords: string[];
+  keywords: string[];
   industry: string | null;
   location: string | null;
   delivery_email: string;
@@ -230,7 +230,7 @@ export default function AdminSeoPage() {
                         )}
                       </td>
                       <td className="px-5 py-4 text-sm text-foreground-muted font-mono max-w-[200px] truncate">
-                        {config.url}
+                        {config.website_url}
                       </td>
                       <td className="px-5 py-4">
                         <span
@@ -242,7 +242,7 @@ export default function AdminSeoPage() {
                         </span>
                       </td>
                       <td className="px-5 py-4 text-sm text-foreground-muted">
-                        {config.target_keywords?.length ?? 0}
+                        {config.keywords?.length ?? 0}
                       </td>
                       <td className="px-5 py-4 text-sm text-foreground-muted">
                         {formatDate(config.last_audit_at)}

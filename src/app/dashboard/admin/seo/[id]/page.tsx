@@ -31,9 +31,9 @@ import {
 
 interface SeoConfig {
   id: string;
-  url: string;
+  website_url: string;
   tier: string;
-  target_keywords: string[];
+  keywords: string[];
   industry: string | null;
   location: string | null;
   gbp_url: string | null;
@@ -309,7 +309,7 @@ export default function SeoConfigDetailPage({
                 {config.tier}
               </span>
             </div>
-            <p className="text-foreground-muted text-sm mt-0.5 font-mono">{config.url}</p>
+            <p className="text-foreground-muted text-sm mt-0.5 font-mono">{config.website_url}</p>
           </div>
         </div>
         <button
@@ -340,12 +340,12 @@ export default function SeoConfigDetailPage({
           <div>
             <p className="text-foreground-muted text-xs uppercase tracking-wider mb-1">URL</p>
             <a
-              href={config.url}
+              href={config.website_url}
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline font-mono text-xs flex items-center gap-1"
             >
-              {config.url}
+              {config.website_url}
               <ExternalLink size={11} />
             </a>
           </div>
@@ -361,7 +361,7 @@ export default function SeoConfigDetailPage({
           </div>
           <div>
             <p className="text-foreground-muted text-xs uppercase tracking-wider mb-1">Keywords</p>
-            <p className="text-foreground">{config.target_keywords?.length ?? 0} keywords</p>
+            <p className="text-foreground">{config.keywords?.length ?? 0} keywords</p>
           </div>
           <div>
             <p className="text-foreground-muted text-xs uppercase tracking-wider mb-1">Last Audit</p>
@@ -403,13 +403,13 @@ export default function SeoConfigDetailPage({
             </div>
           )}
         </div>
-        {config.target_keywords?.length > 0 && (
+        {config.keywords?.length > 0 && (
           <div className="mt-4 pt-4 border-t border-white/5">
             <p className="text-foreground-muted text-xs uppercase tracking-wider mb-2">
               Target Keywords
             </p>
             <div className="flex flex-wrap gap-2">
-              {config.target_keywords.map((kw, i) => (
+              {config.keywords.map((kw, i) => (
                 <span
                   key={i}
                   className="text-xs px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-foreground-muted"

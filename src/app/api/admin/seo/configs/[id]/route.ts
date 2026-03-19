@@ -37,9 +37,9 @@ export async function PATCH(
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const { tier, target_keywords, competitors, ...rest } = body as {
+  const { tier, keywords, competitors, ...rest } = body as {
     tier?: SeoTier;
-    target_keywords?: string[];
+    keywords?: string[];
     competitors?: Array<{ name: string; url: string }>;
     [key: string]: unknown;
   };
@@ -54,14 +54,14 @@ export async function PATCH(
 
     const tierDefaults = SEO_TIER_DEFAULTS[tier];
 
-    if (target_keywords !== undefined) {
+    if (keywords !== undefined) {
       if (
-        Array.isArray(target_keywords) &&
-        target_keywords.length > tierDefaults.maxKeywords
+        Array.isArray(keywords) &&
+        keywords.length > tierDefaults.maxKeywords
       ) {
         return NextResponse.json(
           {
-            error: `target_keywords exceeds limit of ${tierDefaults.maxKeywords} for tier "${tier}"`,
+            error: `keywords exceeds limit of ${tierDefaults.maxKeywords} for tier "${tier}"`,
           },
           { status: 400 }
         );
@@ -69,7 +69,7 @@ export async function PATCH(
     } else {
       const { data: existing, error: fetchError } = await supabase!
         .from("seo_configs")
-        .select("target_keywords, competitors")
+        .select("keywords, competitors")
         .eq("id", id)
         .single();
 
@@ -78,12 +78,12 @@ export async function PATCH(
       }
 
       if (
-        Array.isArray(existing?.target_keywords) &&
-        existing.target_keywords.length > tierDefaults.maxKeywords
+        Array.isArray(existing?.keywords) &&
+        existing.keywords.length > tierDefaults.maxKeywords
       ) {
         return NextResponse.json(
           {
-            error: `Existing target_keywords count exceeds limit of ${tierDefaults.maxKeywords} for tier "${tier}"`,
+            error: `Existing keywords count exceeds limit of ${tierDefaults.maxKeywords} for tier "${tier}"`,
           },
           { status: 400 }
         );
@@ -117,10 +117,10 @@ export async function PATCH(
       );
     }
   } else {
-    if (target_keywords !== undefined || competitors !== undefined) {
+    if (keywords !== undefined || competitors !== undefined) {
       const { data: existing, error: fetchError } = await supabase!
         .from("seo_configs")
-        .select("tier, target_keywords, competitors")
+        .select("tier, keywords, competitors")
         .eq("id", id)
         .single();
 
@@ -132,13 +132,13 @@ export async function PATCH(
       const tierDefaults = SEO_TIER_DEFAULTS[effectiveTier];
 
       if (
-        target_keywords !== undefined &&
-        Array.isArray(target_keywords) &&
-        target_keywords.length > tierDefaults.maxKeywords
+        keywords !== undefined &&
+        Array.isArray(keywords) &&
+        keywords.length > tierDefaults.maxKeywords
       ) {
         return NextResponse.json(
           {
-            error: `target_keywords exceeds limit of ${tierDefaults.maxKeywords} for tier "${effectiveTier}"`,
+            error: `keywords exceeds limit of ${tierDefaults.maxKeywords} for tier "${effectiveTier}"`,
           },
           { status: 400 }
         );
@@ -161,7 +161,7 @@ export async function PATCH(
   const updatePayload: Record<string, unknown> = {
     ...rest,
     ...(tier !== undefined ? { tier } : {}),
-    ...(target_keywords !== undefined ? { target_keywords } : {}),
+    ...(keywords !== undefined ? { keywords } : {}),
     ...(competitors !== undefined ? { competitors } : {}),
     updated_at: new Date().toISOString(),
   };

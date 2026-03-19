@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
 
   const { data: configs, error } = await supabase
     .from("seo_configs")
-    .select("id, url, clients(company_name)")
+    .select("id, website_url, clients(company_name)")
     .eq("active", true);
 
   if (error) {
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
       const client = c.clients;
       if (Array.isArray(client) && client[0]?.company_name) return client[0].company_name;
       if (client?.company_name) return client.company_name;
-      return c.url;
+      return c.website_url;
     }
   );
 
