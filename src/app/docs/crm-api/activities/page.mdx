@@ -1,0 +1,100 @@
+# Activities API
+
+Log custom activities against a contact's timeline. **Pro tier only.**
+
+Activities appear in the CRM contact timeline and can be used to trigger automations.
+
+---
+
+## Log Custom Activity
+
+`POST /api/crm/[slug]/activities`
+
+**Pro tier only.** Logs a custom activity event against a contact.
+
+### Request Body
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `contact_id` | string | Yes | ID of the contact |
+| `type` | string | Yes | Activity type slug (e.g., `"demo_scheduled"`) |
+| `description` | string | Yes | Human-readable description |
+| `deal_id` | string | No | Associate with a deal |
+
+### Response
+
+Returns `201` on success.
+
+```json
+{
+  "logged": true
+}
+```
+
+### cURL
+
+```bash
+curl -X POST https://ophidianai.com/api/crm/your-slug/activities \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contact_id": "contact-uuid",
+    "type": "demo_scheduled",
+    "description": "Demo call scheduled for March 25",
+    "deal_id": "deal-uuid"
+  }'
+```
+
+### JavaScript
+
+```js
+const res = await fetch(
+  "https://ophidianai.com/api/crm/your-slug/activities",
+  {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer YOUR_API_KEY",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      contact_id: "contact-uuid",
+      type: "demo_scheduled",
+      description: "Demo call scheduled for March 25",
+      deal_id: "deal-uuid",
+    }),
+  }
+);
+
+if (res.status === 201) {
+  console.log("Activity logged.");
+} else {
+  const { error } = await res.json();
+  console.error("Error:", error);
+}
+```
+
+---
+
+## Activity Types
+
+You can use any string for `type`. Recommended conventions:
+
+| Type | Meaning |
+|---|---|
+| `demo_scheduled` | A demo was booked |
+| `demo_completed` | Demo call happened |
+| `proposal_sent` | Proposal delivered to contact |
+| `contract_signed` | Contract executed |
+| `payment_received` | Payment collected |
+| `follow_up_sent` | Manual follow-up sent |
+| `note` | Freeform note |
+
+Using consistent type slugs allows automations to trigger on specific activity types.
+
+---
+
+## Notes
+
+- Activities are append-only and cannot be deleted via the API.
+- The `type` field is used to match automation trigger conditions.
+- Activity timestamps are set server-side at the time of the request.

@@ -1,0 +1,89 @@
+# Getting Started
+
+The CRM API lets you programmatically read and write contacts, deals, and activities from your own application. Use it to sync leads, update deal stages, and log custom events without touching the dashboard.
+
+---
+
+## Authentication
+
+All requests require a Bearer API key in the `Authorization` header.
+
+```
+Authorization: Bearer YOUR_API_KEY
+```
+
+Retrieve your API key from the CRM dashboard under **Settings > API**.
+
+---
+
+## Base URL
+
+```
+https://ophidianai.com/api/crm/[slug]
+```
+
+Replace `[slug]` with your account slug shown in your dashboard.
+
+---
+
+## Tier Access Matrix
+
+| Feature | Essentials | Growth | Pro |
+|---|---|---|---|
+| Read contacts | No | Yes | Yes |
+| Read deals | No | Yes | Yes |
+| Create contacts | No | No | Yes |
+| Create deals | No | No | Yes |
+| Update deal stage | No | No | Yes |
+| Log custom activities | No | No | Yes |
+
+---
+
+## Quick Start: Read Deals
+
+### cURL
+
+```bash
+curl https://ophidianai.com/api/crm/your-slug/deals \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+### JavaScript
+
+```js
+const response = await fetch(
+  "https://ophidianai.com/api/crm/your-slug/deals",
+  {
+    headers: {
+      Authorization: "Bearer YOUR_API_KEY",
+    },
+  }
+);
+
+const data = await response.json();
+console.log(data.deals);
+```
+
+---
+
+## Error Responses
+
+All errors return a JSON body with an `error` field.
+
+| Status | Meaning |
+|---|---|
+| 401 | Missing or invalid API key |
+| 403 | Feature not available on your tier |
+| 404 | Slug not found or CRM not active |
+| 400 | Invalid request body |
+| 500 | Server error |
+
+---
+
+## Rate Limits
+
+| Limit | Value |
+|---|---|
+| Requests per minute | 10 |
+
+Requests that exceed the rate limit receive a `429 Too Many Requests` response.
