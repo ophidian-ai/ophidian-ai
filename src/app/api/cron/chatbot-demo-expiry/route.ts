@@ -44,6 +44,13 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  // Expire stale GBP drafts
+  await supabase
+    .from("seo_gbp_drafts")
+    .update({ status: "expired" })
+    .eq("status", "draft")
+    .lt("expires_at", new Date().toISOString());
+
   return NextResponse.json({
     deactivated: (deactivated ?? []).length,
     expiring_soon: expiringSoon ?? [],
