@@ -1,6 +1,6 @@
 import type { SeoTier } from "@/lib/supabase/seo-types";
 import { createClient } from "@/lib/supabase/server";
-import { execFileNoThrow } from "@/utils/execFileNoThrow";
+import { firecrawlScrape, firecrawlMap } from "@/lib/seo/firecrawl-client";
 
 export interface AuditResult {
   scores: {
@@ -30,26 +30,15 @@ export interface AuditResult {
 // ---------------------------------------------------------------------------
 
 async function scrape(url: string): Promise<string> {
-  const result = await execFileNoThrow("firecrawl", ["scrape", url, "--format", "markdown"], {
-    timeout: 30_000,
-  });
-  return result.stdout;
+  return firecrawlScrape(url, { timeout: 30_000 });
 }
 
 async function mapSite(url: string): Promise<string[]> {
-  const result = await execFileNoThrow("firecrawl", ["map", url], { timeout: 30_000 });
-  if (result.status === "error" || !result.stdout) return [];
-  return result.stdout
-    .split(/\r?\n/)
-    .map((l) => l.trim())
-    .filter((l) => l.startsWith("http"));
+  return firecrawlMap(url, { timeout: 30_000 });
 }
 
 async function tryFetch(url: string): Promise<string> {
-  const result = await execFileNoThrow("firecrawl", ["scrape", url, "--format", "markdown"], {
-    timeout: 15_000,
-  });
-  return result.stdout;
+  return firecrawlScrape(url, { timeout: 15_000 });
 }
 
 function countWords(markdown: string): number {

@@ -1,18 +1,12 @@
-import { execFileNoThrow } from "@/utils/execFileNoThrow";
 import { createClient } from "@/lib/supabase/server";
 import type { SeoRanking } from "@/lib/supabase/seo-types";
+import { firecrawlSearch, type FirecrawlSearchResult } from "@/lib/seo/firecrawl-client";
 
 export interface RankResult {
   keyword: string;
   position: "top-3" | "top-10" | "top-20" | "not-found";
   aiOverview: boolean;
   competitorPositions: Record<string, string>;
-}
-
-interface FirecrawlSearchResult {
-  url: string;
-  title: string;
-  description: string;
 }
 
 function getPositionBucket(index: number): "top-3" | "top-10" | "top-20" | "not-found" {
@@ -50,27 +44,10 @@ export async function checkKeywordRanks(
   const results: RankResult[] = [];
 
   for (const keyword of keywords) {
-    const { stdout, status } = await execFileNoThrow("firecrawl", ["search", keyword, "--format", "json"], {
-      timeout: 30000,
-    });
+    const searchResults = await firecrawlSearch(keyword, { timeout: 30_000 });
 
-    if (status === "error" || !stdout.trim()) {
-      console.error(`[rank-tracker] Firecrawl failed for keyword "${keyword}"`);
-      results.push({
-        keyword,
-        position: "not-found",
-        aiOverview: false,
-        competitorPositions: {},
-      });
-      continue;
-    }
-
-    let searchResults: FirecrawlSearchResult[] = [];
-    try {
-      const parsed = JSON.parse(stdout);
-      searchResults = Array.isArray(parsed) ? parsed : (parsed.results ?? parsed.data ?? []);
-    } catch {
-      console.error(`[rank-tracker] Failed to parse JSON output for keyword "${keyword}"`);
+    if (searchResults.length === 0) {
+      console.error(`[rank-tracker] Firecrawl returned no results for keyword "${keyword}"`);
       results.push({
         keyword,
         position: "not-found",

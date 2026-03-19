@@ -1,21 +1,9 @@
-import { execFileNoThrow } from "@/utils/execFileNoThrow";
 import { KEYWORD_DISCOVERY_MAX_QUERIES } from "./tier-defaults";
+import { firecrawlSearch, type FirecrawlSearchResult } from "@/lib/seo/firecrawl-client";
 
 export interface KeywordSuggestion {
   keyword: string;
   source: string;
-}
-
-interface FirecrawlSearchResult {
-  title?: string;
-  description?: string;
-  snippet?: string;
-  url?: string;
-}
-
-interface FirecrawlSearchOutput {
-  results?: FirecrawlSearchResult[];
-  data?: FirecrawlSearchResult[];
 }
 
 function extractKeywordsFromText(text: string): string[] {
@@ -63,23 +51,9 @@ function extractKeywordsFromText(text: string): string[] {
 
 async function runFirecrawlSearch(
   query: string
-): Promise<FirecrawlSearchOutput | null> {
-  const result = await execFileNoThrow("firecrawl", [
-    "search",
-    query,
-    "--format",
-    "json",
-  ]);
-
-  if (result.status === "error" || !result.stdout.trim()) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(result.stdout) as FirecrawlSearchOutput;
-  } catch {
-    return null;
-  }
+): Promise<FirecrawlSearchResult[] | null> {
+  const results = await firecrawlSearch(query);
+  return results.length > 0 ? results : null;
 }
 
 export async function discoverKeywords(
@@ -103,10 +77,8 @@ export async function discoverKeywords(
   for (const query of queries) {
     if (suggestions.length >= limit) break;
 
-    const data = await runFirecrawlSearch(query);
-    if (!data) continue;
-
-    const results: FirecrawlSearchResult[] = data.results ?? data.data ?? [];
+    const results = await runFirecrawlSearch(query);
+    if (!results) continue;
 
     for (const result of results) {
       if (suggestions.length >= limit) break;

@@ -1,5 +1,5 @@
-import { execFileSync } from "child_process";
 import { CONTENT_FRESHNESS_THRESHOLD_DAYS } from "./tier-defaults";
+import { firecrawlMap, firecrawlScrape } from "@/lib/seo/firecrawl-client";
 
 export interface StalePageResult {
   url: string;
@@ -57,21 +57,9 @@ function isBlogUrl(url: string): boolean {
 export async function scanContentFreshness(
   siteUrl: string
 ): Promise<StalePageResult[]> {
-  // 1. Map site with firecrawl to get all page URLs
-  let allUrls: string[] = [];
-  try {
-    const mapOutput = execFileSync("firecrawl", ["map", siteUrl], {
-      encoding: "utf-8",
-      timeout: 60000,
-    });
-    // Parse URLs from output -- one per line, filter lines that look like URLs
-    allUrls = mapOutput
-      .split("\n")
-      .map((line) => line.trim())
-      .filter((line) => line.startsWith("http"));
-  } catch {
-    return [];
-  }
+  // 1. Map site with Firecrawl API to get all page URLs
+  const allUrls = await firecrawlMap(siteUrl, { timeout: 60_000 });
+  if (allUrls.length === 0) return [];
 
   // 2. Filter for blog/article pages (max 20 to control API usage)
   const blogUrls = allUrls.filter(isBlogUrl).slice(0, 20);
@@ -82,34 +70,23 @@ export async function scanContentFreshness(
   const stalePages: StalePageResult[] = [];
 
   for (const url of blogUrls) {
-    try {
-      const scrapeOutput = execFileSync(
-        "firecrawl",
-        ["scrape", url, "--format", "markdown"],
-        {
-          encoding: "utf-8",
-          timeout: 30000,
-        }
-      );
+    const scrapeOutput = await firecrawlScrape(url, { timeout: 30_000 });
+    if (!scrapeOutput) continue;
 
-      const publishDateStr = extractPublishDate(scrapeOutput);
-      if (!publishDateStr) continue;
+    const publishDateStr = extractPublishDate(scrapeOutput);
+    if (!publishDateStr) continue;
 
-      const ageInDays = calcAgeInDays(publishDateStr);
-      if (ageInDays < 0) continue;
+    const ageInDays = calcAgeInDays(publishDateStr);
+    if (ageInDays < 0) continue;
 
-      // 4. Return pages older than CONTENT_FRESHNESS_THRESHOLD_DAYS (180)
-      if (ageInDays > CONTENT_FRESHNESS_THRESHOLD_DAYS) {
-        stalePages.push({
-          url,
-          title: extractTitle(scrapeOutput),
-          publishDate: publishDateStr,
-          ageInDays,
-        });
-      }
-    } catch {
-      // Skip pages that can't be scraped or have no date
-      continue;
+    // 4. Return pages older than CONTENT_FRESHNESS_THRESHOLD_DAYS (180)
+    if (ageInDays > CONTENT_FRESHNESS_THRESHOLD_DAYS) {
+      stalePages.push({
+        url,
+        title: extractTitle(scrapeOutput),
+        publishDate: publishDateStr,
+        ageInDays,
+      });
     }
   }
 

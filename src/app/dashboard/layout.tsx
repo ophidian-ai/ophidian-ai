@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getClientModules } from "@/lib/modules";
+import { getClientModules, ALL_MODULES } from "@/lib/modules";
 import type { DashboardModule } from "@/lib/modules";
 import { DashboardProvider } from "@/lib/dashboard-context";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
@@ -33,7 +33,10 @@ export default async function DashboardLayout({
   let modulesArray: DashboardModule[] = [];
   let clientId: string | null = null;
 
-  if (role === "client") {
+  if (role === "admin") {
+    // Admins get access to every module
+    modulesArray = [...ALL_MODULES];
+  } else {
     // Fetch client record
     const { data: client } = await supabase
       .from("clients")

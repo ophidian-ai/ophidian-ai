@@ -2,7 +2,8 @@ import type { SeoConfig, SeoAudit } from "@/lib/supabase/seo-types";
 import type { AuditResult } from "@/lib/seo/audit-engine";
 import type { RankResult } from "@/lib/seo/rank-tracker";
 import { put } from "@vercel/blob";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+import chromium from "@sparticuz/chromium";
 
 // ---------------------------------------------------------------------------
 // Score helpers
@@ -317,7 +318,9 @@ export async function generateSeoReport(
   const html = buildHtml(config, audit, rankings, previousAudit, aiInsights);
 
   const browser = await puppeteer.launch({
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    args: chromium.args,
+    executablePath: await chromium.executablePath(),
+    headless: true,
   });
 
   let pdfBuffer: Buffer;

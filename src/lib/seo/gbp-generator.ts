@@ -1,6 +1,6 @@
 import { generateText } from "ai";
-import { execFileNoThrow } from "@/utils/execFileNoThrow";
 import type { SeoConfig } from "@/lib/supabase/seo-types";
+import { firecrawlScrape } from "@/lib/seo/firecrawl-client";
 import { GBP_DRAFT_EXPIRY_DAYS } from "./tier-defaults";
 import { createClient } from "@/lib/supabase/server";
 
@@ -9,22 +9,14 @@ export async function generateGbpDraft(
   keywords: string[],
   config: SeoConfig
 ): Promise<{ content: string; keywordsUsed: string[] }> {
-  // 1. Scrape blog post with firecrawl
-  const scrapeResult = await execFileNoThrow("firecrawl", [
-    "scrape",
-    blogUrl,
-    "--format",
-    "markdown",
-  ]);
+  // 1. Scrape blog post with Firecrawl API
+  const scraped = await firecrawlScrape(blogUrl);
 
-  if (scrapeResult.status === "error" || !scrapeResult.stdout.trim()) {
-    throw new Error(
-      `Failed to scrape blog post: ${scrapeResult.stderr || "empty output"}`
-    );
+  if (!scraped.trim()) {
+    throw new Error(`Failed to scrape blog post: empty output from ${blogUrl}`);
   }
 
   // 2. Truncate scraped content to 3000 chars if longer
-  const scraped = scrapeResult.stdout.trim();
   const blogContent = scraped.length > 3000 ? scraped.slice(0, 3000) : scraped;
 
   // 3. Generate GBP update via AI Gateway
