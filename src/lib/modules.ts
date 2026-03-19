@@ -13,7 +13,8 @@ export type DashboardModule =
   | "reports"
   | "billing"
   | "proposals"
-  | "chatbot";
+  | "chatbot"
+  | "email_marketing";
 
 export interface AdminModule {
   label: string;
@@ -23,6 +24,7 @@ export interface AdminModule {
 
 export const adminModules: AdminModule[] = [
   { label: "AI Chatbot", path: "/dashboard/admin/chatbot", adminOnly: true },
+  { label: "Email Marketing", path: "/dashboard/admin/email", adminOnly: true },
 ];
 
 const SERVICE_MODULE_MAP: Record<ServiceType, DashboardModule[]> = {
@@ -71,6 +73,21 @@ export function getClientModules(
 
   return modules;
 }
+
+/** All modules — used to grant admins full access. */
+export const ALL_MODULES: DashboardModule[] = [
+  "project_tracker",
+  "content_requests",
+  "analytics",
+  "seo_performance",
+  "social_media",
+  "content_engine",
+  "reports",
+  "billing",
+  "proposals",
+  "chatbot",
+  "email_marketing",
+];
 
 export function hasModule(
   modules: Set<DashboardModule>,

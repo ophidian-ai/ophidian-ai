@@ -22,6 +22,7 @@ import {
   Share2,
   Sparkles,
   MessageSquare,
+  Mail,
   LogOut,
   Menu,
   X,
@@ -97,6 +98,7 @@ const adminNavItems: NavItem[] = [
   { icon: Sparkles, label: "Content Engine", href: "/dashboard/content-engine" },
   { icon: MessageSquare, label: "AI Chatbot", href: "/dashboard/admin/chatbot" },
   { icon: Search, label: "SEO Automation", href: "/dashboard/admin/seo" },
+  { icon: Mail, label: "Email Marketing", href: "/dashboard/admin/email" },
   { icon: Settings, label: "Account Settings", href: "/dashboard/account" },
 ];
 
