@@ -39,8 +39,12 @@ export async function GET(request: NextRequest) {
 
   const count = results.length;
   const clientNames = (configs ?? []).map(
-    (c) =>
-      (c.clients as { company_name: string } | null)?.company_name ?? c.url
+    (c: any) => {
+      const client = c.clients;
+      if (Array.isArray(client) && client[0]?.company_name) return client[0].company_name;
+      if (client?.company_name) return client.company_name;
+      return c.url;
+    }
   );
 
   await resend.emails.send({

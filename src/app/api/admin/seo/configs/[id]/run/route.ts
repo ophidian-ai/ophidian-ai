@@ -116,39 +116,34 @@ export async function POST(
     if (
       tierDefaults.gbpSync !== "manual" &&
       freshnessResults &&
-      freshnessResults.pages &&
-      freshnessResults.pages.length > 0
+      freshnessResults.length > 0
     ) {
-      const blogPages = freshnessResults.pages.filter(
-        (p: { type?: string; lastModified?: string; url: string }) =>
-          p.type === "blog" || p.url?.includes("/blog")
+      const blogPages = freshnessResults.filter(
+        (p) => p.url?.includes("/blog") || p.url?.includes("/article") || p.url?.includes("/post")
       );
       const targetPages =
-        blogPages.length > 0 ? blogPages : freshnessResults.pages;
+        blogPages.length > 0 ? blogPages : freshnessResults;
       const mostRecentPage = targetPages.sort(
-        (
-          a: { lastModified?: string },
-          b: { lastModified?: string }
-        ) =>
-          new Date(b.lastModified ?? 0).getTime() -
-          new Date(a.lastModified ?? 0).getTime()
+        (a, b) =>
+          new Date(b.publishDate ?? 0).getTime() -
+          new Date(a.publishDate ?? 0).getTime()
       )[0];
 
       if (mostRecentPage) {
-        const gbpDraft = await generateGbpDraft(mostRecentPage);
-        await storeGbpDraft(seoConfig.id, todayStr, gbpDraft);
+        const gbpDraft = await generateGbpDraft(mostRecentPage.url, seoConfig.target_keywords, seoConfig);
+        await storeGbpDraft(seoConfig.id, mostRecentPage.url, gbpDraft.content, gbpDraft.keywordsUsed);
       }
     }
 
     // AI insights (Pro only)
-    let aiInsights: string | undefined;
+    let aiInsights: string | null = null;
     if (tierDefaults.aiInsights) {
       const { text } = await generateText({
         model: "google/gemini-2.5-flash" as Parameters<typeof generateText>[0]["model"],
         prompt: `You are an SEO analyst. Write a concise narrative summary (3-5 paragraphs) for a client SEO report.
 
 Audit scores: ${JSON.stringify(audit.scores ?? {})}
-Ranking changes: ${JSON.stringify(rankings.changes ?? [])}
+Rankings: ${JSON.stringify(rankings.map(r => ({ keyword: r.keyword, position: r.position, aiOverview: r.aiOverview })))}
 Top issues: ${JSON.stringify(audit.issues?.slice(0, 10) ?? [])}
 ${previousAudit ? `Previous audit date: ${previousAudit.date}` : "No previous audit available."}
 
@@ -167,7 +162,7 @@ Focus on: what improved, what declined, top priorities for the client to act on.
     );
 
     // Store audit
-    const storedAudit = await storeAudit(
+    await storeAudit(
       seoConfig.id,
       todayStr,
       audit,
@@ -197,7 +192,7 @@ Focus on: what improved, what declined, top priorities for the client to act on.
 
     return NextResponse.json({
       success: true,
-      auditId: storedAudit?.id ?? null,
+      date: todayStr,
       reportUrl,
     });
   } catch (err) {
