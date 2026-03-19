@@ -260,3 +260,13 @@ export type {
   ChatbotAnalytics,
   ChatbotWebhookFailure,
 } from "./chatbot-types";
+
+// SEO types
+export type {
+  SeoTier,
+  GbpDraftStatus,
+  SeoConfig,
+  SeoAudit,
+  SeoRanking,
+  SeoGbpDraft,
+} from "./seo-types";
