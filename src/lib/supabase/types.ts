@@ -270,3 +270,10 @@ export type {
   SeoRanking,
   SeoGbpDraft,
 } from "./seo-types";
+
+// Email Marketing types
+export type {
+  EmailCampaignStatus, EmailEnrollmentStatus, EmailRecipientStatus,
+  EmailConfig, EmailContact, EmailTemplate, EmailCampaign,
+  EmailCampaignRecipient, EmailSequence, EmailSequenceEnrollment, EmailEvent,
+} from "./email-types";
