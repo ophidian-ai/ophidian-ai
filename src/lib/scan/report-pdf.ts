@@ -216,19 +216,13 @@ export async function generateReportPDF(result: ScanResult): Promise<Buffer> {
   const html = applyTokens(template, tokens);
 
   // 5. Launch Puppeteer and render PDF
-  let puppeteer: typeof import('puppeteer');
-  try {
-    puppeteer = (await import('puppeteer')).default as unknown as typeof import('puppeteer');
-  } catch {
-    throw new Error(
-      'Puppeteer is not available in this environment. ' +
-        'PDF generation requires puppeteer to be installed (devDependency). ' +
-        'In Vercel production, use @sparticuz/chromium with puppeteer-core instead.'
-    );
-  }
+  const puppeteer = await import('puppeteer-core');
+  const chromium = (await import('@sparticuz/chromium')).default;
 
-  const browser = await (puppeteer as unknown as { launch: (opts: Record<string, unknown>) => Promise<import('puppeteer').Browser> }).launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  const browser = await puppeteer.launch({
+    args: chromium.args,
+    executablePath: await chromium.executablePath(),
+    headless: true,
   });
 
   let pdfBuffer: Buffer;

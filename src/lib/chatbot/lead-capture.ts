@@ -150,9 +150,9 @@ export async function captureLead(
   if (config.client_id) {
     try {
       await onChatbotLeadCaptured(config.client_id, {
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
+        name: data.name ?? undefined,
+        email: data.email ?? "",
+        phone: data.phone ?? undefined,
         conversationId: data.conversationId,
       });
     } catch (e) {

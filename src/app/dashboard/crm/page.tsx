@@ -8,6 +8,7 @@ import { DollarSign, Target, TrendingUp, Users } from "lucide-react";
 
 interface DealRow {
   id: string;
+  pipeline_id: string;
   title: string;
   stage: string;
   value: number | null;
@@ -44,7 +45,7 @@ const STAGE_COLORS: Record<string, string> = {
 
 export default function ClientCrmPage() {
   const router = useRouter();
-  const { clientSlug } = useDashboard();
+  const { clientId } = useDashboard();
   const [deals, setDeals] = useState<DealRow[]>([]);
   const [contacts, setContacts] = useState<ContactRow[]>([]);
   const [pipelines, setPipelines] = useState<PipelineRow[]>([]);
@@ -53,7 +54,7 @@ export default function ClientCrmPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!clientSlug) return;
+    if (!clientId) return;
 
     async function fetchData() {
       // Client uses admin endpoints filtered to their own config
@@ -85,7 +86,7 @@ export default function ClientCrmPage() {
     }
 
     fetchData();
-  }, [clientSlug, router]);
+  }, [clientId, router]);
 
   if (loading) {
     return (
