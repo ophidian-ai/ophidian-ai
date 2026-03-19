@@ -1,0 +1,81 @@
+# Getting Started
+
+The Email Marketing API lets you programmatically manage contacts and fire behavioral triggers from your own application. Use it to sync signups, sync unsubscribes, and kick off automated sequences without touching the dashboard.
+
+---
+
+## Authentication
+
+All requests require a Bearer API key in the `Authorization` header.
+
+```
+Authorization: Bearer YOUR_API_KEY
+```
+
+Retrieve your API key from the Email Marketing dashboard under **Settings > API**.
+
+---
+
+## Base URL
+
+```
+https://ophidianai.com/api/email/{slug}
+```
+
+Replace `{slug}` with your account slug shown in your dashboard.
+
+---
+
+## Quick Start: Add a Contact
+
+### cURL
+
+```bash
+curl -X POST https://ophidianai.com/api/email/your-slug/contacts \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"email": "jane@example.com", "name": "Jane Smith"}'
+```
+
+### JavaScript
+
+```js
+const response = await fetch(
+  "https://ophidianai.com/api/email/your-slug/contacts",
+  {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer YOUR_API_KEY",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: "jane@example.com",
+      name: "Jane Smith",
+    }),
+  }
+);
+
+const data = await response.json();
+console.log(data);
+```
+
+---
+
+## Tier Access
+
+| Feature | Essentials | Growth | Pro |
+|---|---|---|---|
+| Contacts API | Yes | Yes | Yes |
+| Triggers API | No | No | Yes |
+| Batch contacts (up to 100) | Yes | Yes | Yes |
+
+---
+
+## Rate Limits
+
+| Limit | Value |
+|---|---|
+| Contacts per batch | 100 |
+| Requests per minute | 10 |
+
+Requests that exceed the rate limit receive a `429 Too Many Requests` response. Retry after the interval indicated in the `Retry-After` response header.

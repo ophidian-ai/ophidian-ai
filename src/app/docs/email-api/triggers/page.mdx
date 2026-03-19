@@ -1,0 +1,101 @@
+# Triggers API
+
+**Pro tier only.** Fire custom behavioral events from your application to kick off automated email sequences tied to specific contact actions.
+
+---
+
+## How Triggers Work
+
+Triggers connect real-world events in your application to email sequences in the dashboard.
+
+1. You define a sequence in the Email Marketing dashboard and attach it to a named event (e.g. `"purchase"`).
+2. When that event occurs in your app, you call this endpoint with the event name and the contact's email.
+3. OphidianAI enrolls the contact in the matching sequence and begins sending.
+
+If no sequence is mapped to the event, the call succeeds but no emails are sent.
+
+---
+
+## POST /api/email/{slug}/triggers
+
+Fire a custom event for a contact.
+
+**Request body**
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `event` | string | Yes | Event name (must match a sequence trigger in the dashboard) |
+| `contactEmail` | string | Yes | Email address of the contact to enroll |
+| `data` | object | No | Optional key-value payload passed to sequence templates |
+
+**cURL**
+
+```bash
+curl -X POST https://ophidianai.com/api/email/your-slug/triggers \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "event": "purchase",
+    "contactEmail": "jane@example.com",
+    "data": {
+      "productName": "SEO Growth Plan",
+      "amount": 350
+    }
+  }'
+```
+
+**JavaScript**
+
+```js
+const response = await fetch(
+  "https://ophidianai.com/api/email/your-slug/triggers",
+  {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer YOUR_API_KEY",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      event: "purchase",
+      contactEmail: "jane@example.com",
+      data: {
+        productName: "SEO Growth Plan",
+        amount: 350,
+      },
+    }),
+  }
+);
+
+const data = await response.json();
+```
+
+**Response** — `200 OK`
+
+```json
+{
+  "success": true
+}
+```
+
+---
+
+## Example Events
+
+| Event name | When to fire |
+|---|---|
+| `purchase` | Customer completes a transaction |
+| `appointment_booked` | Customer books an appointment |
+| `form_submitted` | Customer submits a lead or contact form |
+
+Event names are arbitrary strings. Use whatever naming convention matches your application — just make sure the name in your code matches the trigger name configured in the dashboard sequence.
+
+---
+
+## Error Responses
+
+| Status | Description |
+|---|---|
+| `400 Bad Request` | Missing or invalid `event` or `contactEmail` |
+| `401 Unauthorized` | Missing or invalid API key |
+| `403 Forbidden` | Account is not on the Pro tier |
+| `429 Too Many Requests` | Rate limit exceeded — retry after the `Retry-After` header interval |

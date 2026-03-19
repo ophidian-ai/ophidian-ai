@@ -1,0 +1,203 @@
+# Contacts API
+
+Manage your subscriber list programmatically. Add contacts individually or in batches, and unsubscribe contacts by ID.
+
+---
+
+## POST /api/email/{slug}/contacts
+
+Add a single contact or a batch of contacts to your list.
+
+### Add a Single Contact
+
+**Request body**
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `email` | string | Yes | Contact email address |
+| `name` | string | No | Full name |
+| `phone` | string | No | Phone number |
+| `tags` | string[] | No | Tags to apply to the contact |
+| `source` | string | No | Lead source label (e.g. `"website"`) |
+
+**cURL**
+
+```bash
+curl -X POST https://ophidianai.com/api/email/your-slug/contacts \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "jane@example.com",
+    "name": "Jane Smith",
+    "tags": ["newsletter", "website"],
+    "source": "website"
+  }'
+```
+
+**JavaScript**
+
+```js
+const response = await fetch(
+  "https://ophidianai.com/api/email/your-slug/contacts",
+  {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer YOUR_API_KEY",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: "jane@example.com",
+      name: "Jane Smith",
+      tags: ["newsletter", "website"],
+      source: "website",
+    }),
+  }
+);
+
+const data = await response.json();
+```
+
+**Response** — `201 Created`
+
+```json
+{
+  "contact": {
+    "id": "cnt_abc123",
+    "email": "jane@example.com",
+    "name": "Jane Smith",
+    "tags": ["newsletter", "website"],
+    "source": "website",
+    "createdAt": "2026-03-19T12:00:00Z"
+  }
+}
+```
+
+---
+
+### Add a Batch of Contacts
+
+Send up to 100 contacts in a single request using the `contacts` array.
+
+**Request body**
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `contacts` | object[] | Yes | Array of contact objects (max 100) |
+
+Each object in `contacts` accepts the same fields as a single contact (`email`, `name`, `phone`, `tags`, `source`).
+
+**cURL**
+
+```bash
+curl -X POST https://ophidianai.com/api/email/your-slug/contacts \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contacts": [
+      {"email": "alice@example.com", "name": "Alice"},
+      {"email": "bob@example.com", "name": "Bob", "tags": ["vip"]}
+    ]
+  }'
+```
+
+**JavaScript**
+
+```js
+const response = await fetch(
+  "https://ophidianai.com/api/email/your-slug/contacts",
+  {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer YOUR_API_KEY",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      contacts: [
+        { email: "alice@example.com", name: "Alice" },
+        { email: "bob@example.com", name: "Bob", tags: ["vip"] },
+      ],
+    }),
+  }
+);
+
+const data = await response.json();
+```
+
+**Response** — `201 Created`
+
+```json
+{
+  "contacts": [
+    {
+      "id": "cnt_def456",
+      "email": "alice@example.com",
+      "name": "Alice",
+      "createdAt": "2026-03-19T12:00:00Z"
+    },
+    {
+      "id": "cnt_ghi789",
+      "email": "bob@example.com",
+      "name": "Bob",
+      "tags": ["vip"],
+      "createdAt": "2026-03-19T12:00:00Z"
+    }
+  ]
+}
+```
+
+---
+
+## DELETE /api/email/{slug}/contacts
+
+Unsubscribe a contact by ID. The contact is marked as unsubscribed and will no longer receive emails.
+
+**Request body**
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `contactId` | string | Yes | ID of the contact to unsubscribe |
+
+**cURL**
+
+```bash
+curl -X DELETE https://ophidianai.com/api/email/your-slug/contacts \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"contactId": "cnt_abc123"}'
+```
+
+**JavaScript**
+
+```js
+const response = await fetch(
+  "https://ophidianai.com/api/email/your-slug/contacts",
+  {
+    method: "DELETE",
+    headers: {
+      Authorization: "Bearer YOUR_API_KEY",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ contactId: "cnt_abc123" }),
+  }
+);
+
+const data = await response.json();
+```
+
+**Response** — `200 OK`
+
+```json
+{
+  "success": true
+}
+```
+
+---
+
+## Error Responses
+
+| Status | Description |
+|---|---|
+| `400 Bad Request` | Missing or invalid fields in the request body |
+| `401 Unauthorized` | Missing or invalid API key |
+| `429 Too Many Requests` | Rate limit exceeded — retry after the `Retry-After` header interval |
