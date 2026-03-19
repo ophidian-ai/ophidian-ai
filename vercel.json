@@ -3,7 +3,10 @@
     { "path": "/api/cron/chatbot-analytics", "schedule": "0 2 * * *" },
     { "path": "/api/cron/chatbot-demo-expiry", "schedule": "0 6 * * *" },
     { "path": "/api/cron/chatbot-monthly-reset", "schedule": "0 0 1 * *" },
-    { "path": "/api/cron/seo-monthly-dispatch", "schedule": "0 3 1 * *" }
+    { "path": "/api/cron/seo-monthly-dispatch", "schedule": "0 3 1 * *" },
+    { "path": "/api/cron/email-campaign-send", "schedule": "*/5 * * * *" },
+    { "path": "/api/cron/email-sequence-process", "schedule": "*/15 * * * *" },
+    { "path": "/api/cron/email-monthly-reset", "schedule": "0 1 1 * *" }
   ],
   "headers": [
     {
