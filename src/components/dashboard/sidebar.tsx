@@ -96,6 +96,7 @@ const adminNavItems: NavItem[] = [
   { icon: Share2, label: "Social Media", href: "/dashboard/social" },
   { icon: Sparkles, label: "Content Engine", href: "/dashboard/content-engine" },
   { icon: MessageSquare, label: "AI Chatbot", href: "/dashboard/admin/chatbot" },
+  { icon: Search, label: "SEO Automation", href: "/dashboard/admin/seo" },
   { icon: Settings, label: "Account Settings", href: "/dashboard/account" },
 ];
 
