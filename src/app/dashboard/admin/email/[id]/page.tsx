@@ -15,6 +15,7 @@ import {
   CheckCircle,
   Clock,
   Plus,
+  Trash2,
 } from "lucide-react";
 import type { EmailConfig, EmailCampaign, EmailSequence } from "@/lib/supabase/email-types";
 
@@ -74,6 +75,8 @@ export default function EmailConfigDetailPage({
   const [data, setData] = useState<DetailData | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (role !== "admin") {
@@ -115,6 +118,20 @@ export default function EmailConfigDetailPage({
 
     fetchDetail();
   }, [id, role, router]);
+
+  async function handleDelete() {
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/admin/email/configs/${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        router.push("/dashboard/admin/email");
+      }
+    } finally {
+      setDeleting(false);
+    }
+  }
 
   if (role !== "admin") return null;
 
@@ -209,6 +226,32 @@ export default function EmailConfigDetailPage({
           </div>
         </div>
         <div className="flex items-center gap-3">
+          {showDeleteConfirm ? (
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-red-400">Are you sure?</span>
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors disabled:opacity-50 cursor-pointer"
+              >
+                {deleting ? "Deleting..." : "Delete"}
+              </button>
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="px-3 py-1.5 rounded-lg text-foreground-muted border border-white/10 hover:bg-white/5 transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowDeleteConfirm(true)}
+              className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors cursor-pointer"
+            >
+              <Trash2 size={14} />
+              Delete
+            </button>
+          )}
           <GlassButton size="sm" href={`/dashboard/admin/email/campaigns/new`}>
             <span className="flex items-center gap-2">
               <Plus size={16} />

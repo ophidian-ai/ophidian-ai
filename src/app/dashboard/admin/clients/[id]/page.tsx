@@ -21,6 +21,7 @@ import {
   Upload,
   User,
   Phone,
+  Trash2,
 } from "lucide-react";
 import type {
   Client,
@@ -95,6 +96,10 @@ export default function AdminClientDetailPage() {
   const [editingField, setEditingField] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
   const [saving, setSaving] = useState(false);
+
+  // Delete state
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (role !== "admin") {
@@ -193,21 +198,44 @@ export default function AdminClientDetailPage() {
 
   const handlePhaseChange = useCallback(
     async (projectId: string, phase: ProjectPhase) => {
-      const res = await fetch(`/api/admin/projects/${projectId}/phase`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phase }),
-      });
+      try {
+        const res = await fetch(`/api/admin/projects/${projectId}/phase`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ phase }),
+        });
 
-      if (res.ok) {
-        const data = await res.json();
-        setProjects((prev) =>
-          prev.map((p) => (p.id === projectId ? data.project : p))
-        );
+        if (res.ok) {
+          const data = await res.json();
+          setProjects((prev) =>
+            prev.map((p) => (p.id === projectId ? data.project : p))
+          );
+        } else {
+          const err = await res.json().catch(() => ({ error: res.statusText }));
+          console.error("[Phase change failed]", err);
+          alert(`Phase change failed: ${err.error ?? "Unknown error"}`);
+        }
+      } catch (e) {
+        console.error("[Phase change error]", e);
+        alert("Phase change failed: network error");
       }
     },
     []
   );
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/admin/clients/${clientId}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        router.push("/dashboard/admin/clients");
+      }
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   const activeProjects = projects.filter((p) => p.status === "active");
   const launchedProjects = projects.filter((p) => p.status === "launched");
@@ -262,7 +290,7 @@ export default function AdminClientDetailPage() {
         >
           <ArrowLeft size={20} className="text-foreground-muted" />
         </button>
-        <div>
+        <div className="flex-1">
           <h1 className="text-2xl font-bold text-foreground">
             {client.company_name}
           </h1>
@@ -274,6 +302,32 @@ export default function AdminClientDetailPage() {
             })}
           </p>
         </div>
+        {showDeleteConfirm ? (
+          <div className="flex items-center gap-2 text-sm">
+            <span className="text-red-400">Are you sure?</span>
+            <button
+              onClick={handleDelete}
+              disabled={deleting}
+              className="px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors disabled:opacity-50 cursor-pointer"
+            >
+              {deleting ? "Deleting..." : "Delete"}
+            </button>
+            <button
+              onClick={() => setShowDeleteConfirm(false)}
+              className="px-3 py-1.5 rounded-lg text-foreground-muted border border-white/10 hover:bg-white/5 transition-colors cursor-pointer"
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => setShowDeleteConfirm(true)}
+            className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors cursor-pointer"
+          >
+            <Trash2 size={14} />
+            Delete
+          </button>
+        )}
       </div>
 
       {/* Client Info + Setup Fields */}

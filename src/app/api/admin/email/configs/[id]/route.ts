@@ -65,3 +65,39 @@ export async function PATCH(
 
   return NextResponse.json({ config: data });
 }
+
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { supabase, error, status } = await requireAdmin();
+  if (error) return NextResponse.json({ error }, { status });
+
+  const { id } = await params;
+
+  // Load the config to get the client slug for cache invalidation
+  const { data: existing, error: fetchError } = await supabase!
+    .from("email_configs")
+    .select("*, clients!inner(slug)")
+    .eq("id", id)
+    .single();
+
+  if (fetchError || !existing) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  const { error: dbError } = await supabase!
+    .from("email_configs")
+    .update({ active: false, updated_at: new Date().toISOString() })
+    .eq("id", id);
+
+  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 });
+
+  // Invalidate Redis cache for this client's slug
+  const slug = (existing as Record<string, unknown> & { clients?: { slug?: string } }).clients?.slug;
+  if (slug) {
+    await invalidateEmailConfigCache(slug);
+  }
+
+  return NextResponse.json({ success: true });
+}

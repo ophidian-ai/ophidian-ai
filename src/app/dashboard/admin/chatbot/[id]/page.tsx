@@ -16,6 +16,7 @@ import {
   CheckCircle,
   XCircle,
   Edit,
+  Trash2,
 } from "lucide-react";
 import type { ChatbotConfig, ChatbotLead, ChatbotConversation } from "@/lib/supabase/types";
 
@@ -71,6 +72,8 @@ export default function ChatbotConfigDetailPage({
   const [data, setData] = useState<DetailData | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (role !== "admin") {
@@ -94,6 +97,20 @@ export default function ChatbotConfigDetailPage({
 
     fetchDetail();
   }, [id, role, router]);
+
+  async function handleDelete() {
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/admin/chatbot/configs/${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        router.push("/dashboard/admin/chatbot");
+      }
+    } finally {
+      setDeleting(false);
+    }
+  }
 
   if (role !== "admin") return null;
 
@@ -184,12 +201,40 @@ export default function ChatbotConfigDetailPage({
             </p>
           </div>
         </div>
-        <GlassButton size="sm" href={`/dashboard/admin/chatbot/${id}/edit`}>
-          <span className="flex items-center gap-2">
-            <Edit size={16} />
-            Edit Config
-          </span>
-        </GlassButton>
+        <div className="flex items-center gap-3">
+          {showDeleteConfirm ? (
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-red-400">Are you sure?</span>
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors disabled:opacity-50 cursor-pointer"
+              >
+                {deleting ? "Deleting..." : "Delete"}
+              </button>
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="px-3 py-1.5 rounded-lg text-foreground-muted border border-white/10 hover:bg-white/5 transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowDeleteConfirm(true)}
+              className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors cursor-pointer"
+            >
+              <Trash2 size={14} />
+              Delete
+            </button>
+          )}
+          <GlassButton size="sm" href={`/dashboard/admin/chatbot/${id}/edit`}>
+            <span className="flex items-center gap-2">
+              <Edit size={16} />
+              Edit Config
+            </span>
+          </GlassButton>
+        </div>
       </div>
 
       {/* Stats */}

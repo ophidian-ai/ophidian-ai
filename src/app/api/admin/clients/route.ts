@@ -115,7 +115,9 @@ export async function POST(request: NextRequest) {
     .insert({
       name: displayName,
       company_name: displayName,
+      contact_name: fullName,
       contact_email,
+      phone: phone ?? null,
       website_url: website_url ?? null,
       status: "prospect",
     })

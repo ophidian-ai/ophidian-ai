@@ -92,6 +92,8 @@ function ContentEngineContent({ isAdmin }: { isAdmin: boolean }) {
   const [selectedBatch, setSelectedBatch] = useState<BatchWithPosts | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showNewBatch, setShowNewBatch] = useState(false);
+  const [creating, setCreating] = useState(false);
 
   const fetchBatches = useCallback(async () => {
     setLoading(true);
@@ -131,6 +133,34 @@ function ContentEngineContent({ isAdmin }: { isAdmin: boolean }) {
     fetchBatches();
   }, [fetchBatches]);
 
+  const createBatch = useCallback(
+    async (label: string, start: string, end: string) => {
+      setCreating(true);
+      try {
+        const res = await fetch("/api/content-engine/batches", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            batch_label: label,
+            period_start: start,
+            period_end: end,
+          }),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({ error: "Failed" }));
+          throw new Error(err.error || "Failed to create batch");
+        }
+        setShowNewBatch(false);
+        await fetchBatches();
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Unknown error");
+      } finally {
+        setCreating(false);
+      }
+    },
+    [fetchBatches]
+  );
+
   if (loading && !selectedBatch && batches.length === 0) {
     return (
       <div className="p-6 md:p-10">
@@ -144,27 +174,43 @@ function ContentEngineContent({ isAdmin }: { isAdmin: boolean }) {
   return (
     <div className="p-6 md:p-10 space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        {selectedBatch && (
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          {selectedBatch && (
+            <button
+              type="button"
+              onClick={goBack}
+              title="Back to batches"
+              className="flex items-center justify-center h-8 w-8 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
+            >
+              <ChevronLeft size={20} />
+            </button>
+          )}
+          <div>
+            <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+              <Sparkles size={24} className="text-primary" />
+              Content Engine
+            </h1>
+            <p className="text-sm text-foreground-muted mt-1">
+              {selectedBatch
+                ? selectedBatch.batch_label
+                : "Manage social media content batches"}
+            </p>
+          </div>
+        </div>
+        {isAdmin && !selectedBatch && (
           <button
-            onClick={goBack}
-            className="flex items-center justify-center h-8 w-8 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
+            type="button"
+            onClick={() => setShowNewBatch((v) => !v)}
+            className="text-xs font-medium px-4 py-2 rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors cursor-pointer"
           >
-            <ChevronLeft size={20} />
+            {showNewBatch ? "Cancel" : "New Batch"}
           </button>
         )}
-        <div>
-          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-            <Sparkles size={24} className="text-primary" />
-            Content Engine
-          </h1>
-          <p className="text-sm text-foreground-muted mt-1">
-            {selectedBatch
-              ? selectedBatch.batch_label
-              : "Manage social media content batches"}
-          </p>
-        </div>
       </div>
+
+      {/* New Batch Form */}
+      {showNewBatch && <NewBatchForm onSubmit={createBatch} loading={creating} />}
 
       {error && (
         <div className="flex items-center gap-2 text-red-400 text-sm bg-red-400/10 rounded-lg px-4 py-3">
@@ -824,6 +870,80 @@ function ActionButton({
     <button onClick={onClick} disabled={loading} className={styles}>
       {loading ? <Loader2 size={14} className="animate-spin" /> : label}
     </button>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  New Batch Form                                                     */
+/* ------------------------------------------------------------------ */
+
+function NewBatchForm({
+  onSubmit,
+  loading,
+}: {
+  onSubmit: (label: string, start: string, end: string) => Promise<void>;
+  loading: boolean;
+}) {
+  const today = new Date().toISOString().slice(0, 10);
+  const nextWeek = new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10);
+  const [label, setLabel] = useState(
+    `Week of ${new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" })}`
+  );
+  const [start, setStart] = useState(today);
+  const [end, setEnd] = useState(nextWeek);
+
+  return (
+    <GlowCard className="p-5 space-y-4">
+      <h2 className="text-sm font-semibold text-foreground">Create New Batch</h2>
+      <div className="grid gap-3 sm:grid-cols-3">
+        <div className="sm:col-span-3">
+          <label htmlFor="batch-label" className="text-[10px] font-semibold text-foreground-muted uppercase tracking-wider">
+            Batch Label
+          </label>
+          <input
+            id="batch-label"
+            type="text"
+            value={label}
+            onChange={(e) => setLabel(e.target.value)}
+            className="mt-1 w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary/40"
+          />
+        </div>
+        <div>
+          <label htmlFor="batch-start" className="text-[10px] font-semibold text-foreground-muted uppercase tracking-wider">
+            Period Start
+          </label>
+          <input
+            id="batch-start"
+            type="date"
+            value={start}
+            onChange={(e) => setStart(e.target.value)}
+            className="mt-1 w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary/40"
+          />
+        </div>
+        <div>
+          <label htmlFor="batch-end" className="text-[10px] font-semibold text-foreground-muted uppercase tracking-wider">
+            Period End
+          </label>
+          <input
+            id="batch-end"
+            type="date"
+            value={end}
+            onChange={(e) => setEnd(e.target.value)}
+            className="mt-1 w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary/40"
+          />
+        </div>
+        <div className="flex items-end">
+          <button
+            type="button"
+            onClick={() => onSubmit(label, start, end)}
+            disabled={loading || !label.trim()}
+            className="text-xs font-medium px-4 py-2 rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors cursor-pointer disabled:opacity-50"
+          >
+            {loading ? <Loader2 size={14} className="animate-spin" /> : "Create Batch"}
+          </button>
+        </div>
+      </div>
+    </GlowCard>
   );
 }
 

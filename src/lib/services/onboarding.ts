@@ -103,7 +103,9 @@ export async function onboardClient(params: OnboardClientParams): Promise<Onboar
       profile_id: userId,
       status: "active",
       company_name: params.company,
+      contact_name: params.fullName,
       contact_email: params.email,
+      phone: params.phone || null,
       website_url: params.websiteUrl || null,
     })
     .eq("id", params.clientId);
@@ -189,10 +191,11 @@ export async function onboardClient(params: OnboardClientParams): Promise<Onboar
   });
 
   // Step 10: Store stripe_customer_id
-  await supabase
+  const { error: stripeIdError } = await supabase
     .from("clients")
     .update({ stripe_customer_id: customer.id })
     .eq("id", params.clientId);
+  if (stripeIdError) throw new Error(`Stripe customer ID save failed: ${stripeIdError.message}`);
 
   // Step 11: Create Stripe invoice
   await updateStep("stripe_invoice");

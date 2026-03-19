@@ -13,6 +13,7 @@ import {
   ExternalLink,
   FileText,
   Download,
+  Trash2,
 } from "lucide-react";
 import {
   LineChart,
@@ -170,6 +171,8 @@ export default function SeoConfigDetailPage({
   const [notFound, setNotFound] = useState(false);
   const [running, setRunning] = useState(false);
   const [toasts, setToasts] = useState<{ id: string; message: string; type: "success" | "error" }[]>([]);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (role !== "admin") {
@@ -213,6 +216,20 @@ export default function SeoConfigDetailPage({
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== toastId));
     }, 5000);
+  }
+
+  async function handleDelete() {
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/admin/seo/configs/${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        router.push("/dashboard/admin/seo");
+      }
+    } finally {
+      setDeleting(false);
+    }
   }
 
   async function handleRunNow() {
@@ -312,23 +329,51 @@ export default function SeoConfigDetailPage({
             <p className="text-foreground-muted text-sm mt-0.5 font-mono">{config.website_url}</p>
           </div>
         </div>
-        <button
-          onClick={handleRunNow}
-          disabled={running}
-          className="flex items-center gap-2 px-4 py-2 text-sm rounded-lg bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-        >
-          {running ? (
-            <>
-              <div className="w-4 h-4 border border-primary border-t-transparent rounded-full animate-spin" />
-              Running...
-            </>
+        <div className="flex items-center gap-3">
+          {showDeleteConfirm ? (
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-red-400">Are you sure?</span>
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors disabled:opacity-50 cursor-pointer"
+              >
+                {deleting ? "Deleting..." : "Delete"}
+              </button>
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="px-3 py-1.5 rounded-lg text-foreground-muted border border-white/10 hover:bg-white/5 transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+            </div>
           ) : (
-            <>
-              <Search size={16} />
-              Run Now
-            </>
+            <button
+              onClick={() => setShowDeleteConfirm(true)}
+              className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors cursor-pointer"
+            >
+              <Trash2 size={14} />
+              Delete
+            </button>
           )}
-        </button>
+          <button
+            onClick={handleRunNow}
+            disabled={running}
+            className="flex items-center gap-2 px-4 py-2 text-sm rounded-lg bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          >
+            {running ? (
+              <>
+                <div className="w-4 h-4 border border-primary border-t-transparent rounded-full animate-spin" />
+                Running...
+              </>
+            ) : (
+              <>
+                <Search size={16} />
+                Run Now
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Config Summary */}

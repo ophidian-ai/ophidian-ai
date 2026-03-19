@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useDashboard } from "@/lib/dashboard-context";
 import { GlowCard } from "@/components/ui/spotlight-card";
 import { GlassButton } from "@/components/ui/glass-button";
-import { ArrowLeft, Plus, BarChart3, DollarSign, TrendingUp, Zap } from "lucide-react";
+import { ArrowLeft, Plus, BarChart3, DollarSign, TrendingUp, Zap, Trash2 } from "lucide-react";
 
 interface CrmConfigDetail {
   id: string;
@@ -63,6 +63,8 @@ export default function AdminCrmConfigDetailPage({
   const [automations, setAutomations] = useState<AutomationRow[]>([]);
   const [activities, setActivities] = useState<ActivityRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (role !== "admin") {
@@ -130,6 +132,20 @@ export default function AdminCrmConfigDetailPage({
     fetchData();
   }, [id, role, router]);
 
+  async function handleDelete() {
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/admin/crm/configs/${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        router.push("/dashboard/admin/crm");
+      }
+    } finally {
+      setDeleting(false);
+    }
+  }
+
   if (role !== "admin") return null;
 
   if (loading) {
@@ -167,12 +183,40 @@ export default function AdminCrmConfigDetailPage({
             {config.tier} tier &middot; API: {config.api_access}
           </p>
         </div>
-        <GlassButton size="sm" href="/dashboard/admin/crm/automations/new">
-          <span className="flex items-center gap-2">
-            <Plus size={16} />
-            Add Automation
-          </span>
-        </GlassButton>
+        <div className="flex items-center gap-3">
+          {showDeleteConfirm ? (
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-red-400">Are you sure?</span>
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors disabled:opacity-50 cursor-pointer"
+              >
+                {deleting ? "Deleting..." : "Delete"}
+              </button>
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="px-3 py-1.5 rounded-lg text-foreground-muted border border-white/10 hover:bg-white/5 transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowDeleteConfirm(true)}
+              className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors cursor-pointer"
+            >
+              <Trash2 size={14} />
+              Delete
+            </button>
+          )}
+          <GlassButton size="sm" href="/dashboard/admin/crm/automations/new">
+            <span className="flex items-center gap-2">
+              <Plus size={16} />
+              Add Automation
+            </span>
+          </GlassButton>
+        </div>
       </div>
 
       {/* Pipeline stats */}

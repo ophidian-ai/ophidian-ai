@@ -70,3 +70,42 @@ export async function PATCH(
 
   return NextResponse.json({ config: updated });
 }
+
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const { supabase, error, status } = await requireAdmin();
+  if (error) return NextResponse.json({ error }, { status });
+
+  // Load the config to get the client slug for cache invalidation
+  const { data: existing, error: fetchError } = await supabase!
+    .from("crm_configs")
+    .select("*, clients(slug)")
+    .eq("id", id)
+    .single();
+
+  if (fetchError || !existing) {
+    return NextResponse.json({ error: "Config not found" }, { status: 404 });
+  }
+
+  const { error: dbError } = await supabase!
+    .from("crm_configs")
+    .update({ active: false, updated_at: new Date().toISOString() })
+    .eq("id", id);
+
+  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 });
+
+  // Invalidate Redis cache
+  const slug = (existing.clients as { slug: string } | null)?.slug;
+  if (slug) {
+    try {
+      await invalidateCrmConfigCache(slug);
+    } catch (cacheErr) {
+      console.error("[admin/crm/configs/[id]] Cache invalidation failed:", cacheErr);
+    }
+  }
+
+  return NextResponse.json({ success: true });
+}

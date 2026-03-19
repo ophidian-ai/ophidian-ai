@@ -48,3 +48,21 @@ export async function PATCH(
     return NextResponse.json({ error: message }, { status: 400 });
   }
 }
+
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const { supabase, error, status } = await requireAdmin();
+  if (error) return NextResponse.json({ error }, { status });
+
+  const { error: dbError } = await supabase!
+    .from("crm_deals")
+    .update({ status: "deleted", updated_at: new Date().toISOString() })
+    .eq("id", id);
+
+  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 });
+
+  return NextResponse.json({ success: true });
+}
