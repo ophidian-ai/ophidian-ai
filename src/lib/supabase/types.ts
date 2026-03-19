@@ -277,3 +277,14 @@ export type {
   EmailConfig, EmailContact, EmailTemplate, EmailCampaign,
   EmailCampaignRecipient, EmailSequence, EmailSequenceEnrollment, EmailEvent,
 } from "./email-types";
+
+// CRM types
+export type {
+  CrmTaskStatus,
+  CrmConfig,
+  CrmPipeline,
+  CrmDeal,
+  CrmActivity,
+  CrmTask,
+  CrmAutomation,
+} from "./crm-types";
