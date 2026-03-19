@@ -1,0 +1,162 @@
+# Keyword Discovery API
+
+Endpoints for discovering keyword opportunities and checking search visibility for specific terms.
+
+## Authentication
+
+All requests require a valid session token in the `Authorization` header. See [REST API — Authentication](/docs/seo-api/rest-api) for details.
+
+---
+
+## Endpoints
+
+### POST /api/seo/keywords/discover
+
+Returns a list of keyword opportunities for a given topic and location.
+
+**Request body:**
+
+```json
+{
+  "topic": "sourdough bread",
+  "location": "Columbus, IN",
+  "limit": 10
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `topic` | string | Yes | The subject or niche to research |
+| `location` | string | No | City and state to localize results |
+| `limit` | number | No | Number of keywords to return. Max 20. Default 10. |
+
+**Response:**
+
+```json
+{
+  "keywords": [
+    {
+      "keyword": "sourdough bread Columbus Indiana",
+      "estimated_volume": "low",
+      "competition": "low",
+      "intent": "local"
+    },
+    {
+      "keyword": "fresh sourdough near me",
+      "estimated_volume": "medium",
+      "competition": "medium",
+      "intent": "local"
+    }
+  ]
+}
+```
+
+| Field | Values | Description |
+|-------|--------|-------------|
+| `estimated_volume` | `low`, `medium`, `high` | Relative search demand |
+| `competition` | `low`, `medium`, `high` | Relative difficulty to rank |
+| `intent` | `local`, `informational`, `transactional` | Searcher intent classification |
+
+**cURL example:**
+
+```bash
+curl -X POST https://ophidianai.com/api/seo/keywords/discover \
+  -H "Authorization: Bearer your-session-token" \
+  -H "Content-Type: application/json" \
+  -d '{"topic":"sourdough bread","location":"Columbus, IN","limit":10}'
+```
+
+**JavaScript fetch example:**
+
+```js
+const res = await fetch('/api/seo/keywords/discover', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${session.access_token}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    topic: 'sourdough bread',
+    location: 'Columbus, IN',
+    limit: 10,
+  }),
+});
+
+const { keywords } = await res.json();
+```
+
+---
+
+### POST /api/seo/keywords/check-rank
+
+Checks the visibility tier for a specific keyword and URL combination.
+
+**Request body:**
+
+```json
+{
+  "keyword": "sourdough bread Columbus Indiana",
+  "url": "https://example.com"
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `keyword` | string | Yes | The keyword to check |
+| `url` | string | Yes | The website URL to check visibility for |
+
+**Response:**
+
+```json
+{
+  "keyword": "sourdough bread Columbus Indiana",
+  "url": "https://example.com",
+  "visibility_tier": "top_10",
+  "ai_overview": false,
+  "checked_at": "2026-03-18T14:00:00Z"
+}
+```
+
+| Field | Values | Description |
+|-------|--------|-------------|
+| `visibility_tier` | `top_3`, `top_10`, `top_20`, `not_found` | Where the URL appears in results |
+| `ai_overview` | boolean | Whether the URL appears in a Google AI Overview for this keyword |
+
+**cURL example:**
+
+```bash
+curl -X POST https://ophidianai.com/api/seo/keywords/check-rank \
+  -H "Authorization: Bearer your-session-token" \
+  -H "Content-Type: application/json" \
+  -d '{"keyword":"sourdough bread Columbus Indiana","url":"https://example.com"}'
+```
+
+**JavaScript fetch example:**
+
+```js
+const res = await fetch('/api/seo/keywords/check-rank', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${session.access_token}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    keyword: 'sourdough bread Columbus Indiana',
+    url: 'https://example.com',
+  }),
+});
+
+const result = await res.json();
+console.log(result.visibility_tier); // "top_10"
+```
+
+---
+
+## Rate Limits
+
+| Endpoint | Max per call | Notes |
+|----------|-------------|-------|
+| `/api/seo/keywords/discover` | 20 keywords | Controlled by the `limit` field |
+| `/api/seo/keywords/check-rank` | 1 keyword | Single lookup per request |
+
+For bulk rank checking, call `/check-rank` in sequence. Batching is not currently supported.

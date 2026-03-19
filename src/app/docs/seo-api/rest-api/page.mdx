@@ -1,0 +1,199 @@
+# REST API Reference
+
+Direct API access for retrieving audit data, report archives, and managing GBP drafts.
+
+## Authentication
+
+All requests use Supabase auth — the same login as your dashboard. Include your session token in the `Authorization` header.
+
+```
+Authorization: Bearer your-supabase-session-token
+```
+
+Tokens are obtained by signing in through the dashboard. For server-side integrations, use a Supabase service role key scoped to your client record.
+
+---
+
+## Endpoints
+
+### GET /api/seo/dashboard
+
+Returns the current audit scores, keyword visibility, open issues, and AI insights for the authenticated client.
+
+**Query parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `clientId` | string | Yes | Your client ID |
+
+**Response:**
+
+```json
+{
+  "scores": [
+    {
+      "category": "on_page",
+      "label": "On-Page",
+      "score": 4,
+      "previous_score": 3
+    }
+  ],
+  "rankings": [
+    {
+      "keyword": "sourdough bread Columbus IN",
+      "visibility_tier": "top_10",
+      "ai_overview": false,
+      "best_competitor": "competitor.com"
+    }
+  ],
+  "issues": [
+    {
+      "area": "Technical",
+      "finding": "3 pages are missing meta descriptions",
+      "severity": "medium",
+      "impact": "Missing meta descriptions reduce click-through rates from search results."
+    }
+  ],
+  "reports": [
+    {
+      "id": "rpt_abc123",
+      "month": "March 2026",
+      "generated_at": "2026-03-01T08:00:00Z",
+      "pdf_url": "https://ophidianai.com/reports/rpt_abc123.pdf"
+    }
+  ],
+  "gbp_drafts": [
+    {
+      "id": "gbp_xyz789",
+      "content": "Spring is here! Stop by this week for fresh sourdough...",
+      "status": "pending",
+      "created_at": "2026-03-01T08:00:00Z"
+    }
+  ],
+  "ai_insights": "Your on-page score improved this month..."
+}
+```
+
+**cURL example:**
+
+```bash
+curl -G https://ophidianai.com/api/seo/dashboard \
+  -H "Authorization: Bearer your-session-token" \
+  --data-urlencode "clientId=your-client-id"
+```
+
+**JavaScript fetch example:**
+
+```js
+const res = await fetch('/api/seo/dashboard?clientId=your-client-id', {
+  headers: {
+    'Authorization': `Bearer ${session.access_token}`,
+  },
+});
+
+const data = await res.json();
+console.log(data.scores);
+```
+
+---
+
+### GET /api/seo/reports
+
+Returns the full archive of monthly PDF reports for the authenticated client.
+
+**Query parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `clientId` | string | Yes | Your client ID |
+
+**Response:**
+
+```json
+{
+  "reports": [
+    {
+      "id": "rpt_abc123",
+      "month": "March 2026",
+      "generated_at": "2026-03-01T08:00:00Z",
+      "pdf_url": "https://ophidianai.com/reports/rpt_abc123.pdf"
+    },
+    {
+      "id": "rpt_def456",
+      "month": "February 2026",
+      "generated_at": "2026-02-01T08:00:00Z",
+      "pdf_url": "https://ophidianai.com/reports/rpt_def456.pdf"
+    }
+  ]
+}
+```
+
+**cURL example:**
+
+```bash
+curl -G https://ophidianai.com/api/seo/reports \
+  -H "Authorization: Bearer your-session-token" \
+  --data-urlencode "clientId=your-client-id"
+```
+
+**JavaScript fetch example:**
+
+```js
+const res = await fetch('/api/seo/reports?clientId=your-client-id', {
+  headers: {
+    'Authorization': `Bearer ${session.access_token}`,
+  },
+});
+
+const { reports } = await res.json();
+```
+
+---
+
+### POST /api/seo/gbp-drafts/[id]/approve
+
+Approves a Google Business Profile draft, marking it ready to publish.
+
+**URL parameters:**
+
+| Parameter | Description |
+|-----------|-------------|
+| `id` | The GBP draft ID (e.g. `gbp_xyz789`) |
+
+**Request body:** None required.
+
+**Response:**
+
+```json
+{ "success": true, "id": "gbp_xyz789", "status": "approved" }
+```
+
+**Error responses:**
+
+| HTTP Status | Description |
+|-------------|-------------|
+| 404 | Draft not found or does not belong to your client |
+| 409 | Draft is already approved or expired |
+
+**cURL example:**
+
+```bash
+curl -X POST https://ophidianai.com/api/seo/gbp-drafts/gbp_xyz789/approve \
+  -H "Authorization: Bearer your-session-token"
+```
+
+**JavaScript fetch example:**
+
+```js
+const res = await fetch('/api/seo/gbp-drafts/gbp_xyz789/approve', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${session.access_token}`,
+  },
+});
+
+const result = await res.json();
+if (result.success) {
+  console.log('Draft approved');
+}
+```
