@@ -158,7 +158,7 @@ export async function getContactsBySegment(
 
   let query = supabase
     .from("email_contacts")
-    .select("*")
+    .select("*", { count: "exact" })
     .eq("client_id", client_id)
     .eq("subscribed", true);
 
@@ -174,7 +174,7 @@ export async function getContactsBySegment(
     query = query.gte("last_engaged_at", filter.last_engaged_after);
   }
 
-  const { data, error, count } = await query.select("*", { count: "exact" });
+  const { data, error, count } = await query;
 
   if (error) {
     throw new Error(`Failed to query contacts: ${error.message}`);
