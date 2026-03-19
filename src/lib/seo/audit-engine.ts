@@ -705,6 +705,18 @@ export async function storeAudit(
 ): Promise<void> {
   const supabase = await createClient();
 
+  const scoreValues = [
+    result.scores.onpage,
+    result.scores.technical,
+    result.scores.content,
+    result.scores.local,
+    result.scores.speed,
+    result.scores.aiVisibility,
+  ];
+  const overallScore = Math.round(
+    scoreValues.reduce((sum, s) => sum + s, 0) / scoreValues.length
+  );
+
   await supabase.from("seo_audits").insert({
     config_id: configId,
     date,
@@ -714,6 +726,8 @@ export async function storeAudit(
     score_local: result.scores.local,
     score_speed: result.scores.speed,
     score_ai_visibility: result.scores.aiVisibility,
+    overall_score: overallScore,
+    scores: result.scores,
     issues: result.issues,
     recommendations: result.recommendations,
     report_url: reportUrl,

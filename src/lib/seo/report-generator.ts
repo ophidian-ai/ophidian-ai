@@ -196,7 +196,7 @@ function buildHtml(
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SEO Audit Report – ${config.url}</title>
+  <title>SEO Audit Report – ${config.website_url}</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -221,7 +221,7 @@ function buildHtml(
       <div style="font-size:12px;color:#7a9e7e;margin-top:2px;text-transform:uppercase;letter-spacing:2px;">SEO Audit Report</div>
     </div>
     <div style="text-align:right;">
-      <div style="font-size:14px;font-weight:600;color:#c4a265;">${config.url}</div>
+      <div style="font-size:14px;font-weight:600;color:#c4a265;">${config.website_url}</div>
       <div style="font-size:12px;color:#7a9e7e;margin-top:4px;">${reportDate}</div>
       ${config.location ? `<div style="font-size:11px;color:#4b5563;margin-top:2px;">${config.location}</div>` : ""}
     </div>
