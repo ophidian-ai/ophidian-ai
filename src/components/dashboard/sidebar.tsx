@@ -23,6 +23,7 @@ import {
   Sparkles,
   MessageSquare,
   Mail,
+  ContactRound,
   LogOut,
   Menu,
   X,
@@ -99,6 +100,7 @@ const adminNavItems: NavItem[] = [
   { icon: MessageSquare, label: "AI Chatbot", href: "/dashboard/admin/chatbot" },
   { icon: Search, label: "SEO Automation", href: "/dashboard/admin/seo" },
   { icon: Mail, label: "Email Marketing", href: "/dashboard/admin/email" },
+  { icon: ContactRound, label: "CRM", href: "/dashboard/admin/crm" },
   { icon: Settings, label: "Account Settings", href: "/dashboard/account" },
 ];
 

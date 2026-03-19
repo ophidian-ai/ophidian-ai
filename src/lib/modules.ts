@@ -25,6 +25,7 @@ export interface AdminModule {
 export const adminModules: AdminModule[] = [
   { label: "AI Chatbot", path: "/dashboard/admin/chatbot", adminOnly: true },
   { label: "Email Marketing", path: "/dashboard/admin/email", adminOnly: true },
+  { label: "CRM", path: "/dashboard/admin/crm", adminOnly: true },
 ];
 
 const SERVICE_MODULE_MAP: Record<ServiceType, DashboardModule[]> = {
