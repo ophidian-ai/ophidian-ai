@@ -6,7 +6,10 @@
     { "path": "/api/cron/seo-monthly-dispatch", "schedule": "0 3 1 * *" },
     { "path": "/api/cron/email-campaign-send", "schedule": "*/5 * * * *" },
     { "path": "/api/cron/email-sequence-process", "schedule": "*/15 * * * *" },
-    { "path": "/api/cron/email-monthly-reset", "schedule": "0 1 1 * *" }
+    { "path": "/api/cron/email-monthly-reset", "schedule": "0 1 1 * *" },
+    { "path": "/api/cron/crm-automation-process", "schedule": "* * * * *" },
+    { "path": "/api/cron/crm-task-reminders", "schedule": "0 12 * * *" },
+    { "path": "/api/cron/crm-task-archive", "schedule": "0 0 1 * *" }
   ],
   "headers": [
     {
