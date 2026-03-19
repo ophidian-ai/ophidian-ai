@@ -1,14 +1,14 @@
 export type SeoTier = "essentials" | "growth" | "pro";
-export type GbpDraftStatus = "draft" | "approved" | "expired";
+export type GbpDraftStatus = "draft" | "approved" | "expired" | "posted";
 
 export interface SeoConfig {
   id: string;
   client_id: string | null;
-  url: string;
+  website_url: string;
   industry: string | null;
   location: string | null;
   tier: SeoTier;
-  target_keywords: string[];
+  keywords: string[];
   competitors: Array<{ name: string; url: string }>;
   gbp_url: string | null;
   delivery_email: string;
@@ -21,6 +21,8 @@ export interface SeoAudit {
   id: string;
   config_id: string;
   date: string;
+  overall_score: number;
+  scores: { technical: number; onPage: number; content: number; local: number; speed: number; aiVisibility: number };
   score_onpage: number;
   score_technical: number;
   score_content: number;
@@ -54,4 +56,5 @@ export interface SeoGbpDraft {
   status: GbpDraftStatus;
   expires_at: string;
   created_at: string;
+  updated_at: string;
 }
