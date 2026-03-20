@@ -12,7 +12,8 @@
     { "path": "/api/cron/crm-task-archive", "schedule": "0 0 1 * *" },
     { "path": "/api/cron/review-poll", "schedule": "0 */4 * * *" },
     { "path": "/api/cron/review-analytics", "schedule": "0 2 * * *" },
-    { "path": "/api/cron/review-attribution", "schedule": "0 8 * * *" }
+    { "path": "/api/cron/review-attribution", "schedule": "0 8 * * *" },
+    { "path": "/api/cron/ad-monthly-report", "schedule": "0 0 1 * *" }
   ],
   "headers": [
     {
