@@ -60,7 +60,9 @@ export default function AdminClientsPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterType>("all");
   const [search, setSearch] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
     if (role !== "admin") {
@@ -80,8 +82,7 @@ export default function AdminClientsPage() {
     fetchClients();
   }, [role, router]);
 
-  async function handleDelete(clientId: string, companyName: string) {
-    if (!confirm(`Delete ${companyName}? This will deactivate the client.`)) return;
+  async function handleDelete(clientId: string) {
     setDeletingId(clientId);
     try {
       const res = await fetch(`/api/admin/clients/${clientId}`, { method: "DELETE" });
@@ -89,12 +90,13 @@ export default function AdminClientsPage() {
         setClients((prev) => prev.filter((c) => c.id !== clientId));
       } else {
         const err = await res.json().catch(() => ({ error: "Failed" }));
-        alert(`Delete failed: ${err.error}`);
+        setError(`Delete failed: ${err.error}`);
       }
     } catch {
-      alert("Delete failed: network error");
+      setError("Delete failed: network error");
     } finally {
       setDeletingId(null);
+      setConfirmDeleteId(null);
     }
   }
 
@@ -296,18 +298,43 @@ export default function AdminClientsPage() {
                       </td>
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            title={`Delete ${client.company_name}`}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDelete(client.id, client.company_name);
-                            }}
-                            disabled={deletingId === client.id}
-                            className="p-1.5 rounded-lg text-foreground-muted hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer disabled:opacity-50"
-                          >
-                            <Trash2 size={14} />
-                          </button>
+                          {confirmDeleteId === client.id ? (
+                            <>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDelete(client.id);
+                                }}
+                                disabled={deletingId === client.id}
+                                className="text-[10px] font-medium px-2 py-1 rounded bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors cursor-pointer disabled:opacity-50"
+                              >
+                                {deletingId === client.id ? "..." : "Delete"}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setConfirmDeleteId(null);
+                                }}
+                                className="text-[10px] font-medium px-2 py-1 rounded bg-white/5 text-foreground-muted hover:bg-white/10 transition-colors cursor-pointer"
+                              >
+                                Cancel
+                              </button>
+                            </>
+                          ) : (
+                            <button
+                              type="button"
+                              title={`Delete ${client.company_name}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setConfirmDeleteId(client.id);
+                              }}
+                              className="p-1.5 rounded-lg text-foreground-muted hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          )}
                           <ChevronRight
                             size={16}
                             className="text-foreground-muted"

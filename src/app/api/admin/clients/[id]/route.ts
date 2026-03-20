@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createServiceClient } from "@supabase/supabase-js";
 
 async function verifyAdmin() {
   const supabase = await createClient();
@@ -135,12 +136,18 @@ export async function DELETE(
     );
   }
 
-  const { supabase } = auth;
   const { id } = await params;
 
-  const { error } = await supabase
+  const serviceUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!serviceUrl || !serviceKey) {
+    return NextResponse.json({ error: "Service role configuration missing" }, { status: 500 });
+  }
+
+  const serviceClient = createServiceClient(serviceUrl, serviceKey);
+  const { error } = await serviceClient
     .from("clients")
-    .update({ status: "inactive", updated_at: new Date().toISOString() })
+    .delete()
     .eq("id", id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
