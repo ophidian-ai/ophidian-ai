@@ -217,11 +217,13 @@ export async function generateReportPDF(result: ScanResult): Promise<Buffer> {
 
   // 5. Launch Puppeteer and render PDF
   const puppeteer = await import('puppeteer-core');
-  const chromium = (await import('@sparticuz/chromium')).default;
+  const chromium = (await import('@sparticuz/chromium-min')).default;
 
   const browser = await puppeteer.launch({
     args: chromium.args,
-    executablePath: await chromium.executablePath(),
+    executablePath: await chromium.executablePath(
+      "https://github.com/nicholasgasior/chromium-binaries/releases/download/v131.0.0/chromium-v131.0.0-pack.tar"
+    ),
     headless: true,
   });
 

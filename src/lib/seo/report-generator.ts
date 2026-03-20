@@ -3,7 +3,7 @@ import type { AuditResult } from "@/lib/seo/audit-engine";
 import type { RankResult } from "@/lib/seo/rank-tracker";
 import { put } from "@vercel/blob";
 import puppeteer from "puppeteer-core";
-import chromium from "@sparticuz/chromium";
+import chromium from "@sparticuz/chromium-min";
 
 // ---------------------------------------------------------------------------
 // Score helpers
@@ -319,7 +319,9 @@ export async function generateSeoReport(
 
   const browser = await puppeteer.launch({
     args: chromium.args,
-    executablePath: await chromium.executablePath(),
+    executablePath: await chromium.executablePath(
+      "https://github.com/nicholasgasior/chromium-binaries/releases/download/v131.0.0/chromium-v131.0.0-pack.tar"
+    ),
     headless: true,
   });
 
