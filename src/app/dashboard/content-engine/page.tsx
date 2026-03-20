@@ -263,6 +263,9 @@ function ContentEngineContent({ isAdmin }: { isAdmin: boolean }) {
           batches={batches}
           loading={loading}
           onSelect={openBatch}
+          isAdmin={isAdmin}
+          onCreateBatch={createBatch}
+          creating={creating}
         />
       )}
     </div>
@@ -277,21 +280,29 @@ function BatchList({
   batches,
   loading,
   onSelect,
+  isAdmin,
+  onCreateBatch,
+  creating,
 }: {
   batches: ContentBatch[];
   loading: boolean;
   onSelect: (id: string) => void;
+  isAdmin: boolean;
+  onCreateBatch: (label: string, start: string, end: string) => Promise<void>;
+  creating: boolean;
 }) {
   if (!loading && batches.length === 0) {
     return (
-      <GlowCard className="p-12 text-center">
-        <Sparkles size={40} className="mx-auto text-foreground-muted mb-4" />
-        <p className="text-foreground-muted text-lg">No batches yet</p>
-        <p className="text-foreground-muted/60 text-sm mt-2">
-          Run <code className="font-mono text-primary/80">/social-content</code> to
-          generate your first batch
-        </p>
-      </GlowCard>
+      <div className="space-y-6">
+        <GlowCard className="p-12 text-center">
+          <Sparkles size={40} className="mx-auto text-foreground-muted mb-4" />
+          <p className="text-foreground-muted text-lg">No batches yet</p>
+          <p className="text-foreground-muted/60 text-sm mt-2">
+            Create your first batch below
+          </p>
+        </GlowCard>
+        {isAdmin && <NewBatchForm onSubmit={onCreateBatch} loading={creating} />}
+      </div>
     );
   }
 
