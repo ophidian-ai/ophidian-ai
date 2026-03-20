@@ -211,7 +211,7 @@ export default function AdminAnalyticsPage() {
                   borderRadius: "8px",
                   color: "#fff",
                 }}
-                formatter={(value: number) => [`$${value.toLocaleString()}`, "MRR"]}
+                formatter={(value) => [`$${Number(value ?? 0).toLocaleString()}`, "MRR"]}
               />
               <Area
                 type="monotone"

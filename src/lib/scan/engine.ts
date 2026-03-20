@@ -191,6 +191,9 @@ async function fetchPsi(url: string, signal: AbortSignal): Promise<any | null> {
 // ---------------------------------------------------------------------------
 
 export async function runScan(input: ScanInput): Promise<ScanResult> {
+  const t0 = Date.now();
+  const log = (step: string) => console.log(`[scan/engine] ${step} (+${Date.now() - t0}ms)`);
+
   // 1. Total-timeout abort controller
   const controller = new AbortController();
   const totalTimer = setTimeout(() => controller.abort(), TOTAL_TIMEOUT_MS);
@@ -198,17 +201,20 @@ export async function runScan(input: ScanInput): Promise<ScanResult> {
   try {
     // 2. Validate and normalise URL
     const url = normalizeUrl(input.url);
+    log(`Normalized URL: ${url}`);
 
     // 3. Check cache
     const urlHash = hashUrl(url);
     const maxCacheAge = DEFAULT_CACHE_MAX_AGE_HOURS;
     const cached = await getCachedScan(urlHash, maxCacheAge);
-    if (cached) return cached;
+    if (cached) { log('Cache hit -- returning cached result'); return cached; }
+    log('Cache miss -- running fresh scan');
 
     // 4. Generate scan ID
     const scanId = crypto.randomUUID();
 
     // 5. Fetch HTML and PSI data in parallel
+    log('Starting parallel fetch: Firecrawl + PSI');
     const [crawlSettled, psiSettled] = await Promise.allSettled([
       fetchHtml(url, controller.signal),
       fetchPsi(url, controller.signal),
@@ -216,6 +222,8 @@ export async function runScan(input: ScanInput): Promise<ScanResult> {
 
     const crawlResult = crawlSettled.status === 'fulfilled' ? crawlSettled.value : null;
     const psiData = psiSettled.status === 'fulfilled' ? psiSettled.value : null;
+    log(`Firecrawl: ${crawlResult ? `OK (${crawlResult.html.length} chars)` : `FAILED (${crawlSettled.status === 'rejected' ? crawlSettled.reason : 'null'})`}`);
+    log(`PSI: ${psiData ? 'OK' : `FAILED (${psiSettled.status === 'rejected' ? psiSettled.reason : 'null'})`}`);
 
     if (!crawlResult) {
       // Site unreachable -- return early with no module scores
@@ -250,6 +258,7 @@ export async function runScan(input: ScanInput): Promise<ScanResult> {
     const analysisUrl = finalUrl;
 
     // 6. Run all four modules concurrently
+    log('Starting 4 analysis modules in parallel');
     const moduleNames: ModuleName[] = ['speed', 'seo', 'mobile', 'trust'];
     const results = await Promise.allSettled([
       withTimeout(analyzeSpeed(analysisUrl, psiData ?? undefined), MODULE_TIMEOUT_MS),
@@ -257,6 +266,7 @@ export async function runScan(input: ScanInput): Promise<ScanResult> {
       withTimeout(analyzeMobile(analysisUrl, html, psiData ?? undefined), MODULE_TIMEOUT_MS),
       withTimeout(analyzeTrust(analysisUrl, html), MODULE_TIMEOUT_MS),
     ]);
+    log(`Modules complete: ${results.map((r, i) => `${moduleNames[i]}=${r.status}`).join(', ')}`);
 
     // 7. Extract module results
     const modules: Record<ModuleName, ModuleResult> = {
@@ -338,9 +348,11 @@ export async function runScan(input: ScanInput): Promise<ScanResult> {
     };
 
     // 14. Cache the result
+    log('Caching result to Supabase');
     await cacheScan(scanResult, urlHash);
 
     // 15. Return
+    log(`Scan complete. Score: ${scanResult.overall_score}, Findings: ${allFindings.length}`);
     return scanResult;
   } finally {
     clearTimeout(totalTimer);

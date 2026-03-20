@@ -1,4 +1,12 @@
 {
+  "functions": {
+    "src/app/api/scan/route.ts": {
+      "maxDuration": 60
+    },
+    "src/app/api/scan/[id]/pdf/route.ts": {
+      "maxDuration": 60
+    }
+  },
   "crons": [
     { "path": "/api/cron/chatbot-analytics", "schedule": "0 2 * * *" },
     { "path": "/api/cron/chatbot-demo-expiry", "schedule": "0 6 * * *" },

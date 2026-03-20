@@ -73,10 +73,22 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const input: ScanInput = { url, city_population, industry };
 
   // 4. Run scan
+  const startTime = Date.now();
+  console.log(`[scan/api] Starting scan for: ${url}`);
+
   try {
     const result = await runScan(input);
+    console.log(`[scan/api] Scan completed in ${Date.now() - startTime}ms, score: ${result.overall_score}`);
     return NextResponse.json(result, { status: 200 });
-  } catch {
-    return NextResponse.json({ error: 'Scan failed' }, { status: 500 });
+  } catch (err: unknown) {
+    const elapsed = Date.now() - startTime;
+    const message = err instanceof Error ? err.message : String(err);
+    const stack = err instanceof Error ? err.stack : undefined;
+    console.error(`[scan/api] Scan failed after ${elapsed}ms:`, message);
+    if (stack) console.error(`[scan/api] Stack:`, stack);
+    return NextResponse.json(
+      { error: 'Scan failed', detail: message, elapsed_ms: elapsed },
+      { status: 500 },
+    );
   }
 }

@@ -56,7 +56,7 @@ function StatCard({
   label,
   value,
 }: {
-  icon: React.ElementType;
+  icon: React.ComponentType<{ className?: string }>;
   label: string;
   value: string;
 }) {
@@ -64,7 +64,7 @@ function StatCard({
     <GlowCard className="p-5">
       <div className="flex items-center gap-3">
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
-          <Icon size={18} className="text-primary" />
+          <Icon className="h-4.5 w-4.5 text-primary" />
         </div>
         <div>
           <p className="text-xs text-foreground-muted">{label}</p>
@@ -88,7 +88,7 @@ export default function ClientAdsPage() {
       return;
     }
 
-    if (!modules.includes("ad_management")) {
+    if (!modules.has("ad_management")) {
       router.replace("/dashboard");
       return;
     }

@@ -57,8 +57,10 @@ export function ScanForm({ onScanStart, onScanComplete, onScanError }: ScanFormP
       });
 
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error((data as { error?: string }).error || `Scan failed (${res.status})`);
+        const data = await res.json().catch(() => ({})) as { error?: string; detail?: string; elapsed_ms?: number };
+        const detail = data.detail ? ` — ${data.detail}` : '';
+        const elapsed = data.elapsed_ms ? ` (${Math.round(data.elapsed_ms / 1000)}s)` : '';
+        throw new Error(`${data.error || 'Scan failed'}${detail}${elapsed} [${res.status}]`);
       }
 
       const result = (await res.json()) as ScanResult;
