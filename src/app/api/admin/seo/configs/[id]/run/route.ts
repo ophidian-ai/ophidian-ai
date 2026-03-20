@@ -196,7 +196,8 @@ Focus on: what improved, what declined, top priorities for the client to act on.
       reportUrl,
     });
   } catch (err) {
-    console.error("[SEO run] Unhandled error:", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[SEO run] Unhandled error:", message, err);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

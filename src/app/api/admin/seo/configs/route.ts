@@ -28,6 +28,7 @@ export async function GET() {
   const { data, error: dbError } = await supabase!
     .from("seo_configs")
     .select("*, clients(company_name)")
+    .eq("active", true)
     .order("created_at", { ascending: false });
 
   if (dbError) {
