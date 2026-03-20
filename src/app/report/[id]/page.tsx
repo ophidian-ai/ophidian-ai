@@ -14,11 +14,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const { data } = await supabase
     .from('scans')
-    .select('results_json')
+    .select('result')
     .eq('scan_id', id)
     .single();
 
-  const result = data?.results_json as ScanResult | null;
+  const result = data?.result as ScanResult | null;
   const score = result?.overall_score ?? null;
   const description =
     score !== null
@@ -37,15 +37,15 @@ export default async function ReportPage({ params }: Props) {
 
   const { data, error } = await supabase
     .from('scans')
-    .select('results_json')
+    .select('result')
     .eq('scan_id', id)
     .single();
 
-  if (error || !data?.results_json) {
+  if (error || !data?.result) {
     notFound();
   }
 
-  const scanResult = data.results_json as ScanResult;
+  const scanResult = data.result as ScanResult;
 
   // Track view — non-blocking
   supabase
