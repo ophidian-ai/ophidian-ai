@@ -211,7 +211,7 @@ export default function ClientAdsPage() {
                   borderRadius: 8,
                   fontSize: 12,
                 }}
-                formatter={(v: number) => [`$${v.toFixed(2)}`, "Spend"]}
+                formatter={(v) => [`$${Number(v ?? 0).toFixed(2)}`, "Spend"]}
               />
               <Area
                 type="monotone"
