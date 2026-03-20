@@ -1,0 +1,103 @@
+# Review Management — Getting Started
+
+OphidianAI Review Management monitors your Google Business Profile reviews, generates AI-drafted responses, and helps you drive more reviews through email campaigns.
+
+---
+
+## How It Works
+
+1. Connect your Google Business Profile (GBP) account in the dashboard.
+2. OphidianAI polls for new reviews every 4 hours.
+3. An AI response is drafted automatically for each new review.
+4. Approve, edit, or skip each response from your dashboard.
+5. Approved responses are posted directly to Google.
+
+---
+
+## Connecting Google Business Profile
+
+OphidianAI uses OAuth 2.0 to access your GBP account. Your admin will complete this step during onboarding.
+
+Required GBP API scopes:
+
+```
+https://www.googleapis.com/auth/business.manage
+```
+
+Once connected, you will see **GBP Connected** in green on your Review Management dashboard.
+
+---
+
+## Dashboard Walkthrough
+
+### Admin Dashboard
+
+**`/dashboard/admin/review`** — Overview table of all client review configs.
+
+Columns: Client, Tier, GBP Connected, Avg Rating, Total Reviews, Pending Responses, Status.
+
+**`/dashboard/admin/review/[id]`** — Config detail page.
+
+- Config info card (brand voice, auto-respond settings)
+- Review feed with inline approve / edit / skip actions
+- Platform and status filters
+- Analytics: response rate, sentiment breakdown (Growth/Pro)
+- Campaign launcher (Pro only)
+
+### Client Dashboard
+
+**`/dashboard/review`** — Client-facing view.
+
+- Stats: total reviews, avg rating, new this month, response rate
+- Pending responses section (approve or edit inline)
+- Recent reviews list with sentiment badges (Growth/Pro)
+
+---
+
+## Tier Comparison
+
+| Feature | Essentials | Growth | Pro |
+|---------|-----------|--------|-----|
+| Google monitoring | Yes | Yes | Yes |
+| Yelp + Facebook monitoring | No | Yes | Yes |
+| Brand voice customization | No | Yes | Yes |
+| Auto-respond positive reviews | No | Yes | Yes |
+| Auto-respond negative reviews | No | No | Yes |
+| Escalation alerts | No | No | Yes |
+| Sentiment analysis | No | Yes | Yes |
+| Rating trend tracking | No | Yes | Yes |
+| Competitor benchmarking | 0 | 0 | Up to 3 |
+| Review request campaigns | No | No | Yes |
+| Monthly PDF report | Yes | Yes | Yes |
+
+---
+
+## Review Polling
+
+Reviews are fetched from GBP every **4 hours** via a scheduled cron job. The cron runs at `0 */4 * * *`.
+
+A maximum of **50 AI responses** are generated per cron run across all active clients to manage API costs. Additional reviews are queued for the next cycle.
+
+---
+
+## AI Response Generation
+
+Responses are generated using Claude Haiku. The prompt is built from:
+
+- Review text and star rating
+- Brand voice tone, guidelines, and sign-off (Growth/Pro)
+- Fixed professional tone for Essentials tier
+
+Generated responses are saved as **drafts** and must be approved before posting. Growth tier can auto-post 4–5 star responses. Pro tier can auto-post all responses.
+
+---
+
+## Supported Platforms
+
+| Platform | Method | Tier |
+|----------|--------|------|
+| Google Business Profile | API (official) | All |
+| Yelp | Firecrawl scrape | Growth, Pro |
+| Facebook | Firecrawl scrape | Growth, Pro |
+
+Note: Yelp and Facebook scraping is supplementary. GBP is the primary and most reliable source.

@@ -1,0 +1,92 @@
+# Review Request Campaigns
+
+Review request campaigns allow you to email your customers asking them to leave a Google review. Campaigns are available on the **Pro tier** only.
+
+---
+
+## Overview
+
+A campaign sends a branded email to your eligible customer contacts with a direct link to your Google review page. OphidianAI tracks which contacts clicked the link and attributes new reviews that arrived within 48 hours.
+
+---
+
+## Creating a Campaign
+
+From the admin dashboard:
+
+1. Navigate to **Review Management** and open a Pro tier client config.
+2. Click **New Campaign** in the top right.
+3. Fill in the campaign form:
+   - **Client Config** — select the Pro tier config
+   - **Campaign Name** — internal label (e.g. "Spring 2026 Review Drive")
+   - **Review Link** — optional override. If blank, OphidianAI auto-fetches the Google review link from the GBP API.
+4. Preview the email by clicking **Preview email**.
+5. Click **Save as Draft** or **Send Now**.
+
+---
+
+## Contact Filtering
+
+Campaigns are sent to contacts from the **Email Marketing** contact list for the same client, filtered as follows:
+
+- `subscribed = true`
+- `tags` contains `customer`
+- Up to **500 contacts** per campaign (Pro tier limit)
+
+To add contacts to the `customer` tag, use the Email Marketing contact manager or the `/api/email/contacts` endpoint.
+
+---
+
+## Review Link Resolution
+
+The review link is resolved in this priority order:
+
+1. **Manual override** — URL entered in the campaign form
+2. **GBP API** — `newReviewUrl` from the location metadata (`/v1/accounts/{account}/locations/{location}`)
+3. **Fallback** — Google search review URL constructed from the GBP location ID
+
+---
+
+## Email Template
+
+The campaign email is a minimal branded HTML email:
+
+- OphidianAI logo header
+- Personalized greeting (first name)
+- Call-to-action button linking to the review page
+- Unsubscribe footer (required by CAN-SPAM)
+
+The email is sent from `reviews@ophidianai.com` via Resend.
+
+---
+
+## Attribution Tracking
+
+OphidianAI attributes new reviews to campaigns using a 48-hour attribution window:
+
+- The window opens at the campaign `sent_at` timestamp
+- New reviews that appear in the config's review feed within that window are counted as attributed
+- Attribution is approximate — exact match requires click tracking (planned for a future release)
+
+The `reviews_attributed` count is updated daily by the attribution cron job at `0 8 * * *`.
+
+---
+
+## Campaign Statuses
+
+| Status | Description |
+|--------|-------------|
+| `draft` | Created but not sent |
+| `scheduled` | Queued for future send (not yet implemented) |
+| `sent` | Emails dispatched |
+| `completed` | Attribution window closed |
+
+---
+
+## Limits
+
+| Limit | Value |
+|-------|-------|
+| Max contacts per campaign | 500 |
+| Campaigns per config | Unlimited |
+| Tier requirement | Pro |

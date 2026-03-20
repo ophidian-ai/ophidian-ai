@@ -1,0 +1,149 @@
+# Webhook Notifications
+
+OphidianAI Review Management sends webhook notifications when key events occur. Webhooks are available on the **Pro tier**.
+
+---
+
+## Available Events
+
+| Event | Description | Tier |
+|-------|-------------|------|
+| `review.received` | A new review was detected on any monitored platform | Pro |
+| `review.response_posted` | A response was successfully posted to Google | Pro |
+| `review.escalation` | A 1–2 star review was received (requires immediate attention) | Pro |
+
+---
+
+## Webhook Payload
+
+All webhook events share the same envelope:
+
+```json
+{
+  "id": "evt_abc123",
+  "event": "review.received",
+  "timestamp": "2026-03-19T10:00:00Z",
+  "configId": "cfg_uuid",
+  "data": {}
+}
+```
+
+### review.received
+
+```json
+{
+  "id": "evt_abc123",
+  "event": "review.received",
+  "timestamp": "2026-03-19T10:00:00Z",
+  "configId": "cfg_uuid",
+  "data": {
+    "reviewId": "rev_uuid",
+    "platform": "google",
+    "authorName": "Jane Smith",
+    "rating": 4,
+    "text": "Great service, very friendly staff!",
+    "reviewDate": "2026-03-19T09:55:00Z",
+    "responseDrafted": true
+  }
+}
+```
+
+### review.response_posted
+
+```json
+{
+  "id": "evt_def456",
+  "event": "review.response_posted",
+  "timestamp": "2026-03-19T10:05:00Z",
+  "configId": "cfg_uuid",
+  "data": {
+    "reviewId": "rev_uuid",
+    "responseId": "rsp_uuid",
+    "platform": "google",
+    "autoPosted": false,
+    "postedAt": "2026-03-19T10:05:00Z"
+  }
+}
+```
+
+### review.escalation
+
+```json
+{
+  "id": "evt_ghi789",
+  "event": "review.escalation",
+  "timestamp": "2026-03-19T11:00:00Z",
+  "configId": "cfg_uuid",
+  "data": {
+    "reviewId": "rev_uuid",
+    "platform": "google",
+    "authorName": "John Doe",
+    "rating": 1,
+    "text": "Very disappointed with the experience.",
+    "escalationEmail": "owner@business.com"
+  }
+}
+```
+
+---
+
+## Signature Verification
+
+Every webhook request includes an `X-OphidianAI-Signature` header. Use it to verify the request originated from OphidianAI.
+
+The signature is an HMAC-SHA256 of the raw request body using your webhook secret, prefixed with `sha256=`.
+
+**Node.js verification example:**
+
+```js
+import crypto from 'crypto';
+
+function verifyWebhook(rawBody, signatureHeader, secret) {
+  const expected = 'sha256=' + crypto
+    .createHmac('sha256', secret)
+    .update(rawBody)
+    .digest('hex');
+
+  return crypto.timingSafeEqual(
+    Buffer.from(signatureHeader),
+    Buffer.from(expected)
+  );
+}
+
+app.post('/webhooks/reviews', (req, res) => {
+  const sig = req.headers['x-ophidianai-signature'];
+  if (!verifyWebhook(req.rawBody, sig, process.env.WEBHOOK_SECRET)) {
+    return res.status(401).send('Invalid signature');
+  }
+  const event = JSON.parse(req.rawBody);
+  // handle event...
+  res.sendStatus(200);
+});
+```
+
+Your webhook secret is shown once at registration. Store it securely.
+
+---
+
+## Retry Policy
+
+If your endpoint does not return `2xx` within 10 seconds, OphidianAI retries with exponential backoff:
+
+| Attempt | Delay |
+|---------|-------|
+| 1st retry | 1 minute |
+| 2nd retry | 5 minutes |
+| 3rd retry | 30 minutes |
+
+After 3 failures the event is marked failed. Respond with `200 OK` immediately and process events asynchronously.
+
+---
+
+## Registering a Webhook
+
+Contact your OphidianAI admin to register a webhook endpoint. Provide:
+
+1. Your HTTPS endpoint URL
+2. Which events you want to subscribe to
+
+Webhook management UI is planned for a future release.
