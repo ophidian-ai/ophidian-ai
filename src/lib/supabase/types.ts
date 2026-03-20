@@ -288,3 +288,16 @@ export type {
   CrmTask,
   CrmAutomation,
 } from "./crm-types";
+
+// Review Management types
+export type {
+  ReviewTier,
+  ReviewResponseStatus,
+  ReviewCampaignStatus,
+  BrandVoice,
+  ReviewConfig,
+  Review,
+  ReviewResponse,
+  ReviewCampaign,
+  ReviewAnalytics,
+} from "./review-types";
