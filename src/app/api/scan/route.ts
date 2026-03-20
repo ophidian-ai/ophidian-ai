@@ -89,10 +89,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const input: ScanInput = { url, city_population, industry };
 
-    // 4. Run scan
+    // 4. Run scan with hard deadline (return error before Vercel kills us at 60s)
+    const HARD_DEADLINE_MS = 55_000;
     console.log(`[scan/api] Starting scan for: ${url} (+${Date.now() - t0}ms)`);
 
-    const result = await runScan(input);
+    const scanPromise = runScan(input);
+    const deadlinePromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('Scan exceeded 55s hard deadline')), HARD_DEADLINE_MS - (Date.now() - t0)),
+    );
+
+    const result = await Promise.race([scanPromise, deadlinePromise]);
     console.log(`[scan/api] Scan completed in ${Date.now() - t0}ms, score: ${result.overall_score}`);
     return NextResponse.json(result, { status: 200 });
   } catch (err: unknown) {

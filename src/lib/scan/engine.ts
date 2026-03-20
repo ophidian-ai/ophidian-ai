@@ -232,6 +232,8 @@ async function fetchHtml(
 // PageSpeed Insights fetch
 // ---------------------------------------------------------------------------
 
+const PSI_TIMEOUT_MS = 25_000;
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 async function fetchPsi(url: string, signal: AbortSignal): Promise<any | null> {
   const apiKey = process.env.GOOGLE_PSI_API_KEY;
@@ -244,7 +246,13 @@ async function fetchPsi(url: string, signal: AbortSignal): Promise<any | null> {
   }
 
   try {
-    const res = await fetch(endpoint.toString(), { signal });
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), PSI_TIMEOUT_MS);
+    signal.addEventListener('abort', () => controller.abort(), { once: true });
+
+    const res = await fetch(endpoint.toString(), { signal: controller.signal });
+    clearTimeout(timer);
+
     if (!res.ok) {
       console.error(`[scan/engine] PSI HTTP ${res.status}`);
       return null;
