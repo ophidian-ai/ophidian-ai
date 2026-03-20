@@ -10,6 +10,7 @@ import {
   Plus,
   Search,
   ChevronRight,
+  Trash2,
 } from "lucide-react";
 import type {
   Client,
@@ -59,6 +60,7 @@ export default function AdminClientsPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterType>("all");
   const [search, setSearch] = useState("");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (role !== "admin") {
@@ -77,6 +79,24 @@ export default function AdminClientsPage() {
 
     fetchClients();
   }, [role, router]);
+
+  async function handleDelete(clientId: string, companyName: string) {
+    if (!confirm(`Delete ${companyName}? This will deactivate the client.`)) return;
+    setDeletingId(clientId);
+    try {
+      const res = await fetch(`/api/admin/clients/${clientId}`, { method: "DELETE" });
+      if (res.ok) {
+        setClients((prev) => prev.filter((c) => c.id !== clientId));
+      } else {
+        const err = await res.json().catch(() => ({ error: "Failed" }));
+        alert(`Delete failed: ${err.error}`);
+      }
+    } catch {
+      alert("Delete failed: network error");
+    } finally {
+      setDeletingId(null);
+    }
+  }
 
   const filteredClients = useMemo(() => {
     let result = clients;
@@ -275,10 +295,24 @@ export default function AdminClientsPage() {
                         </span>
                       </td>
                       <td className="px-5 py-4">
-                        <ChevronRight
-                          size={16}
-                          className="text-foreground-muted"
-                        />
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            title={`Delete ${client.company_name}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDelete(client.id, client.company_name);
+                            }}
+                            disabled={deletingId === client.id}
+                            className="p-1.5 rounded-lg text-foreground-muted hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer disabled:opacity-50"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                          <ChevronRight
+                            size={16}
+                            className="text-foreground-muted"
+                          />
+                        </div>
                       </td>
                     </tr>
                   );

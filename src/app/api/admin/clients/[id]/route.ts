@@ -140,7 +140,7 @@ export async function DELETE(
 
   const { error } = await supabase
     .from("clients")
-    .update({ status: "archived", updated_at: new Date().toISOString() })
+    .update({ status: "inactive", updated_at: new Date().toISOString() })
     .eq("id", id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
