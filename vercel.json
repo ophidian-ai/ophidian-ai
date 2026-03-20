@@ -9,7 +9,10 @@
     { "path": "/api/cron/email-monthly-reset", "schedule": "0 1 1 * *" },
     { "path": "/api/cron/crm-automation-process", "schedule": "* * * * *" },
     { "path": "/api/cron/crm-task-reminders", "schedule": "0 12 * * *" },
-    { "path": "/api/cron/crm-task-archive", "schedule": "0 0 1 * *" }
+    { "path": "/api/cron/crm-task-archive", "schedule": "0 0 1 * *" },
+    { "path": "/api/cron/review-poll", "schedule": "0 */4 * * *" },
+    { "path": "/api/cron/review-analytics", "schedule": "0 2 * * *" },
+    { "path": "/api/cron/review-attribution", "schedule": "0 8 * * *" }
   ],
   "headers": [
     {
