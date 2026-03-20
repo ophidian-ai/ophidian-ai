@@ -24,6 +24,7 @@ import {
   MessageSquare,
   Mail,
   ContactRound,
+  Star,
   LogOut,
   Menu,
   X,
@@ -101,6 +102,7 @@ const adminNavItems: NavItem[] = [
   { icon: Search, label: "SEO Automation", href: "/dashboard/admin/seo" },
   { icon: Mail, label: "Email Marketing", href: "/dashboard/admin/email" },
   { icon: ContactRound, label: "CRM", href: "/dashboard/admin/crm" },
+  { icon: Star, label: "Review Management", href: "/dashboard/admin/review" },
   { icon: Settings, label: "Account Settings", href: "/dashboard/account" },
 ];
 

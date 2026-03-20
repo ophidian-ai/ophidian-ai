@@ -14,7 +14,8 @@ export type DashboardModule =
   | "billing"
   | "proposals"
   | "chatbot"
-  | "email_marketing";
+  | "email_marketing"
+  | "review_management";
 
 export interface AdminModule {
   label: string;
@@ -26,6 +27,7 @@ export const adminModules: AdminModule[] = [
   { label: "AI Chatbot", path: "/dashboard/admin/chatbot", adminOnly: true },
   { label: "Email Marketing", path: "/dashboard/admin/email", adminOnly: true },
   { label: "CRM", path: "/dashboard/admin/crm", adminOnly: true },
+  { label: "Review Management", path: "/dashboard/admin/review", adminOnly: true },
 ];
 
 const SERVICE_MODULE_MAP: Record<ServiceType, DashboardModule[]> = {
@@ -88,6 +90,7 @@ export const ALL_MODULES: DashboardModule[] = [
   "proposals",
   "chatbot",
   "email_marketing",
+  "review_management",
 ];
 
 export function hasModule(
