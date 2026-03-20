@@ -1,0 +1,93 @@
+# AI Copy Generation
+
+Generate platform-optimized ad copy using Claude AI. Copy is automatically stored as a draft and returned immediately.
+
+## Endpoint
+
+```
+POST /api/admin/ads/generate-copy
+```
+
+Admin authentication required.
+
+## Request Body
+
+```json
+{
+  "config_id": "uuid",
+  "platform": "google",
+  "ad_type": "search",
+  "business_name": "Acme Plumbing",
+  "industry": "Plumbing services",
+  "location": "Columbus, IN",
+  "objective": "Drive phone calls for emergency plumbing repairs",
+  "target_audience": "Homeowners 30-65"
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `config_id` | string | Yes | Ad config UUID |
+| `platform` | `google` or `meta` | Yes | Target ad platform |
+| `ad_type` | string | Yes | Ad format (search, display, responsive, social, story) |
+| `business_name` | string | Yes | Client business name |
+| `industry` | string | Yes | Industry or service category |
+| `location` | string | Yes | City, state or region |
+| `objective` | string | Yes | Campaign goal in plain language |
+| `target_audience` | string | No | Audience description |
+
+## Character Limits Applied
+
+The AI enforces platform character limits automatically:
+
+**Google Ads**
+- Headlines: max 30 characters each
+- Descriptions: max 90 characters each
+
+**Meta Ads**
+- Primary text: max 125 characters
+- Headline: max 40 characters
+- Description: max 30 characters
+
+## Response
+
+Returns the created `ad_copy_drafts` record:
+
+```json
+{
+  "id": "uuid",
+  "config_id": "uuid",
+  "platform": "google",
+  "ad_type": "search",
+  "headlines": [
+    "Fast Plumbing Repairs",
+    "Emergency Plumber Near You",
+    "Columbus Plumbing Experts"
+  ],
+  "descriptions": [
+    "24/7 emergency plumbing in Columbus, IN. Licensed & insured. Call now for same-day service.",
+    "Local plumbers you can trust. Fast response, upfront pricing. Book online or call today."
+  ],
+  "call_to_action": "Call Now",
+  "target_audience": "Homeowners 30-65 in Columbus, IN",
+  "status": "draft",
+  "created_at": "2026-03-19T00:00:00Z",
+  "updated_at": "2026-03-19T00:00:00Z"
+}
+```
+
+## List Drafts
+
+```
+GET /api/admin/ads/copy-drafts?config_id=[config_id]
+```
+
+Returns all drafts for a given ad config, ordered newest first.
+
+## Draft Statuses
+
+| Status | Meaning |
+|--------|---------|
+| `draft` | Generated, not yet reviewed |
+| `approved` | Approved for use |
+| `rejected` | Rejected, not to be used |

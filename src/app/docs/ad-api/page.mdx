@@ -1,0 +1,98 @@
+# Ad Management API
+
+The Ad Management API lets you retrieve campaign performance data, ad spend analytics, and AI-generated ad copy for your connected Google Ads and Meta Ads accounts.
+
+## Authentication
+
+All client-facing endpoints require a valid session cookie (Supabase Auth). Include credentials with every request.
+
+## Base URL
+
+```
+https://ophidianai.com/api/ads
+```
+
+## Endpoints
+
+### Dashboard Summary
+
+```
+GET /api/ads/dashboard
+```
+
+Returns aggregate stats, platform connection status, and a list of campaigns for the authenticated client.
+
+**Response**
+
+```json
+{
+  "config": {
+    "id": "uuid",
+    "tier": "growth",
+    "google_ads_connected": true,
+    "meta_connected": false,
+    "monthly_ad_budget": 2000
+  },
+  "stats": {
+    "totalSpend": 1240.50,
+    "totalConversions": 38,
+    "totalClicks": 920,
+    "totalImpressions": 41000,
+    "avgCpc": 1.35
+  },
+  "campaigns": [
+    {
+      "id": "uuid",
+      "platform": "google",
+      "name": "Brand Search",
+      "status": "active",
+      "daily_budget": 50,
+      "start_date": "2026-01-01",
+      "end_date": null
+    }
+  ]
+}
+```
+
+### Monthly Reports
+
+```
+GET /api/ads/reports
+```
+
+Returns a list of generated monthly performance reports. Reports are generated automatically on the first of each month.
+
+**Response**
+
+```json
+{
+  "reports": [],
+  "message": "Monthly ad reports will appear here once generated."
+}
+```
+
+## Tiers
+
+| Feature | Essentials | Growth | Pro |
+|---------|-----------|--------|-----|
+| Platforms | 1 | 2 | 2 |
+| Max campaigns | 1 | 3 | Unlimited |
+| AI copy drafts/mo | 3 | 10 | Unlimited |
+| Budget recommendations | No | Yes | Yes |
+| Weekly optimization | No | Yes | Yes |
+| Audience suggestions | No | Yes | Yes |
+
+## Errors
+
+All endpoints return standard error shapes:
+
+```json
+{ "error": "Unauthorized" }
+```
+
+| Status | Meaning |
+|--------|---------|
+| 401 | Not authenticated |
+| 403 | Forbidden (wrong role or use admin endpoint) |
+| 404 | Resource not found or not configured |
+| 500 | Server error |
