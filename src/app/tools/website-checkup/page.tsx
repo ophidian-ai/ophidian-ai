@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 
 export default function WebsiteCheckupPage() {
   return (
-    <main className="min-h-screen bg-[#0D1B2A] flex flex-col items-center justify-start">
+    <main className="min-h-screen bg-background flex flex-col items-center justify-start">
       <WebsiteCheckup />
     </main>
   );

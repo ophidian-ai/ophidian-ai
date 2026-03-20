@@ -76,32 +76,32 @@ export function ScanProgress() {
       {/* Spinner */}
       <div className="flex justify-center mb-8">
         <div className="relative w-16 h-16">
-          <div className="absolute inset-0 rounded-full border-4 border-[rgba(255,255,255,0.08)]" />
-          <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-[#0DB1B2] animate-spin" />
+          <div className="absolute inset-0 rounded-full border-4 border-surface-border" />
+          <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary animate-spin" />
         </div>
       </div>
 
       {/* Module label */}
-      <p className="text-xl font-semibold text-[#F1F5F9] mb-2 min-h-[1.75rem]">
+      <p className="text-xl font-semibold text-foreground mb-2 min-h-7">
         {SCAN_MODULES[moduleIndex]}
       </p>
 
       {/* Progress bar */}
-      <div className="w-full bg-[rgba(255,255,255,0.08)] rounded-full h-2 mb-3 overflow-hidden">
+      <div className="w-full bg-surface-border rounded-full h-2 mb-3 overflow-hidden">
         <div
-          className="h-2 rounded-full bg-[#0DB1B2] transition-all duration-700 ease-out"
+          className="h-2 rounded-full bg-primary transition-all duration-700 ease-out"
           style={{ width: `${progress}%` }}
         />
       </div>
 
-      <p className="text-sm text-[#64748B] mb-10">{progress}% complete — this takes 15-30 seconds</p>
+      <p className="text-sm text-foreground-dim mb-10">{progress}% complete — this takes 15-30 seconds</p>
 
       {/* Micro-stat */}
       <div
-        className="mx-auto max-w-sm rounded-xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)] px-5 py-4 transition-opacity duration-300"
+        className="mx-auto max-w-sm rounded-xl border border-surface-border bg-white/3 px-5 py-4 transition-opacity duration-300"
         style={{ opacity: statVisible ? 1 : 0 }}
       >
-        <p className="text-sm text-[#94A3B8] leading-relaxed italic">
+        <p className="text-sm text-foreground-muted leading-relaxed italic">
           &ldquo;{MICRO_STATS[statIndex]}&rdquo;
         </p>
       </div>

@@ -34,12 +34,12 @@ export function WebsiteCheckup() {
   }
 
   return (
-    <div className="w-full max-w-[600px] mx-auto px-4 py-12 sm:py-16">
+    <div className="w-full max-w-150 mx-auto px-4 py-12 sm:py-16">
       {/* Logo / wordmark */}
       <div className="mb-10 text-center">
         <a href="/" className="inline-block">
-          <span className="text-sm font-semibold tracking-widest uppercase text-[#64748B]">
-            Ophidian<span style={{ color: '#39FF14' }}>AI</span>
+          <span className="text-sm font-semibold tracking-widest uppercase text-foreground-dim">
+            Ophidian<span className="text-primary">AI</span>
           </span>
         </a>
       </div>

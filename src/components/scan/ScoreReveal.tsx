@@ -9,9 +9,9 @@ interface ScoreRevealProps {
 }
 
 const GRADE_COLORS: Record<string, string> = {
-  A: '#22c55e',
-  B: '#84cc16',
-  C: '#eab308',
+  A: '#7A9E7E',
+  B: '#7A9E7E',
+  C: '#C4A265',
   D: '#f97316',
   F: '#ef4444',
   '-': '#64748b',
@@ -90,10 +90,10 @@ export function ScoreReveal({ result, onContinue }: ScoreRevealProps) {
           </svg>
           {/* Score number centered over ring */}
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-5xl font-bold text-[#F1F5F9] tabular-nums leading-none">
+            <span className="text-5xl font-bold text-foreground tabular-nums leading-none">
               {animatedScore}
             </span>
-            <span className="text-sm text-[#64748B] mt-1">out of 100</span>
+            <span className="text-sm text-foreground-dim mt-1">out of 100</span>
           </div>
         </div>
 
@@ -111,27 +111,27 @@ export function ScoreReveal({ result, onContinue }: ScoreRevealProps) {
       </div>
 
       {/* Revenue leak callout */}
-      <div className="mb-8 rounded-xl border border-[rgba(57,255,20,0.2)] bg-[rgba(57,255,20,0.05)] px-6 py-5">
-        <p className="text-sm text-[#94A3B8] mb-1 uppercase tracking-wider font-medium">
+      <div className="mb-8 rounded-xl border border-primary/20 bg-primary/5 px-6 py-5">
+        <p className="text-sm text-foreground-muted mb-1 uppercase tracking-wider font-medium">
           Estimated revenue leak
         </p>
-        <p className="text-4xl font-bold leading-none" style={{ color: '#39FF14' }}>
+        <p className="text-4xl font-bold text-primary leading-none">
           {formatRevenue(animatedRevenue)}
-          <span className="text-lg font-normal text-[#94A3B8] ml-1">/month</span>
+          <span className="text-lg font-normal text-foreground-muted ml-1">/month</span>
         </p>
-        <p className="text-sm text-[#64748B] mt-2">
+        <p className="text-sm text-foreground-dim mt-2">
           Based on your site issues and industry benchmarks
         </p>
       </div>
 
       {/* CTA */}
-      <p className="text-base text-[#94A3B8] mb-6">
+      <p className="text-base text-foreground-muted mb-6">
         Enter your email to see the full breakdown and how to fix it.
       </p>
 
       <button
         onClick={onContinue}
-        className="w-full py-4 px-6 rounded-xl text-base font-semibold bg-[#0DB1B2] text-white hover:bg-[#0CA0A1] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0DB1B2]/50"
+        className="w-full py-4 px-6 rounded-xl text-base font-semibold bg-primary text-background hover:bg-primary-light active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50"
       >
         Get My Free Report
       </button>

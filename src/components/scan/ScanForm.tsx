@@ -72,12 +72,12 @@ export function ScanForm({ onScanStart, onScanComplete, onScanError }: ScanFormP
   return (
     <div className="w-full">
       {/* Headline */}
-      <h1 className="text-4xl sm:text-5xl font-bold text-[#F1F5F9] mb-4 leading-tight tracking-tight">
+      <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-4 leading-tight tracking-tight">
         Is Your Website Costing You Customers?
       </h1>
 
       {/* Subhead */}
-      <p className="text-lg text-[#94A3B8] mb-10 leading-relaxed">
+      <p className="text-lg text-foreground-muted mb-10 leading-relaxed">
         Enter your URL. Get a free report showing exactly where you&apos;re losing revenue — and how to fix it.
       </p>
 
@@ -112,11 +112,11 @@ export function ScanForm({ onScanStart, onScanComplete, onScanError }: ScanFormP
             spellCheck={false}
             className={[
               'w-full px-5 py-4 rounded-xl text-base',
-              'bg-[#0F1B28] text-[#F1F5F9] placeholder-[#64748B]',
+              'bg-background-alt text-foreground placeholder-foreground-dim',
               'border transition-all duration-200',
               validationError
                 ? 'border-red-500 focus:ring-2 focus:ring-red-500/40 outline-none'
-                : 'border-[rgba(255,255,255,0.12)] focus:border-[#0DB1B2] focus:ring-2 focus:ring-[#0DB1B2]/30 outline-none',
+                : 'border-surface-border focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none',
             ].join(' ')}
           />
           {validationError && (
@@ -130,11 +130,11 @@ export function ScanForm({ onScanStart, onScanComplete, onScanError }: ScanFormP
           disabled={isSubmitting || !url.trim()}
           className={[
             'w-full py-4 px-6 rounded-xl text-base font-semibold',
-            'bg-[#0DB1B2] text-white',
+            'bg-primary text-background',
             'transition-all duration-200',
-            'hover:bg-[#0CA0A1] active:scale-[0.98]',
+            'hover:bg-primary-light active:scale-[0.98]',
             'disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100',
-            'focus:outline-none focus:ring-2 focus:ring-[#0DB1B2]/50',
+            'focus:outline-none focus:ring-2 focus:ring-primary/50',
           ].join(' ')}
         >
           {isSubmitting ? 'Starting scan...' : 'Scan My Site'}
@@ -142,7 +142,7 @@ export function ScanForm({ onScanStart, onScanComplete, onScanError }: ScanFormP
       </form>
 
       {/* Social proof */}
-      <p className="mt-6 text-sm text-[#64748B] text-center">
+      <p className="mt-6 text-sm text-foreground-dim text-center">
         Trusted analysis built on industry-standard tools
       </p>
     </div>

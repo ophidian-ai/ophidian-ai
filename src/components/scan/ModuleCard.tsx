@@ -9,10 +9,16 @@ interface ModuleCardProps {
 }
 
 const gradeColor = (grade: string) => {
-  if (grade === 'A' || grade === 'B') return 'bg-green-500 text-white';
-  if (grade === 'C') return 'bg-yellow-500 text-black';
+  if (grade === 'A' || grade === 'B') return 'bg-accent text-background';
+  if (grade === 'C') return 'bg-primary text-background';
   if (grade === 'D' || grade === 'F') return 'bg-red-500 text-white';
-  return 'bg-slate-600 text-slate-300';
+  return 'bg-surface text-foreground-muted';
+};
+
+const scoreBarClass = (score: number) => {
+  if (score >= 80) return 'bg-accent';
+  if (score >= 70) return 'bg-primary';
+  return 'bg-red-500';
 };
 
 const moduleDisplayNames: Record<string, string> = {
@@ -36,31 +42,31 @@ export function ModuleCard({ name, result }: ModuleCardProps) {
 
   if (result.status === 'unavailable') {
     return (
-      <div className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-5">
+      <div className="rounded-xl border border-surface-border bg-white/3 p-5">
         <div className="flex items-center gap-3 mb-3">
           <span className="text-xl">{icon}</span>
-          <h3 className="text-base font-semibold text-[#F1F5F9]">{displayName}</h3>
+          <h3 className="text-base font-semibold text-foreground">{displayName}</h3>
         </div>
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-700 text-slate-400 text-sm font-bold">
+          <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-surface text-foreground-muted text-sm font-bold">
             -
           </span>
-          <span className="text-sm text-slate-500">Could not check</span>
+          <span className="text-sm text-foreground-dim">Could not check</span>
         </div>
         {result.error && (
-          <p className="mt-2 text-xs text-slate-600">{result.error}</p>
+          <p className="mt-2 text-xs text-foreground-dim">{result.error}</p>
         )}
       </div>
     );
   }
 
   return (
-    <div className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-5 flex flex-col gap-4">
+    <div className="rounded-xl border border-surface-border bg-white/3 p-5 flex flex-col gap-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <span className="text-xl">{icon}</span>
-          <h3 className="text-base font-semibold text-[#F1F5F9]">{displayName}</h3>
+          <h3 className="text-base font-semibold text-foreground">{displayName}</h3>
         </div>
         <span
           className={`inline-flex items-center justify-center w-9 h-9 rounded-full text-sm font-bold ${gradeColor(result.grade)}`}
@@ -72,23 +78,15 @@ export function ModuleCard({ name, result }: ModuleCardProps) {
       {/* Score bar */}
       <div>
         <div className="flex items-center justify-between mb-1">
-          <span className="text-xs text-slate-500">Score</span>
-          <span className="text-sm font-semibold text-[#F1F5F9]">
+          <span className="text-xs text-foreground-dim">Score</span>
+          <span className="text-sm font-semibold text-foreground">
             {result.score !== null ? result.score : '--'}/100
           </span>
         </div>
-        <div className="h-1.5 w-full rounded-full bg-white/[0.08] overflow-hidden">
+        <div className="h-1.5 w-full rounded-full bg-white/8 overflow-hidden">
           <div
-            className="h-full rounded-full transition-all duration-700"
-            style={{
-              width: `${result.score ?? 0}%`,
-              background:
-                (result.score ?? 0) >= 80
-                  ? '#22c55e'
-                  : (result.score ?? 0) >= 70
-                    ? '#eab308'
-                    : '#ef4444',
-            }}
+            className={`h-full rounded-full transition-all duration-700 ${scoreBarClass(result.score ?? 0)}`}
+            style={{ width: `${result.score ?? 0}%` }}
           />
         </div>
       </div>
@@ -98,7 +96,7 @@ export function ModuleCard({ name, result }: ModuleCardProps) {
         <div>
           <button
             onClick={() => setExpanded((v) => !v)}
-            className="flex items-center gap-1.5 text-xs text-[#0DB1B2] hover:text-[#0DB1B2]/80 transition-colors"
+            className="flex items-center gap-1.5 text-xs text-accent hover:text-primary transition-colors"
           >
             <span
               className="inline-block transition-transform duration-200"
@@ -112,14 +110,14 @@ export function ModuleCard({ name, result }: ModuleCardProps) {
           {expanded && (
             <ul className="mt-2 space-y-1.5">
               {result.findings.map((f) => (
-                <li key={f.id} className="flex items-start gap-2 text-xs text-slate-400">
+                <li key={f.id} className="flex items-start gap-2 text-xs text-foreground-muted">
                   <span
                     className={`mt-0.5 shrink-0 w-1.5 h-1.5 rounded-full ${
                       f.severity === 'critical'
                         ? 'bg-red-500'
                         : f.severity === 'moderate'
-                          ? 'bg-yellow-500'
-                          : 'bg-slate-500'
+                          ? 'bg-primary'
+                          : 'bg-foreground-dim'
                     }`}
                   />
                   <span>{f.title}</span>

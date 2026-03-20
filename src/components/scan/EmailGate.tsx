@@ -47,10 +47,10 @@ export function EmailGate({ result }: EmailGateProps) {
 
   return (
     <div className="w-full">
-      <h2 className="text-2xl font-bold text-[#F1F5F9] mb-2">
+      <h2 className="text-2xl font-bold text-foreground mb-2">
         Your report is ready.
       </h2>
-      <p className="text-[#94A3B8] mb-8">
+      <p className="text-foreground-muted mb-8">
         We&apos;ll send a PDF copy to your inbox too.
       </p>
 
@@ -72,11 +72,11 @@ export function EmailGate({ result }: EmailGateProps) {
             autoComplete="email"
             className={[
               'w-full px-5 py-4 rounded-xl text-base',
-              'bg-[#0F1B28] text-[#F1F5F9] placeholder-[#64748B]',
+              'bg-background-alt text-foreground placeholder-foreground-dim',
               'border transition-all duration-200',
               error
                 ? 'border-red-500 focus:ring-2 focus:ring-red-500/40 outline-none'
-                : 'border-[rgba(255,255,255,0.12)] focus:border-[#0DB1B2] focus:ring-2 focus:ring-[#0DB1B2]/30 outline-none',
+                : 'border-surface-border focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none',
             ].join(' ')}
           />
           {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
@@ -85,7 +85,7 @@ export function EmailGate({ result }: EmailGateProps) {
         <button
           type="submit"
           disabled={isSubmitting || !email.trim()}
-          className="w-full py-4 px-6 rounded-xl text-base font-semibold bg-[#0DB1B2] text-white hover:bg-[#0CA0A1] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 focus:outline-none focus:ring-2 focus:ring-[#0DB1B2]/50"
+          className="w-full py-4 px-6 rounded-xl text-base font-semibold bg-primary text-background hover:bg-primary-light active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 focus:outline-none focus:ring-2 focus:ring-primary/50"
         >
           {isSubmitting ? 'Opening your report...' : 'Get My Full Report'}
         </button>
@@ -93,8 +93,8 @@ export function EmailGate({ result }: EmailGateProps) {
 
       {/* Trust notes */}
       <div className="mt-6 space-y-1 text-center">
-        <p className="text-sm text-[#64748B]">No spam. Just your report.</p>
-        <p className="text-sm text-[#64748B]">We&apos;ll send a PDF copy to your inbox too.</p>
+        <p className="text-sm text-foreground-dim">No spam. Just your report.</p>
+        <p className="text-sm text-foreground-dim">We&apos;ll send a PDF copy to your inbox too.</p>
       </div>
     </div>
   );
