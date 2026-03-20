@@ -54,6 +54,7 @@ export default function NewClientPage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [selectedServices, setSelectedServices] = useState<ServiceType[]>([]);
@@ -93,6 +94,7 @@ export default function NewClientPage() {
           first_name: firstName.trim(),
           last_name: lastName.trim(),
           contact_email: contactEmail.trim(),
+          phone: phone.trim() || undefined,
           company_name: companyName.trim() || undefined,
           website_url: websiteUrl.trim() || undefined,
           services: selectedServices.length > 0 ? selectedServices : undefined,
@@ -193,6 +195,20 @@ export default function NewClientPage() {
                 placeholder="john@example.com"
                 className="w-full px-4 py-2.5 bg-surface/50 border border-white/10 rounded-lg text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-primary/50"
                 required
+              />
+            </div>
+
+            {/* Phone */}
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1.5">
+                Phone
+              </label>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="(555) 123-4567"
+                className="w-full px-4 py-2.5 bg-surface/50 border border-white/10 rounded-lg text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-primary/50"
               />
             </div>
 
