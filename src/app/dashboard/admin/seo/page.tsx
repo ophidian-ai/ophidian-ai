@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useDashboard } from "@/lib/dashboard-context";
 import { GlowCard } from "@/components/ui/spotlight-card";
 import { GlassButton } from "@/components/ui/glass-button";
-import { Search, Plus, ExternalLink } from "lucide-react";
+import { Search, Plus, ExternalLink, Trash2 } from "lucide-react";
 
 interface SeoConfig {
   id: string;
@@ -72,6 +72,8 @@ export default function AdminSeoPage() {
   const [configs, setConfigs] = useState<SeoConfig[]>([]);
   const [loading, setLoading] = useState(true);
   const [runningIds, setRunningIds] = useState<Set<string>>(new Set());
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [toasts, setToasts] = useState<{ id: string; message: string; type: "success" | "error" }[]>([]);
 
   useEffect(() => {
@@ -122,6 +124,25 @@ export default function AdminSeoPage() {
         next.delete(configId);
         return next;
       });
+    }
+  }
+
+  async function handleDelete(configId: string) {
+    setDeletingId(configId);
+    try {
+      const res = await fetch(`/api/admin/seo/configs/${configId}`, { method: "DELETE" });
+      if (res.ok) {
+        setConfigs((prev) => prev.filter((c) => c.id !== configId));
+        addToast("Config deleted.", "success");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        addToast(data.error ?? "Delete failed.", "error");
+      }
+    } catch {
+      addToast("Delete failed: network error.", "error");
+    } finally {
+      setDeletingId(null);
+      setConfirmDeleteId(null);
     }
   }
 
@@ -275,6 +296,34 @@ export default function AdminSeoPage() {
                             <ExternalLink size={14} />
                             View
                           </Link>
+                          {confirmDeleteId === config.id ? (
+                            <>
+                              <button
+                                type="button"
+                                onClick={() => handleDelete(config.id)}
+                                disabled={deletingId === config.id}
+                                className="text-[10px] font-medium px-2 py-1 rounded bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors cursor-pointer disabled:opacity-50"
+                              >
+                                {deletingId === config.id ? "..." : "Delete"}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setConfirmDeleteId(null)}
+                                className="text-[10px] font-medium px-2 py-1 rounded bg-white/5 text-foreground-muted hover:bg-white/10 transition-colors cursor-pointer"
+                              >
+                                Cancel
+                              </button>
+                            </>
+                          ) : (
+                            <button
+                              type="button"
+                              title="Delete config"
+                              onClick={() => setConfirmDeleteId(config.id)}
+                              className="p-1.5 rounded-lg text-foreground-muted hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>
