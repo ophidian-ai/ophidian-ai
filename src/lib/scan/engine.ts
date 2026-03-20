@@ -208,8 +208,14 @@ export async function runScan(input: ScanInput): Promise<ScanResult> {
     // 4. Generate scan ID
     const scanId = crypto.randomUUID();
 
-    // 5. Fetch HTML via Firecrawl
-    const crawlResult = await fetchHtml(url, controller.signal);
+    // 5. Fetch HTML and PSI data in parallel
+    const [crawlSettled, psiSettled] = await Promise.allSettled([
+      fetchHtml(url, controller.signal),
+      fetchPsi(url, controller.signal),
+    ]);
+
+    const crawlResult = crawlSettled.status === 'fulfilled' ? crawlSettled.value : null;
+    const psiData = psiSettled.status === 'fulfilled' ? psiSettled.value : null;
 
     if (!crawlResult) {
       // Site unreachable -- return early with no module scores
@@ -239,13 +245,11 @@ export async function runScan(input: ScanInput): Promise<ScanResult> {
     // Edge case: parked / placeholder domain
     const isPlaceholder = html.length < PLACEHOLDER_HTML_THRESHOLD;
 
-    // Use the final URL (after redirects) for module analysis
+    // Use the final URL (after redirects) for module analysis.
+    // PSI was already called with the original URL above; PSI follows redirects internally.
     const analysisUrl = finalUrl;
 
-    // 6. Fetch PageSpeed Insights (one call, shared across modules)
-    const psiData = await fetchPsi(analysisUrl, controller.signal);
-
-    // 7. Run all four modules concurrently
+    // 6. Run all four modules concurrently
     const moduleNames: ModuleName[] = ['speed', 'seo', 'mobile', 'trust'];
     const results = await Promise.allSettled([
       withTimeout(analyzeSpeed(analysisUrl, psiData ?? undefined), MODULE_TIMEOUT_MS),
@@ -254,7 +258,7 @@ export async function runScan(input: ScanInput): Promise<ScanResult> {
       withTimeout(analyzeTrust(analysisUrl, html), MODULE_TIMEOUT_MS),
     ]);
 
-    // 8. Extract module results
+    // 7. Extract module results
     const modules: Record<ModuleName, ModuleResult> = {
       speed: unavailableModule('Not run'),
       seo: unavailableModule('Not run'),
@@ -274,13 +278,13 @@ export async function runScan(input: ScanInput): Promise<ScanResult> {
       }
     }
 
-    // 9. Collect all findings
+    // 8. Collect all findings
     const allFindings: Finding[] = [];
     for (const name of moduleNames) {
       allFindings.push(...modules[name].findings);
     }
 
-    // 10. Calculate revenue impact per finding
+    // 9. Calculate revenue impact per finding
     const cityPopulation = input.city_population ?? DEFAULT_CITY_POPULATION;
     const industry = input.industry ?? 'default';
     const monthlyVisitors = estimateMonthlyVisitors(cityPopulation, industry);
@@ -289,7 +293,7 @@ export async function runScan(input: ScanInput): Promise<ScanResult> {
       finding.revenue_impact = calculateFindingRevenue(finding, monthlyVisitors, industry);
     }
 
-    // 11. Calculate overall score (weighted average of available modules)
+    // 10. Calculate overall score (weighted average of available modules)
     let weightedSum = 0;
     let totalWeight = 0;
 
@@ -305,19 +309,19 @@ export async function runScan(input: ScanInput): Promise<ScanResult> {
       ? Math.round(weightedSum / totalWeight)
       : null;
 
-    // 12. Pick top 3 quick wins
+    // 11. Pick top 3 quick wins
     const quickWinIds = pickQuickWins(allFindings, 3);
     const topQuickWins = quickWinIds
       .map((id) => allFindings.find((f) => f.id === id))
       .filter((f): f is Finding => f !== undefined);
 
-    // 13. Calculate total estimated monthly leak
+    // 12. Calculate total estimated monthly leak
     const estimatedMonthlyLeak = allFindings.reduce(
       (sum, f) => sum + f.revenue_impact,
       0,
     );
 
-    // 14. Assemble the scan result
+    // 13. Assemble the scan result
     const scanResult: ScanResult = {
       scan_id: scanId,
       url: analysisUrl,
@@ -333,10 +337,10 @@ export async function runScan(input: ScanInput): Promise<ScanResult> {
       industry_benchmarks: INDUSTRY_BENCHMARKS,
     };
 
-    // 15. Cache the result
+    // 14. Cache the result
     await cacheScan(scanResult, urlHash);
 
-    // 16. Return
+    // 15. Return
     return scanResult;
   } finally {
     clearTimeout(totalTimer);
