@@ -301,3 +301,6 @@ export type {
   ReviewCampaign,
   ReviewAnalytics,
 } from "./review-types";
+
+// Ad Management types
+export type { AdConfig, AdCampaign, AdMetrics, AdCopyDraft } from "./ad-types";
