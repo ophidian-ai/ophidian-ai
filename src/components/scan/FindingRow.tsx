@@ -7,7 +7,7 @@ interface FindingRowProps {
 const severityConfig = {
   critical: {
     label: 'Critical',
-    classes: 'bg-red-500/20 text-red-400 border border-red-500/30',
+    classes: 'bg-[var(--color-error)]/20 text-[var(--color-error-light)] border border-[var(--color-error)]/30',
   },
   moderate: {
     label: 'Moderate',

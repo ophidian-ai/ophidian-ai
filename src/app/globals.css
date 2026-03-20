@@ -18,6 +18,10 @@
   --color-surface-hover: #243B2B;
   --color-surface-border: rgba(255, 255, 255, 0.08);
 
+  --color-error: #C45B5B;
+  --color-error-light: #D4847F;
+  --color-warning: #D4924A;
+
   --color-foreground: #F1F5F9;
   --color-foreground-muted: #94A3B8;
   --color-foreground-dim: #64748B;

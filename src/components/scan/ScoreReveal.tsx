@@ -9,12 +9,12 @@ interface ScoreRevealProps {
 }
 
 const GRADE_COLORS: Record<string, string> = {
-  A: '#7A9E7E',
-  B: '#7A9E7E',
-  C: '#C4A265',
-  D: '#f97316',
-  F: '#ef4444',
-  '-': '#64748b',
+  A: 'var(--color-accent)',
+  B: 'var(--color-accent)',
+  C: 'var(--color-primary)',
+  D: 'var(--color-warning)',
+  F: 'var(--color-error)',
+  '-': 'var(--color-foreground-dim)',
 };
 
 function useCountUp(target: number, durationMs = 1800): number {

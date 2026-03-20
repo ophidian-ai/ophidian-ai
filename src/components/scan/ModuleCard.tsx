@@ -11,14 +11,15 @@ interface ModuleCardProps {
 const gradeColor = (grade: string) => {
   if (grade === 'A' || grade === 'B') return 'bg-accent text-background';
   if (grade === 'C') return 'bg-primary text-background';
-  if (grade === 'D' || grade === 'F') return 'bg-red-500 text-white';
+  if (grade === 'D') return 'bg-[var(--color-warning)] text-white';
+  if (grade === 'F') return 'bg-[var(--color-error)] text-white';
   return 'bg-surface text-foreground-muted';
 };
 
 const scoreBarClass = (score: number) => {
   if (score >= 80) return 'bg-accent';
   if (score >= 70) return 'bg-primary';
-  return 'bg-red-500';
+  return 'bg-[var(--color-error)]';
 };
 
 const moduleDisplayNames: Record<string, string> = {
@@ -114,7 +115,7 @@ export function ModuleCard({ name, result }: ModuleCardProps) {
                   <span
                     className={`mt-0.5 shrink-0 w-1.5 h-1.5 rounded-full ${
                       f.severity === 'critical'
-                        ? 'bg-red-500'
+                        ? 'bg-[var(--color-error)]'
                         : f.severity === 'moderate'
                           ? 'bg-primary'
                           : 'bg-foreground-dim'

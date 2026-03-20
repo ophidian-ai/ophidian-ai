@@ -53,8 +53,8 @@ export function WebsiteCheckup() {
             onScanError={handleScanError}
           />
           {scanError && (
-            <div className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-5 py-4">
-              <p className="text-sm text-red-400">{scanError}</p>
+            <div className="mt-4 rounded-xl border border-[var(--color-error)]/30 bg-[var(--color-error)]/10 px-5 py-4">
+              <p className="text-sm text-[var(--color-error-light)]">{scanError}</p>
             </div>
           )}
         </>

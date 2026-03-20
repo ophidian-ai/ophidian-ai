@@ -75,11 +75,11 @@ export function EmailGate({ result }: EmailGateProps) {
               'bg-background-alt text-foreground placeholder-foreground-dim',
               'border transition-all duration-200',
               error
-                ? 'border-red-500 focus:ring-2 focus:ring-red-500/40 outline-none'
+                ? 'border-[var(--color-error)] focus:ring-2 focus:ring-[var(--color-error)]/40 outline-none'
                 : 'border-surface-border focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none',
             ].join(' ')}
           />
-          {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
+          {error && <p className="mt-2 text-sm text-[var(--color-error-light)]">{error}</p>}
         </div>
 
         <button

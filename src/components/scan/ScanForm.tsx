@@ -117,12 +117,12 @@ export function ScanForm({ onScanStart, onScanComplete, onScanError }: ScanFormP
               'bg-background-alt text-foreground placeholder-foreground-dim',
               'border transition-all duration-200',
               validationError
-                ? 'border-red-500 focus:ring-2 focus:ring-red-500/40 outline-none'
+                ? 'border-[var(--color-error)] focus:ring-2 focus:ring-[var(--color-error)]/40 outline-none'
                 : 'border-surface-border focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none',
             ].join(' ')}
           />
           {validationError && (
-            <p className="mt-2 text-sm text-red-400">{validationError}</p>
+            <p className="mt-2 text-sm text-[var(--color-error-light)]">{validationError}</p>
           )}
         </div>
 

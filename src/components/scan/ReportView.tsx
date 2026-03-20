@@ -14,13 +14,15 @@ interface ReportViewProps {
 const gradeColorClass = (grade: string) => {
   if (grade === 'A' || grade === 'B') return 'text-accent';
   if (grade === 'C') return 'text-primary';
-  return 'text-red-500';
+  if (grade === 'D') return 'text-[var(--color-warning)]';
+  return 'text-[var(--color-error)]';
 };
 
 const gradeHex = (grade: string) => {
-  if (grade === 'A' || grade === 'B') return '#7A9E7E';
-  if (grade === 'C') return '#C4A265';
-  return '#ef4444';
+  if (grade === 'A' || grade === 'B') return 'var(--color-accent)';
+  if (grade === 'C') return 'var(--color-primary)';
+  if (grade === 'D') return 'var(--color-warning)';
+  return 'var(--color-error)';
 };
 
 const MODULE_ORDER: ModuleName[] = ['speed', 'seo', 'mobile', 'trust'];
