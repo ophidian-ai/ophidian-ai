@@ -27,8 +27,10 @@ import { estimateMonthlyVisitors, INDUSTRY_BENCHMARKS } from './benchmarks';
 // Constants
 // ---------------------------------------------------------------------------
 
-const TOTAL_TIMEOUT_MS = 45_000;
-const MODULE_TIMEOUT_MS = 15_000;
+const TOTAL_TIMEOUT_MS = 50_000;
+const MODULE_TIMEOUT_MS = 10_000;
+const HTML_FETCH_TIMEOUT_MS = 8_000;
+const FIRECRAWL_TIMEOUT_MS = 15_000;
 const DEFAULT_CACHE_MAX_AGE_HOURS = 24;
 const DEFAULT_CITY_POPULATION = 50_000;
 const PLACEHOLDER_HTML_THRESHOLD = 500;
@@ -106,7 +108,55 @@ interface FirecrawlResponse {
   error?: string;
 }
 
-async function fetchHtml(
+/**
+ * Tier 1: Direct HTTP fetch for raw HTML. Fast (1-3s) but only gets
+ * server-rendered HTML (no JS execution). Sufficient for SEO, mobile,
+ * and trust analysis since we check meta tags, headings, and structure.
+ */
+async function fetchHtmlDirect(
+  url: string,
+  signal: AbortSignal,
+): Promise<{ html: string; finalUrl: string } | null> {
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), HTML_FETCH_TIMEOUT_MS);
+    // Abort if parent signal fires too
+    signal.addEventListener('abort', () => controller.abort(), { once: true });
+
+    const res = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; OphidianAI-Scanner/1.0)',
+        Accept: 'text/html,application/xhtml+xml',
+      },
+      redirect: 'follow',
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+
+    if (!res.ok) {
+      console.error(`[scan/engine] Direct fetch HTTP ${res.status}`);
+      return null;
+    }
+
+    const html = await res.text();
+    return { html, finalUrl: res.url || url };
+  } catch (err: unknown) {
+    const name = err instanceof Error ? err.name : '';
+    if (name === 'AbortError') {
+      console.error('[scan/engine] Direct fetch timed out');
+    } else {
+      console.error('[scan/engine] Direct fetch failed:', err);
+    }
+    return null;
+  }
+}
+
+/**
+ * Tier 2: Firecrawl fetch -- JS-rendered HTML. Slower (10-40s) but
+ * captures dynamic content. Used as fallback when direct fetch fails
+ * or returns very little content.
+ */
+async function fetchHtmlFirecrawl(
   url: string,
   signal: AbortSignal,
 ): Promise<{ html: string; finalUrl: string } | null> {
@@ -117,6 +167,10 @@ async function fetchHtml(
   }
 
   try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), FIRECRAWL_TIMEOUT_MS);
+    signal.addEventListener('abort', () => controller.abort(), { once: true });
+
     const res = await fetch('https://api.firecrawl.dev/v1/scrape', {
       method: 'POST',
       headers: {
@@ -124,8 +178,9 @@ async function fetchHtml(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ url, formats: ['html'] }),
-      signal,
+      signal: controller.signal,
     });
+    clearTimeout(timer);
 
     if (!res.ok) {
       console.error(`[scan/engine] Firecrawl HTTP ${res.status}`);
@@ -151,6 +206,26 @@ async function fetchHtml(
     }
     return null;
   }
+}
+
+/**
+ * Combined HTML fetch: try direct first (fast), fall back to Firecrawl
+ * if direct returns too little content (< 500 chars suggests a JS-only shell).
+ */
+async function fetchHtml(
+  url: string,
+  signal: AbortSignal,
+): Promise<{ html: string; finalUrl: string } | null> {
+  // Try direct fetch first (fast)
+  const direct = await fetchHtmlDirect(url, signal);
+  if (direct && direct.html.length >= PLACEHOLDER_HTML_THRESHOLD) {
+    console.log(`[scan/engine] Direct fetch OK: ${direct.html.length} chars`);
+    return direct;
+  }
+
+  // Direct fetch failed or returned too little -- try Firecrawl
+  console.log(`[scan/engine] Direct fetch insufficient (${direct?.html.length ?? 0} chars), trying Firecrawl`);
+  return fetchHtmlFirecrawl(url, signal);
 }
 
 // ---------------------------------------------------------------------------
