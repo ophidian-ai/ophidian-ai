@@ -38,7 +38,7 @@ export default function EmailMarketingPage() {
       <CTABanner
         headline="Ready to turn your email list into revenue?"
         subtitle="Book a free consultation and we will map out your first campaign."
-        cta={{ label: "Get Started", href: "/contact?service=ai_email" }}
+        cta={{ label: "Book a Call", href: "/contact?service=ai_email" }}
       />
     </PageWrapper>
   );

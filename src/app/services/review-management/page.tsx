@@ -38,7 +38,7 @@ export default function ReviewManagementPage() {
       <CTABanner
         headline="Ready to build a five-star reputation?"
         subtitle="Book a free consultation and we will audit your current review presence."
-        cta={{ label: "Get Started", href: "/contact?service=ai_reviews" }}
+        cta={{ label: "Book a Call", href: "/contact?service=ai_reviews" }}
       />
     </PageWrapper>
   );

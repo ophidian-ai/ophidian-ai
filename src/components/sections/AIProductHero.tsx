@@ -42,7 +42,7 @@ export function AIProductHero({ product }: { product: AIProductPageData }) {
             </Text>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <GlassButton size="lg" href="/contact?service=ai_growth">
-                Get Started
+                Book a Call
               </GlassButton>
               <GlassButton size="lg" href="/pricing">
                 View All Plans

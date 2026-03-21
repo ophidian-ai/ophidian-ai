@@ -38,7 +38,7 @@ export default function ContentGenerationPage() {
       <CTABanner
         headline="Ready for consistent, quality content?"
         subtitle="Book a free consultation and we will outline a content strategy for your business."
-        cta={{ label: "Get Started", href: "/contact?service=ai_content" }}
+        cta={{ label: "Book a Call", href: "/contact?service=ai_content" }}
       />
     </PageWrapper>
   );

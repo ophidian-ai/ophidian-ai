@@ -38,7 +38,7 @@ export default function CRMAutomationPage() {
       <CTABanner
         headline="Ready to automate your sales pipeline?"
         subtitle="Book a free consultation and we will map out your CRM workflow."
-        cta={{ label: "Get Started", href: "/contact?service=ai_crm" }}
+        cta={{ label: "Book a Call", href: "/contact?service=ai_crm" }}
       />
     </PageWrapper>
   );

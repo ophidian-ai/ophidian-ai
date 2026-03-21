@@ -75,7 +75,7 @@ export function HeroVideo() {
           Where the natural world meets innovation.
         </p>
         <GlassButton size="default" href="#contact">
-          Get Started
+          Book a Discovery Call
         </GlassButton>
       </div>
 
