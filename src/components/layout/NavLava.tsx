@@ -157,7 +157,7 @@ export function NavLava() {
           {/* Desktop CTA + Account */}
           <div className="hidden md:flex items-center gap-3">
             <GlassButton size="sm" href={isHomepage ? "#contact" : "/contact"}>
-              Get Started
+              Get in Touch
             </GlassButton>
             <AccountPopover user={authUser} />
           </div>
@@ -224,7 +224,7 @@ export function NavLava() {
           ))}
           <div className="mt-4 border-t border-white/10 pt-4 space-y-3">
             <GlassButton size="default" href={isHomepage ? "#contact" : "/contact"} onClick={closeMenu} className="w-full">
-              Get Started
+              Get in Touch
             </GlassButton>
             {authUser ? (
               <GlassButton size="default" href="/dashboard" onClick={closeMenu} className="w-full">

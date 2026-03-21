@@ -525,7 +525,7 @@ function PricingCard({ plan, index, isRecurring, isYearly }: PricingCardProps) {
 
       <div className="mt-8">
         <GlassButton size="sm" href="#contact">
-          Get Started
+          Book a Call
         </GlassButton>
       </div>
 

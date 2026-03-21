@@ -44,7 +44,7 @@ export default function AIChatbotPage() {
       <CTABanner
         headline="Ready to add an AI chatbot?"
         subtitle="Book a free consultation and we will demo a chatbot trained on your business."
-        cta={{ label: "Get Started", href: "/contact?service=ai_chatbot" }}
+        cta={{ label: "Book a Call", href: "/contact?service=ai_chatbot" }}
       />
     </PageWrapper>
   );

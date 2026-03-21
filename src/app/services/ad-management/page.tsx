@@ -38,7 +38,7 @@ export default function AdManagementPage() {
       <CTABanner
         headline="Ready to get more leads from your ad spend?"
         subtitle="Book a free consultation and we will audit your current campaigns."
-        cta={{ label: "Get Started", href: "/contact?service=ai_ads" }}
+        cta={{ label: "Book a Call", href: "/contact?service=ai_ads" }}
       />
     </PageWrapper>
   );

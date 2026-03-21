@@ -14,7 +14,7 @@ export function ContactSection() {
             <div className="space-y-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-sage-accent/15 flex items-center justify-center"><Phone className="w-5 h-5 text-sage-accent" /></div>
-                <div><p className="text-sm text-text-muted">Phone</p><a href="tel:+18125551234" className="text-text-light hover:text-sage-accent transition-colors">(812) 555-1234</a></div>
+                <div><p className="text-sm text-text-muted">Phone</p><a href="tel:+18123434786" className="text-text-light hover:text-sage-accent transition-colors">(812) 343-4786</a></div>
               </div>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-sage-accent/15 flex items-center justify-center"><Mail className="w-5 h-5 text-sage-accent" /></div>

@@ -58,7 +58,7 @@ export function BrandStatement() {
       <div className="relative z-10 mt-10 sm:mt-16 text-center">
         <p className="text-text-muted text-lg mb-8">Ready to bring your vision to life?</p>
         <GlassButton size="default" href="#contact">
-          Get Started
+          Book a Discovery Call
         </GlassButton>
       </div>
     </section>

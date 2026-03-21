@@ -19,8 +19,8 @@ export function FooterLava() {
         <div>
           <h3 className="text-sm font-display tracking-wider uppercase text-text-light mb-4">Contacts</h3>
           <div className="space-y-3 text-text-muted text-sm">
-            <a href="tel:+18125551234" className="flex items-center gap-2 hover:text-text-light transition-colors">
-              <Phone className="w-4 h-4" /> (812) 555-1234
+            <a href="tel:+18123434786" className="flex items-center gap-2 hover:text-text-light transition-colors">
+              <Phone className="w-4 h-4" /> (812) 343-4786
             </a>
             <a href="mailto:eric.lefler@ophidianai.com" className="flex items-center gap-2 hover:text-text-light transition-colors">
               <Mail className="w-4 h-4" /> eric.lefler@ophidianai.com
@@ -45,9 +45,8 @@ export function FooterLava() {
         <div>
           <h3 className="text-sm font-display tracking-wider uppercase text-text-light mb-4">Connect</h3>
           <div className="text-text-muted text-sm space-y-2">
-            <a href="https://facebook.com" className="block hover:text-text-light transition-colors">Facebook</a>
-            <a href="https://instagram.com" className="block hover:text-text-light transition-colors">Instagram</a>
-            <a href="https://linkedin.com" className="block hover:text-text-light transition-colors">LinkedIn</a>
+            <a href="https://www.facebook.com/profile.php?id=61573940409724" className="block hover:text-text-light transition-colors" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://www.instagram.com/ophidianai/" className="block hover:text-text-light transition-colors" target="_blank" rel="noopener noreferrer">Instagram</a>
           </div>
         </div>
       </div>

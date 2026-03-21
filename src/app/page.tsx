@@ -8,7 +8,7 @@ import { ProcessOrbit } from "@/components/sections/ProcessOrbit";
 import { BrandStatement } from "@/components/sections/BrandStatement";
 import { PortfolioGrid } from "@/components/sections/PortfolioGrid";
 import { ServicesGrid } from "@/components/sections/ServicesGrid";
-import { TestimonialsStagger } from "@/components/sections/TestimonialsStagger";
+
 import { PricingCards } from "@/components/sections/PricingCards";
 import { FAQNested } from "@/components/sections/FAQNested";
 import { ContactSection } from "@/components/sections/ContactSection";
@@ -26,7 +26,7 @@ export default function Home() {
         <ProcessOrbit />
         <BrandStatement />
         <ServicesGrid />
-        <TestimonialsStagger />
+
         <PricingCards />
         <FAQNested />
         <ContactSection />

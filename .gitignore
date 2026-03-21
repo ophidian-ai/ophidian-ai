@@ -31,6 +31,9 @@ supabase/.temp/
 
 .env*.local
 
+# Large media (host on CDN instead)
+*.mp4
+
 # Scroll-scrub raw generation assets (keep frames committed for Vercel deploy)
 scripts/output/
 .superpowers/
