@@ -60,11 +60,11 @@ export function ServicesGrid() {
           {SECONDARY_SERVICES.map((service) => (
             <Link key={service.num} href={service.href} className="flex items-center justify-between py-5 border-b border-forest/10 cursor-pointer group">
               <div className="flex items-center gap-4 sm:gap-8">
-                <span className="text-sm text-text-dark/40 font-mono">{service.num}</span>
+                <span className="text-sm text-text-dark/70 font-mono">{service.num}</span>
                 <h3 className="text-lg md:text-xl font-display text-text-dark group-hover:text-gold transition-colors">{service.title}</h3>
               </div>
               <div className="w-8 h-8 rounded-full border border-forest/20 flex items-center justify-center group-hover:bg-gold group-hover:border-gold transition-colors">
-                <ArrowUpRight className="w-4 h-4 text-text-dark/40 group-hover:text-forest-deep" />
+                <ArrowUpRight className="w-4 h-4 text-text-dark/70 group-hover:text-forest-deep" />
               </div>
             </Link>
           ))}
