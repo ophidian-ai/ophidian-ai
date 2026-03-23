@@ -121,9 +121,10 @@ export function NavLava() {
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
           scrolled
-            ? "bg-forest-deep/80 backdrop-blur-md border-b border-white/5"
+            ? "backdrop-blur-xl"
             : "bg-transparent"
         )}
+        style={scrolled ? { background: "rgba(5,23,11,0.8)", borderBottom: "1px solid var(--color-outline-variant)" } : undefined}
       >
         <nav className="max-w-[1400px] mx-auto flex items-center justify-between px-4 sm:px-8 py-4">
           <Link href="/" className="flex items-center gap-3">
@@ -133,6 +134,9 @@ export function NavLava() {
               width={40}
               height={40}
             />
+            <span className="font-display text-xl" style={{ color: "var(--color-on-surface)" }}>
+              Ophidian<span style={{ color: "var(--color-secondary)" }}>AI</span>
+            </span>
           </Link>
 
           {/* Desktop links */}
@@ -207,9 +211,10 @@ export function NavLava() {
       {/* Mobile drawer */}
       <div
         className={cn(
-          "fixed top-0 right-0 z-40 h-full w-[min(18rem,calc(100%-4rem))] transform bg-forest-deep/95 backdrop-blur-xl border-l border-white/5 transition-transform duration-300 ease-out md:hidden",
+          "fixed top-0 right-0 z-40 h-full w-[min(18rem,calc(100%-4rem))] transform backdrop-blur-xl transition-transform duration-300 ease-out md:hidden",
           isOpen ? "translate-x-0" : "translate-x-full"
         )}
+        style={{ background: "rgba(38,57,43,0.95)", borderLeft: "1px solid var(--color-outline-variant)" }}
       >
         <div className="flex flex-col gap-2 px-6 pt-24">
           {NAV_LINKS.map((link) => (

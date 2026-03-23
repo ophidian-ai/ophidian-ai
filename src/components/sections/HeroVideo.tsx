@@ -3,9 +3,7 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Image from "next/image";
 import { GlassButton } from "@/components/ui/glass-button";
-import { ParticleBackground } from "@/components/ui/particle-background";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,8 +38,7 @@ export function HeroVideo() {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative h-screen bg-forest overflow-hidden">
-      <ParticleBackground density={1000} speed={0.5} opacity={0.35} glow />
+    <section ref={containerRef} className="relative h-screen overflow-hidden">
       <div
         ref={videoRef}
         className="absolute inset-0 overflow-hidden origin-center"
@@ -50,40 +47,60 @@ export function HeroVideo() {
         <video autoPlay muted loop playsInline className="w-full h-full object-cover">
           <source src="/video/hero-card-video.mp4" type="video/mp4" />
         </video>
-        {/* Layered overlays for text legibility */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/70" />
+        {/* Layered overlays — deep forest tones instead of pure black */}
+        <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(5,23,11,0.45) 0%, rgba(5,23,11,0.20) 40%, rgba(5,23,11,0.70) 100%)" }} />
         <div
           className="absolute inset-0"
           style={{
-            background: "radial-gradient(ellipse at center, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 65%, transparent 100%)",
+            background: "radial-gradient(ellipse at center, rgba(5,23,11,0.55) 0%, rgba(5,23,11,0.15) 65%, transparent 100%)",
           }}
         />
       </div>
 
-      <div ref={overlayRef} className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4 sm:px-8">
-        <Image src="/images/logo_icon.png" alt="OphidianAI" width={80} height={80} className="mb-8 drop-shadow-lg w-14 h-14 md:w-20 md:h-20" />
-        <h1
-          className="text-4xl md:text-6xl font-display text-white mb-6"
-          style={{ textShadow: "0 2px 20px rgba(0,0,0,0.5)" }}
-        >
-          Ophidian<span className="text-gold" style={{ textShadow: "0 0 30px rgba(196,162,101,0.4)" }}>AI</span>
-        </h1>
-        <p
-          className="text-lg md:text-xl text-white/90 max-w-xl mb-10 font-light"
-          style={{ textShadow: "0 1px 12px rgba(0,0,0,0.6)" }}
-        >
-          Where the natural world meets innovation.
-        </p>
-        <GlassButton size="default" href="#contact">
-          Book a Discovery Call
-        </GlassButton>
+      <div ref={overlayRef} className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6 sm:px-8">
+        <div className="max-w-7xl space-y-8">
+          {/* Eyebrow label */}
+          <div className="flex items-center justify-center gap-4">
+            <span className="h-px w-12" style={{ background: "rgba(196,162,101,0.4)" }} />
+            <span
+              className="text-sm uppercase tracking-[0.3em] px-4 py-1.5 rounded-full"
+              style={{ fontFamily: "var(--font-mono)", color: "var(--color-secondary)", background: "rgba(5,23,11,0.6)", backdropFilter: "blur(8px)" }}
+            >
+              Neural Flora &amp; Silicon Flora
+            </span>
+            <span className="h-px w-12" style={{ background: "rgba(196,162,101,0.4)" }} />
+          </div>
+          {/* Headline */}
+          <h1
+            className="font-display italic leading-[0.85]"
+            style={{ color: "var(--color-on-surface)", letterSpacing: "-0.03em", textShadow: "0 4px 40px rgba(5,23,11,0.6)", fontSize: "clamp(3.75rem, 8vw, 8rem)" }}
+          >
+            Where Artificial <br />
+            <span style={{ color: "var(--color-primary)" }}>Intelligence</span> Breathes.
+          </h1>
+          {/* Subtitle */}
+          <p
+            className="max-w-2xl mx-auto text-lg md:text-xl font-light leading-relaxed"
+            style={{ color: "var(--color-on-surface)", opacity: 0.8, textShadow: "0 1px 12px rgba(5,23,11,0.6)" }}
+          >
+            We cultivate bespoke digital ecosystems that adapt, learn, and grow alongside your vision. Precision-engineered solutions for the organic future.
+          </p>
+          {/* Buttons */}
+          <div className="flex flex-wrap justify-center gap-4 pt-4">
+            <GlassButton size="default" href="#contact">
+              Cultivate Success
+            </GlassButton>
+            <GlassButton size="default" href="#services">
+              Explore Labs
+            </GlassButton>
+          </div>
+        </div>
       </div>
 
-      <div ref={taglineRef} className="absolute bottom-[10%] left-0 right-0 z-10 text-center px-4 sm:px-8">
-        <p className="text-2xl sm:text-3xl md:text-5xl font-display italic text-text-light">
-          <span className="tagline-word inline-block opacity-0">Intelligence.</span>{" "}
-          <span className="tagline-word inline-block opacity-0">Engineered.</span>
-        </p>
+      {/* Scroll indicator + tagline */}
+      <div ref={taglineRef} className="absolute bottom-8 left-0 right-0 z-10 flex flex-col items-center gap-4">
+        <span className="tagline-word inline-block opacity-0 text-xs uppercase tracking-[0.3em]" style={{ fontFamily: "var(--font-mono)", color: "var(--color-on-surface-variant)", opacity: 0.4 }}>Descend</span>
+        <div className="tagline-word inline-block opacity-0 w-px h-16" style={{ background: "linear-gradient(to bottom, rgba(170,208,173,0.6), transparent)" }} />
       </div>
     </section>
   );

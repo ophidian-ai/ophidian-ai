@@ -4,7 +4,6 @@ import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { GlassButton } from "@/components/ui/glass-button";
-import { ParticleBackground } from "@/components/ui/particle-background";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -30,8 +29,7 @@ export function BrandStatement() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex flex-col items-center justify-center bg-forest overflow-hidden">
-      <ParticleBackground glow />
+    <section ref={sectionRef} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
       <div className="absolute inset-0 opacity-10">
         <svg viewBox="0 0 1440 900" className="w-full h-full" preserveAspectRatio="none">
           {[...Array(12)].map((_, i) => (
@@ -39,14 +37,14 @@ export function BrandStatement() {
               key={i}
               d={`M${-100 + i * 40},${450 + Math.sin(i) * 100} Q${360 + i * 20},${200 + i * 30} ${720 + i * 10},${400 + Math.cos(i) * 80} T${1540 + i * 20},${350 + i * 25}`}
               fill="none"
-              stroke="var(--color-sage-accent)"
+              stroke="var(--color-primary-container)"
               strokeWidth="1"
             />
           ))}
         </svg>
       </div>
       <div className="relative z-10 text-center px-4 sm:px-8">
-        <p className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-display text-text-light leading-tight">
+        <p className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-display leading-tight" style={{ color: "var(--color-on-surface)" }}>
           <span className="brand-word inline-block">That&apos;s</span>{" "}
           <span className="brand-word inline-block">us</span>{" "}
           <span className="brand-word inline-block">&mdash;</span>{" "}

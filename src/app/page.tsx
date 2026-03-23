@@ -1,35 +1,26 @@
 import { NavLava } from "@/components/layout/NavLava";
 import { FooterLava } from "@/components/layout/FooterLava";
 import { HeroVideo } from "@/components/sections/HeroVideo";
-import { MissionStatement } from "@/components/sections/MissionStatement";
-import { ImageCarousel } from "@/components/sections/ImageCarousel";
-import { Manifesto } from "@/components/sections/Manifesto";
-import { ProcessOrbit } from "@/components/sections/ProcessOrbit";
-import { BrandStatement } from "@/components/sections/BrandStatement";
-import { PortfolioGrid } from "@/components/sections/PortfolioGrid";
-import { ServicesGrid } from "@/components/sections/ServicesGrid";
-
-import { PricingCards } from "@/components/sections/PricingCards";
-import { FAQNested } from "@/components/sections/FAQNested";
-import { ContactSection } from "@/components/sections/ContactSection";
+import { StatsTestimonial } from "@/components/sections/StatsTestimonial";
+import { ServicesShowcase } from "@/components/sections/ServicesShowcase";
+import { VisualBreak } from "@/components/sections/VisualBreak";
+import { FinalCTA } from "@/components/sections/FinalCTA";
+import { ParticleBackground } from "@/components/ui/particle-background";
 
 export default function Home() {
   return (
     <>
+      {/* Global fixed particle background */}
+      <div className="fixed inset-0 z-0 pointer-events-none" style={{ background: "var(--color-surface-base)" }}>
+        <ParticleBackground density={800} speed={0.4} opacity={0.35} glow />
+      </div>
       <NavLava />
-      <main>
+      <main className="relative z-10">
         <HeroVideo />
-        <MissionStatement />
-        <ImageCarousel />
-        <Manifesto />
-        <PortfolioGrid />
-        <ProcessOrbit />
-        <BrandStatement />
-        <ServicesGrid />
-
-        <PricingCards />
-        <FAQNested />
-        <ContactSection />
+        <StatsTestimonial />
+        <ServicesShowcase />
+        <VisualBreak />
+        <FinalCTA />
       </main>
       <FooterLava />
     </>
