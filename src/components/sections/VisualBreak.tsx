@@ -123,7 +123,7 @@ export function VisualBreak() {
           className="absolute inset-0 w-full h-full object-cover"
           style={{ filter: "blur(0.5px) contrast(1.1) brightness(1.05)", transform: "scale(1.02)" }}
         >
-          <source src="/video/cultivation-timeline.mp4" type="video/mp4" />
+          <source src="https://zikwvaqbtemckite.public.blob.vercel-storage.com/video/cultivation-timeline.mp4" type="video/mp4" />
         </video>
 
         {/* Subtle overlay for text legibility */}
