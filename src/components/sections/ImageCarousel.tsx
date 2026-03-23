@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { ParticleBackground } from "@/components/ui/particle-background";
 
 const IMAGES = [
   { src: "/images/gallery/forest-mist.jpg", width: 520, height: 416, alt: "Forest mist" },
@@ -19,8 +18,7 @@ export function ImageCarousel() {
   const doubled = [...IMAGES, ...IMAGES];
 
   return (
-    <section className="relative bg-forest py-16 overflow-hidden">
-      <ParticleBackground density={600} speed={0.3} opacity={0.2} />
+    <section className="relative py-16 overflow-hidden">
       <div className="group relative">
         <div className="flex gap-4 animate-scroll-x group-hover:[animation-play-state:paused]">
           {doubled.map((img, i) => (
@@ -41,7 +39,7 @@ export function ImageCarousel() {
         </div>
       </div>
       <div className="max-w-4xl mx-auto text-center mt-12 sm:mt-24 px-4 sm:px-8">
-        <p className="text-xl sm:text-2xl md:text-4xl font-display italic text-text-muted">
+        <p className="text-xl sm:text-2xl md:text-4xl font-display italic" style={{ color: "var(--color-on-surface-variant)" }}>
           So that your business thrives at every stage.
         </p>
       </div>

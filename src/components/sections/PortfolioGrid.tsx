@@ -54,7 +54,7 @@ export function PortfolioGrid() {
     <div
       ref={containerRef}
       id="portfolio"
-      className="relative bg-sage"
+      className="relative"
       style={{ height: `${scrollRunway}vh` }}
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center">
@@ -62,23 +62,23 @@ export function PortfolioGrid() {
         <div className="relative flex-1 flex flex-col justify-center">
           {/* Header — inside scroll area, above cards, high z-index above blur */}
           <div className="px-8 md:px-16 mb-8 relative z-20">
-            <h2 className="text-3xl md:text-5xl font-display text-text-dark">
+            <h2 className="text-3xl md:text-5xl font-display" style={{ color: "var(--color-on-surface)" }}>
               Our work speaks for itself.
             </h2>
           </div>
 
-          {/* Left blur edge */}
+          {/* Left frosted edge */}
           <div
-            className="absolute left-0 top-0 bottom-0 w-32 md:w-64 z-10 pointer-events-none"
+            className="absolute left-0 top-0 bottom-0 w-32 md:w-64 z-10 pointer-events-none backdrop-blur-sm"
             style={{
-              background: "linear-gradient(to right, var(--color-sage) 20%, transparent 100%)",
+              background: "linear-gradient(to right, rgba(5,23,11,0.9) 10%, transparent 100%)",
             }}
           />
-          {/* Right blur edge */}
+          {/* Right frosted edge */}
           <div
-            className="absolute right-0 top-0 bottom-0 w-32 md:w-64 z-10 pointer-events-none"
+            className="absolute right-0 top-0 bottom-0 w-32 md:w-64 z-10 pointer-events-none backdrop-blur-sm"
             style={{
-              background: "linear-gradient(to left, var(--color-sage) 20%, transparent 100%)",
+              background: "linear-gradient(to left, rgba(5,23,11,0.9) 10%, transparent 100%)",
             }}
           />
 
@@ -96,8 +96,13 @@ export function PortfolioGrid() {
               <a
                 key={i}
                 href={project.href}
-                className="group relative flex-shrink-0 overflow-hidden rounded-2xl bg-sage-light transition-all duration-300 hover:shadow-2xl"
-                style={{ width: "min(80vw, 900px)" }}
+                className="group relative flex-shrink-0 overflow-hidden rounded-2xl glass-card transition-all duration-300"
+                style={{
+                  width: "min(80vw, 900px)",
+                  boxShadow: "var(--shadow-ambient)",
+                }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "0 0 40px rgba(196,162,101,0.10)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-ambient)"; }}
               >
                 <div className="aspect-[16/10] overflow-hidden">
                   <Image
@@ -108,18 +113,18 @@ export function PortfolioGrid() {
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
-                <div className="p-6 md:p-8 flex items-start justify-between">
+                <div className="p-6 md:p-8 flex items-start justify-between" style={{ background: "var(--color-surface-container-high)" }}>
                   <div>
-                    <h3 className="text-xl md:text-2xl font-semibold text-text-dark">{project.title}</h3>
+                    <h3 className="text-xl md:text-2xl font-semibold" style={{ color: "var(--color-on-surface)" }}>{project.title}</h3>
                     <div className="flex gap-2 mt-3">
                       {project.tags.map((tag) => (
-                        <span key={tag} className="text-xs px-3 py-1 rounded-full bg-forest/10 text-forest font-medium">
+                        <span key={tag} className="text-xs px-3 py-1 rounded-full font-medium" style={{ background: "var(--color-secondary-container)", color: "var(--color-on-secondary-container)" }}>
                           {tag}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <ArrowUpRight className="w-6 h-6 text-text-dark/40 group-hover:text-gold transition-colors" />
+                  <ArrowUpRight className="w-6 h-6 transition-colors" style={{ color: "var(--color-on-surface-variant)" }} />
                 </div>
               </a>
             ))}

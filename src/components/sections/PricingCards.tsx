@@ -265,7 +265,7 @@ export function PricingCards() {
     <section
       id="pricing"
       ref={sectionRef}
-      className="relative w-full overflow-hidden bg-forest py-24 lg:py-32"
+      className="relative w-full overflow-hidden py-24 lg:py-32"
     >
       {/* sparkles background */}
       <div className="pointer-events-none absolute inset-0 h-full w-full">
@@ -295,7 +295,8 @@ export function PricingCards() {
             initial={{ opacity: 0, y: 16 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5 }}
-            className="mb-4 font-mono text-sm uppercase tracking-widest text-gold"
+            className="mb-4 text-sm uppercase tracking-widest"
+            style={{ fontFamily: "var(--font-mono)", color: "var(--color-secondary)" }}
           >
             Pricing
           </motion.p>
@@ -362,7 +363,7 @@ export function PricingCards() {
               transition={{ duration: 0.3 }}
               className="flex justify-center mb-10"
             >
-              <div className="relative flex rounded-full bg-forest-deep border border-white/10 p-1">
+              <div className="relative flex rounded-full p-1" style={{ background: "var(--color-surface-container-high)", border: "1px solid var(--color-outline-variant)" }}>
                 <button
                   type="button"
                   onClick={() => setIsYearly(false)}
@@ -461,15 +462,22 @@ function PricingCard({ plan, index, isRecurring, isYearly }: PricingCardProps) {
   return (
     <div
       className={cn(
-        "group relative flex flex-col rounded-2xl border p-8 transition-all duration-300",
+        "group relative flex flex-col rounded-2xl p-8 transition-all duration-300",
         plan.popular
-          ? "border-gold bg-forest-deep shadow-[0_0_40px_rgba(196,162,101,0.15)] scale-[1.02]"
-          : "border-white/10 bg-forest-deep hover:border-gold/30"
+          ? "glass-card scale-[1.02]"
+          : "ghost-border hover:border-[rgba(196,162,101,0.15)]"
       )}
+      style={{
+        background: plan.popular ? undefined : "var(--color-surface-container-high)",
+        boxShadow: plan.popular ? "0 0 40px rgba(196,162,101,0.10)" : undefined,
+      }}
     >
       {plan.popular && (
         <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-          <span className="inline-flex items-center rounded-full bg-gradient-to-r from-gold to-gold-light px-4 py-1 text-xs font-semibold uppercase tracking-wider text-forest-deep">
+          <span
+            className="inline-flex items-center rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-wider"
+            style={{ background: "linear-gradient(135deg, var(--color-secondary), var(--color-secondary-light))", color: "var(--color-surface-base)" }}
+          >
             Most Popular
           </span>
         </div>
@@ -507,7 +515,7 @@ function PricingCard({ plan, index, isRecurring, isYearly }: PricingCardProps) {
         {plan.description}
       </p>
 
-      <div className="my-6 h-px bg-white/10" />
+      <div className="my-6" style={{ height: "2.75rem" }} />
 
       <ul className="flex-1 space-y-3">
         {plan.features.map((feature) => (

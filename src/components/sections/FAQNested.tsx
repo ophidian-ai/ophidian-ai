@@ -27,28 +27,28 @@ export function FAQNested() {
   const [openQuestion, setOpenQuestion] = useState<string | null>(null);
 
   return (
-    <section id="faq" className="bg-sage py-24 md:py-32">
+    <section id="faq" className="py-24 md:py-32">
       <div className="max-w-[1000px] mx-auto px-4 sm:px-8">
-        <h2 className="text-2xl sm:text-3xl md:text-5xl font-display text-text-dark mb-10 sm:mb-16">Before you start, you might want to know more.</h2>
-        <div className="space-y-2">
+        <h2 className="text-2xl sm:text-3xl md:text-5xl font-display mb-10 sm:mb-16" style={{ color: "var(--color-on-surface)" }}>Before you start, you might want to know more.</h2>
+        <div className="space-y-4">
           {FAQ_GROUPS.map((group, gi) => (
-            <div key={group.title} className="border-b border-forest/10">
-              <button onClick={() => setOpenGroup(openGroup === gi ? null : gi)} className="w-full flex items-center justify-between py-6 text-left">
-                <h3 className="text-xl font-display text-text-dark">{group.title}</h3>
-                {openGroup === gi ? <Minus className="w-5 h-5 text-text-dark/40" /> : <Plus className="w-5 h-5 text-text-dark/40" />}
+            <div key={group.title} className="rounded-xl" style={{ background: openGroup === gi ? "var(--color-surface-container-high)" : "transparent" }}>
+              <button onClick={() => setOpenGroup(openGroup === gi ? null : gi)} className="w-full flex items-center justify-between py-6 px-4 text-left rounded-xl transition-colors hover:bg-[var(--color-surface-container-high)]">
+                <h3 className="text-xl font-display" style={{ color: "var(--color-on-surface)" }}>{group.title}</h3>
+                {openGroup === gi ? <Minus className="w-5 h-5" style={{ color: "var(--color-on-surface-variant)" }} /> : <Plus className="w-5 h-5" style={{ color: "var(--color-on-surface-variant)" }} />}
               </button>
               <div className={cn("overflow-hidden transition-all duration-300", openGroup === gi ? "max-h-[2000px] pb-4" : "max-h-0")}>
                 {group.questions.map((item) => {
                   const key = `${gi}-${item.q}`;
                   const isOpen = openQuestion === key;
                   return (
-                    <div key={key} className="border-t border-forest/5">
-                      <button onClick={() => setOpenQuestion(isOpen ? null : key)} className="w-full flex items-center justify-between py-4 pl-6 text-left">
-                        <span className="text-text-dark/80">{item.q}</span>
-                        <Plus className={cn("w-4 h-4 text-text-dark/30 transition-transform flex-shrink-0 ml-4", isOpen && "rotate-45")} />
+                    <div key={key} className="rounded-lg" style={{ background: isOpen ? "var(--color-surface-container-low)" : "transparent" }}>
+                      <button onClick={() => setOpenQuestion(isOpen ? null : key)} className="w-full flex items-center justify-between py-4 pl-6 pr-4 text-left">
+                        <span style={{ color: "var(--color-on-surface)" }}>{item.q}</span>
+                        <Plus className={cn("w-4 h-4 transition-transform flex-shrink-0 ml-4", isOpen && "rotate-45")} style={{ color: "var(--color-on-surface-variant)" }} />
                       </button>
                       <div className={cn("overflow-hidden transition-all duration-200", isOpen ? "max-h-[500px] pb-4" : "max-h-0")}>
-                        <p className="pl-6 pr-12 text-text-dark/60 leading-relaxed">{item.a}</p>
+                        <p className="pl-6 pr-12 leading-relaxed" style={{ color: "var(--color-on-surface-variant)" }}>{item.a}</p>
                       </div>
                     </div>
                   );

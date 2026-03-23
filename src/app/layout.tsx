@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Space_Mono, Playfair_Display } from "next/font/google";
+import { Inter, Space_Mono, Space_Grotesk, Playfair_Display } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { JsonLd } from "@/components/JsonLd";
 import AIChatWidget from "@/components/ui/ai-orb";
@@ -17,6 +17,12 @@ const spaceMono = Space_Mono({
   variable: "--font-space-mono",
   subsets: ["latin"],
   weight: ["400", "700"],
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const playfair = Playfair_Display({
@@ -85,7 +91,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${inter.variable} ${spaceMono.variable} ${playfair.variable} font-sans antialiased bg-background text-foreground`}
+        className={`${inter.variable} ${spaceMono.variable} ${spaceGrotesk.variable} ${playfair.variable} font-sans antialiased`}
       >
         <JsonLd data={organizationSchema} />
         <EditModeProvider>

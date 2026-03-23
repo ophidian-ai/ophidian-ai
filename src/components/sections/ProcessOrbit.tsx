@@ -3,7 +3,6 @@
 import { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ParticleBackground } from "@/components/ui/particle-background";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -52,20 +51,26 @@ export function ProcessOrbit() {
   return (
     <div
       ref={containerRef}
-      className="relative bg-forest"
+      className="relative"
       style={{ height: `${(STEPS.length + 1) * 75}vh` }}
     >
       {/* Sticky inner — stays centered while outer scrolls */}
       <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center px-8 overflow-hidden">
-        <ParticleBackground />
         <div className="w-full max-w-[1400px]">
-          <h2 className="text-3xl md:text-5xl font-display text-text-light mb-12 md:mb-20">
+          <h2 className="text-3xl md:text-5xl font-display mb-12 md:mb-20" style={{ color: "var(--color-on-surface)" }}>
             Your path starts here
           </h2>
 
           <div className="relative max-w-[800px] mx-auto mb-12 md:mb-16">
             <svg viewBox="0 0 800 400" className="w-full">
-              <ellipse cx="400" cy="200" rx="340" ry="160" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+              <defs>
+                <radialGradient id="orbit-glow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="var(--color-primary-container)" stopOpacity="0.08" />
+                  <stop offset="100%" stopColor="transparent" stopOpacity="0" />
+                </radialGradient>
+              </defs>
+              <ellipse cx="400" cy="200" rx="360" ry="180" fill="url(#orbit-glow)" />
+              <ellipse cx="400" cy="200" rx="340" ry="160" fill="none" stroke="var(--color-outline-variant)" strokeWidth="1" />
 
               {STEPS.map((_, i) => {
                 if (i >= active) return null;
@@ -106,22 +111,22 @@ export function ProcessOrbit() {
                     <circle
                       cx={pos.x} cy={pos.y}
                       r={isActive ? 24 : 18}
-                      fill={isActive || isCompleted ? "var(--color-gold)" : "var(--color-forest-deep)"}
-                      stroke={isActive || isCompleted ? "var(--color-gold)" : "rgba(255,255,255,0.2)"}
+                      fill={isActive ? "var(--color-secondary)" : isCompleted ? "var(--color-primary-container)" : "var(--color-surface-container-high)"}
+                      stroke={isActive ? "var(--color-secondary)" : isCompleted ? "var(--color-primary-container)" : "var(--color-outline-variant)"}
                       strokeWidth="1.5"
-                      opacity={isCompleted && !isActive ? 0.5 : 1}
+                      opacity={isCompleted && !isActive ? 0.7 : 1}
                       className="transition-all duration-500"
                     />
                     {isActive && (
                       <circle
                         cx={pos.x} cy={pos.y} r={32}
-                        fill="none" stroke="var(--color-gold)" strokeWidth="1" opacity="0.3"
+                        fill="none" stroke="var(--color-secondary)" strokeWidth="1" opacity="0.3"
                       />
                     )}
                     <text
                       x={pos.x} y={pos.y + 5}
                       textAnchor="middle"
-                      fill={isActive || isCompleted ? "var(--color-forest-deep)" : "var(--color-text-light)"}
+                      fill={isActive ? "var(--color-surface-base)" : isCompleted ? "var(--color-on-primary)" : "var(--color-on-surface)"}
                       fontSize="14" fontWeight="600"
                     >
                       {step.num}
@@ -132,11 +137,11 @@ export function ProcessOrbit() {
             </svg>
           </div>
 
-          <div className="max-w-2xl mx-auto text-center min-h-[100px]">
-            <h3 className="text-2xl md:text-3xl font-display italic text-text-light mb-4">
+          <div className="max-w-2xl mx-auto text-center min-h-[100px] glass-card rounded-xl px-8 py-6">
+            <h3 className="text-2xl md:text-3xl font-display italic mb-4" style={{ color: "var(--color-on-surface)" }}>
               {STEPS[active].title}
             </h3>
-            <p className="text-text-muted text-lg leading-relaxed">
+            <p className="text-lg leading-relaxed" style={{ color: "var(--color-on-surface-variant)" }}>
               {STEPS[active].desc}
             </p>
           </div>
