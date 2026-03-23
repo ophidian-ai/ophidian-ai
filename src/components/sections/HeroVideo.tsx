@@ -45,7 +45,7 @@ export function HeroVideo() {
         style={{ willChange: "transform, border-radius" }}
       >
         <video autoPlay muted loop playsInline className="w-full h-full object-cover">
-          <source src="/video/hero-card-video.mp4" type="video/mp4" />
+          <source src="https://zikwvaqbtemckite.public.blob.vercel-storage.com/video/hero-card-video.mp4" type="video/mp4" />
         </video>
         {/* Layered overlays — deep forest tones instead of pure black */}
         <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(5,23,11,0.45) 0%, rgba(5,23,11,0.20) 40%, rgba(5,23,11,0.70) 100%)" }} />
