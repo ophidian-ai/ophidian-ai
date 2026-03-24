@@ -2,7 +2,9 @@
 
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 export type ContactFormState = {
   success: boolean;
@@ -35,7 +37,7 @@ export async function submitContactForm(
 
   // --- Send email via Resend ---
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: "OphidianAI Contact Form <contact@ophidianai.com>",
       to: "eric.lefler@ophidianai.com",
       subject: `New contact form submission from ${name}`,
