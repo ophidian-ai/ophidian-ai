@@ -5,6 +5,8 @@ import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
 import { Badge } from "@/components/ui/Badge";
+import { MarkdownContent } from "@/components/ui/MarkdownContent";
+import { NewsletterSignup } from "@/components/ui/NewsletterSignup";
 import { getAllPosts, getPostBySlug } from "@/lib/blog";
 
 interface BlogPostPageProps {
@@ -41,12 +43,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     day: "numeric",
   });
 
-  // Split content into paragraphs for rendering
-  const paragraphs = post.content
-    .trim()
-    .split(/\n\n+/)
-    .filter((p) => p.trim().length > 0);
-
   return (
     <PageWrapper>
       <div className="grain">
@@ -80,14 +76,28 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 )}
               </header>
 
-              <div className="prose prose-invert prose-lg max-w-none">
-                {paragraphs.map((paragraph, i) => (
-                  <Text key={i} variant="body" className="mb-6 leading-relaxed">
-                    {paragraph}
-                  </Text>
-                ))}
-              </div>
+              <MarkdownContent content={post.content} />
             </article>
+
+            {/* Newsletter signup at end of post */}
+            <div className="mt-16 pt-12 border-t border-surface-border">
+              <div className="glass rounded-xl p-8 text-center">
+                <h3 className="text-xl font-display font-bold mb-2" style={{ color: "var(--color-on-surface)" }}>
+                  Enjoyed this article?
+                </h3>
+                <p className="text-sm mb-6" style={{ color: "var(--color-on-surface-variant)" }}>
+                  Get more practical tips on websites, AI, and growing your small business delivered to your inbox.
+                </p>
+                <div className="max-w-md mx-auto">
+                  <NewsletterSignup
+                    variant="inline"
+                    source="blog_post"
+                    heading=""
+                    description=""
+                  />
+                </div>
+              </div>
+            </div>
           </Container>
         </section>
       </div>

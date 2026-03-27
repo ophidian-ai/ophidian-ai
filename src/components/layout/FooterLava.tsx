@@ -1,4 +1,5 @@
 import { Mail, Phone, MapPin } from "lucide-react";
+import { NewsletterSignup } from "@/components/ui/NewsletterSignup";
 
 export function FooterLava() {
   return (
@@ -41,11 +42,11 @@ export function FooterLava() {
           </div>
         </div>
         <div>
-          <h3 className="text-sm font-display tracking-wider uppercase mb-4" style={{ color: "var(--color-on-surface)" }}>Connect</h3>
-          <div className="text-sm space-y-2" style={{ color: "var(--color-on-surface-variant)" }}>
-            <a href="https://www.facebook.com/profile.php?id=61573940409724" className="block hover:opacity-80 transition-opacity" target="_blank" rel="noopener noreferrer">Facebook</a>
-            <a href="https://www.instagram.com/ophidianai/" className="block hover:opacity-80 transition-opacity" target="_blank" rel="noopener noreferrer">Instagram</a>
-          </div>
+          <NewsletterSignup
+            variant="stacked"
+            source="footer"
+            description="AI, web design, and small business tips. No spam."
+          />
         </div>
       </div>
       <div className="py-6 text-center text-xs" style={{ color: "var(--color-on-surface-variant)" }}>

@@ -6,6 +6,7 @@ import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import { NewsletterSignup } from "@/components/ui/NewsletterSignup";
 import { getAllPosts } from "@/lib/blog";
 
 export default function BlogPage() {
@@ -86,6 +87,28 @@ export default function BlogPage() {
                 })}
               </div>
             )}
+          </Container>
+        </section>
+
+        {/* Newsletter signup */}
+        <section className="py-16 md:py-20">
+          <Container width="narrow">
+            <div className="glass rounded-xl p-8 md:p-12 text-center">
+              <Heading level={2} gradient className="mb-3">
+                Get smarter about your online presence
+              </Heading>
+              <Text variant="lead" className="mb-8 max-w-xl mx-auto">
+                Practical tips on websites, AI tools, and marketing for small business owners. One email per week, no fluff.
+              </Text>
+              <div className="max-w-md mx-auto">
+                <NewsletterSignup
+                  variant="inline"
+                  source="blog_listing"
+                  heading=""
+                  description=""
+                />
+              </div>
+            </div>
           </Container>
         </section>
 
