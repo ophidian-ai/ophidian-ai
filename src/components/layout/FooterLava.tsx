@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { NewsletterSignup } from "@/components/ui/NewsletterSignup";
 
@@ -14,7 +15,7 @@ export function FooterLava() {
           </p>
         </div>
       </div>
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-12 sm:py-16 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-12 sm:py-16 grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-12">
         <div>
           <h3 className="text-sm font-display tracking-wider uppercase mb-4" style={{ color: "var(--color-on-surface)" }}>Contacts</h3>
           <div className="space-y-3 text-sm" style={{ color: "var(--color-on-surface-variant)" }}>
@@ -39,6 +40,20 @@ export function FooterLava() {
           <div className="text-sm space-y-1" style={{ color: "var(--color-on-surface-variant)" }}>
             <p>Monday - Friday: 9:00 - 18:00</p>
             <p>Saturday - Sunday: Closed</p>
+          </div>
+        </div>
+        <div>
+          <h3 className="text-sm font-display tracking-wider uppercase mb-4" style={{ color: "var(--color-on-surface)" }}>Compare</h3>
+          <div className="space-y-2 text-sm" style={{ color: "var(--color-on-surface-variant)" }}>
+            <Link href="/compare/ophidianai-vs-wix" className="block hover:opacity-80 transition-opacity">
+              OphidianAI vs Wix
+            </Link>
+            <Link href="/compare/ophidianai-vs-squarespace" className="block hover:opacity-80 transition-opacity">
+              OphidianAI vs Squarespace
+            </Link>
+            <Link href="/compare/agency-vs-freelancer-vs-diy" className="block hover:opacity-80 transition-opacity">
+              Agency vs Freelancer vs DIY
+            </Link>
           </div>
         </div>
         <div>
