@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/JsonLd";
 import AIChatWidget from "@/components/ui/ai-orb";
 import { EditModeProvider } from "@/lib/edit-mode-context";
 import { EditModeToolbar } from "@/components/editable/edit-mode-toolbar";
+import { ScrollCTA } from "@/components/ui/ScrollCTA";
 import "./globals.css";
 
 const inter = Inter({
@@ -99,6 +100,7 @@ export default function RootLayout({
             {children}
           </div>
           <AIChatWidget />
+          <ScrollCTA />
           <EditModeToolbar />
         </EditModeProvider>
         <Analytics />
