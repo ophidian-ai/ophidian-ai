@@ -9,7 +9,6 @@ import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
 import { Badge } from "@/components/ui/Badge";
-import { GlassButton } from "@/components/ui/glass-button";
 import { GlowCard } from "@/components/ui/spotlight-card";
 import { getPortfolioProjects, type PortfolioProject } from "@/lib/portfolio";
 import { ArrowRight, ExternalLink } from "lucide-react";
@@ -108,19 +107,6 @@ export default function PortfolioPage() {
                 ))}
               </div>
             )}
-          </Container>
-        </section>
-
-        {/* CTA */}
-        <section className="py-16 md:py-24">
-          <Container width="narrow">
-            <div className="text-center animate-fade-up">
-              <Heading level={3} gradient className="mb-4">More projects coming soon</Heading>
-              <Text variant="body" className="mb-8">
-                OphidianAI is actively building our portfolio. We are currently taking on new clients -- if you have a project in mind, we would love to hear about it.
-              </Text>
-              <GlassButton size="lg" href="/contact">Start a Project</GlassButton>
-            </div>
           </Container>
         </section>
 

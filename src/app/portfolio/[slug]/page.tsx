@@ -29,6 +29,12 @@ import {
   MapPin,
   ArrowLeft,
   ExternalLink,
+  Wrench,
+  Shield,
+  Users,
+  Monitor,
+  ClipboardList,
+  Truck,
   type LucideIcon,
 } from "lucide-react";
 
@@ -47,6 +53,12 @@ const iconMap: Record<string, LucideIcon> = {
   Facebook,
   MapPin,
   ExternalLink,
+  Wrench,
+  Shield,
+  Users,
+  Monitor,
+  ClipboardList,
+  Truck,
 };
 
 export default function PortfolioProjectPage() {
@@ -288,22 +300,6 @@ export default function PortfolioProjectPage() {
             </Container>
           </section>
         )}
-
-        {/* Back to projects + CTA */}
-        <section className="py-16 md:py-24">
-          <Container width="narrow">
-            <div className="text-center animate-fade-up">
-              <Heading level={3} gradient className="mb-4">More projects coming soon</Heading>
-              <Text variant="body" className="mb-8">
-                OphidianAI is actively building our portfolio. We are currently taking on new clients -- if you have a project in mind, we would love to hear about it.
-              </Text>
-              <div className="flex items-center justify-center gap-4">
-                <GlassButton href="/portfolio">View All Projects</GlassButton>
-                <GlassButton size="lg" href="/contact">Start a Project</GlassButton>
-              </div>
-            </div>
-          </Container>
-        </section>
 
         <CTABanner
           headline="Ready to build something great?"
