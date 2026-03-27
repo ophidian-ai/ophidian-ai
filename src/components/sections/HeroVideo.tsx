@@ -66,7 +66,7 @@ export function HeroVideo() {
               className="text-sm uppercase tracking-[0.3em] px-4 py-1.5 rounded-full"
               style={{ fontFamily: "var(--font-mono)", color: "var(--color-secondary)", background: "rgba(5,23,11,0.6)", backdropFilter: "blur(8px)" }}
             >
-              Neural Flora &amp; Silicon Flora
+              Columbus, Indiana
             </span>
             <span className="h-px w-12" style={{ background: "rgba(196,162,101,0.4)" }} />
           </div>
@@ -75,23 +75,23 @@ export function HeroVideo() {
             className="font-display italic leading-[0.85]"
             style={{ color: "var(--color-on-surface)", letterSpacing: "-0.03em", textShadow: "0 4px 40px rgba(5,23,11,0.6)", fontSize: "clamp(3.75rem, 8vw, 8rem)" }}
           >
-            Where Artificial <br />
-            <span style={{ color: "var(--color-primary)" }}>Intelligence</span> Breathes.
+            Websites &amp; <span style={{ color: "var(--color-primary)" }}>AI</span> That<br />
+            Grow Your Business.
           </h1>
           {/* Subtitle */}
           <p
             className="max-w-2xl mx-auto text-lg md:text-xl font-light leading-relaxed"
             style={{ color: "var(--color-on-surface)", opacity: 0.8, textShadow: "0 1px 12px rgba(5,23,11,0.6)" }}
           >
-            We cultivate bespoke digital ecosystems that adapt, learn, and grow alongside your vision. Precision-engineered solutions for the organic future.
+            Custom websites, AI chatbots, and marketing automation for small businesses. No templates. No jargon. Just results.
           </p>
           {/* Buttons */}
           <div className="flex flex-wrap justify-center gap-4 pt-4">
-            <GlassButton size="default" href="#contact">
-              Cultivate Success
+            <GlassButton size="default" href="/portfolio">
+              See Our Work
             </GlassButton>
-            <GlassButton size="default" href="#services">
-              Explore Labs
+            <GlassButton size="default" href="/contact">
+              Book a Free Call
             </GlassButton>
           </div>
         </div>
@@ -99,7 +99,7 @@ export function HeroVideo() {
 
       {/* Scroll indicator + tagline */}
       <div ref={taglineRef} className="absolute bottom-8 left-0 right-0 z-10 flex flex-col items-center gap-4">
-        <span className="tagline-word inline-block opacity-0 text-xs uppercase tracking-[0.3em]" style={{ fontFamily: "var(--font-mono)", color: "var(--color-on-surface-variant)", opacity: 0.4 }}>Descend</span>
+        <span className="tagline-word inline-block opacity-0 text-xs uppercase tracking-[0.3em]" style={{ fontFamily: "var(--font-mono)", color: "var(--color-on-surface-variant)", opacity: 0.4 }}>Scroll</span>
         <div className="tagline-word inline-block opacity-0 w-px h-16" style={{ background: "linear-gradient(to bottom, rgba(170,208,173,0.6), transparent)" }} />
       </div>
     </section>
