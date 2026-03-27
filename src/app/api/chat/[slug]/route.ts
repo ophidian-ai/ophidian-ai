@@ -66,7 +66,14 @@ export async function POST(
     }
   }
 
-  let body: { messages?: Array<{ role: string; content: string }>; sessionId?: string };
+  let body: {
+    messages?: Array<{
+      role: string;
+      content?: string;
+      parts?: Array<{ type: string; text?: string }>;
+    }>;
+    sessionId?: string;
+  };
   try {
     body = await request.json();
   } catch {
@@ -83,11 +90,26 @@ export async function POST(
     return NextResponse.json({ error: "sessionId is required" }, { status: 400, headers: corsHeaders });
   }
 
-  // Sanitize user messages
-  const sanitizedMessages = messages.map((m) => ({
-    ...m,
-    content: m.role === "user" ? m.content.replace(/<[^>]*>/g, "") : m.content,
-  }));
+  // Extract text from either v6 UIMessage parts or legacy content field
+  function getTextContent(m: { content?: string; parts?: Array<{ type: string; text?: string }> }): string {
+    if (m.content) return m.content;
+    if (m.parts) {
+      return m.parts
+        .filter((p) => p.type === "text" && p.text)
+        .map((p) => p.text!)
+        .join("");
+    }
+    return "";
+  }
+
+  // Normalize and sanitize messages
+  const sanitizedMessages = messages.map((m) => {
+    const text = getTextContent(m);
+    return {
+      role: m.role,
+      content: m.role === "user" ? text.replace(/<[^>]*>/g, "") : text,
+    };
+  });
 
   const lastUserMessage = sanitizedMessages.filter((m) => m.role === "user").pop()?.content ?? "";
 
