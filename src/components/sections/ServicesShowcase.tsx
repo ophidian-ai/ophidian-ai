@@ -11,20 +11,20 @@ export function ServicesShowcase() {
               className="text-[10px] uppercase tracking-[0.4em] mb-6 block"
               style={{ fontFamily: "var(--font-mono)", color: "var(--color-secondary)" }}
             >
-              Our Specializations
+              What We Do
             </span>
             <h2
               className="font-display italic text-6xl md:text-7xl"
               style={{ color: "var(--color-on-surface)" }}
             >
-              Distinctive &amp; <br />Intentional.
+              Built to <br />Perform.
             </h2>
           </div>
           <p
             className="max-w-sm font-light italic leading-relaxed"
             style={{ color: "var(--color-on-surface-variant)", opacity: 0.7 }}
           >
-            Breaking the mechanical barrier through advanced glass-morphism and fluid-state architecture.
+            Two core offerings that help small businesses compete online — high-performance websites and AI-powered marketing.
           </p>
         </div>
 
@@ -44,20 +44,20 @@ export function ServicesShowcase() {
                 <Brain className="w-8 h-8" style={{ color: "var(--color-primary)" }} />
               </div>
               <h3 className="font-display italic text-4xl" style={{ color: "var(--color-on-surface)" }}>
-                AI Content Engine
+                AI Marketing &amp; Chatbots
               </h3>
               <p className="text-lg leading-relaxed font-light" style={{ color: "var(--color-on-surface-variant)", opacity: 0.8 }}>
-                Self-sustaining content ecosystems that leverage neural linguistics to engage and convert with unprecedented empathy.
+                AI chatbots that answer customer questions 24/7, plus automated content and SEO that keep your business visible online without extra work.
               </p>
             </div>
             <div className="relative z-10 grid grid-cols-2 gap-4 mt-16">
               <div className="p-4 rounded-lg" style={{ background: "rgba(5,23,11,0.4)" }}>
-                <span className="text-[8px] uppercase tracking-widest block mb-2" style={{ fontFamily: "var(--font-mono)", color: "var(--color-secondary)" }}>Process 01</span>
-                <span className="text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "var(--color-primary)" }}>NEURAL SEMANTICS</span>
+                <span className="text-[8px] uppercase tracking-widest block mb-2" style={{ fontFamily: "var(--font-mono)", color: "var(--color-secondary)" }}>Service 01</span>
+                <span className="text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "var(--color-primary)" }}>AI CHATBOTS</span>
               </div>
               <div className="p-4 rounded-lg" style={{ background: "rgba(5,23,11,0.4)" }}>
-                <span className="text-[8px] uppercase tracking-widest block mb-2" style={{ fontFamily: "var(--font-mono)", color: "var(--color-secondary)" }}>Process 02</span>
-                <span className="text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "var(--color-primary)" }}>AUTONOMOUS SYNTHESIS</span>
+                <span className="text-[8px] uppercase tracking-widest block mb-2" style={{ fontFamily: "var(--font-mono)", color: "var(--color-secondary)" }}>Service 02</span>
+                <span className="text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "var(--color-primary)" }}>CONTENT &amp; SEO</span>
               </div>
             </div>
           </div>
@@ -73,19 +73,19 @@ export function ServicesShowcase() {
                   <PenTool className="w-8 h-8" style={{ color: "var(--color-secondary)" }} />
                 </div>
                 <h3 className="font-display italic text-4xl" style={{ color: "var(--color-on-surface)" }}>
-                  Premium Web Design
+                  Custom Websites
                 </h3>
                 <p className="text-lg leading-relaxed font-light" style={{ color: "var(--color-on-surface-variant)", opacity: 0.8 }}>
-                  Interfaces that don&apos;t just function — they breathe. Using fluid layouts and organic textures to create digital sanctuaries.
+                  Fast, mobile-friendly websites built from scratch — not templates. Designed to load in under 2 seconds and turn visitors into customers.
                 </p>
                 <ul className="space-y-4 pt-4">
                   <li className="flex items-center gap-4 text-[10px] tracking-widest" style={{ fontFamily: "var(--font-mono)", color: "rgba(170,208,173,0.7)" }}>
                     <span className="w-1 h-1 rounded-full" style={{ background: "var(--color-secondary)" }} />
-                    ASYMMETRIC FLUIDITY
+                    95+ LIGHTHOUSE SCORES
                   </li>
                   <li className="flex items-center gap-4 text-[10px] tracking-widest" style={{ fontFamily: "var(--font-mono)", color: "rgba(170,208,173,0.7)" }}>
                     <span className="w-1 h-1 rounded-full" style={{ background: "var(--color-secondary)" }} />
-                    KINETIC PRECISION
+                    MOBILE-FIRST DESIGN
                   </li>
                 </ul>
               </div>
