@@ -20,14 +20,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const result = data?.result as ScanResult | null;
   const score = result?.overall_score ?? null;
+
+  let domain = '';
+  try {
+    if (result?.url) domain = new URL(result.url).hostname.replace(/^www\./, '');
+  } catch { /* ignore invalid URL */ }
+
+  const title = domain
+    ? `Website Report: ${domain} — ${result?.overall_grade ?? '?'} (${score ?? '?'}/100)`
+    : 'Website Revenue Leak Report | OphidianAI';
+
   const description =
-    score !== null
-      ? `Your website scored ${score}/100. See your full revenue leak report and quick wins.`
+    score !== null && result
+      ? `${domain || 'This site'} scored ${score}/100 and is leaking ~$${result.estimated_monthly_leak.toLocaleString()}/mo. See the full speed, SEO, mobile, and trust breakdown.`
       : 'See your full website revenue leak report and how to fix it.';
 
   return {
-    title: 'Website Revenue Leak Report | OphidianAI',
+    title,
     description,
+    openGraph: { title, description },
   };
 }
 
