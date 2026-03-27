@@ -9,10 +9,28 @@ import { AccountPopover } from "@/components/ui/account-popover";
 import { GlassButton } from "@/components/ui/glass-button";
 import { createClient } from "@/lib/supabase/client";
 
-const NAV_LINKS = [
+type NavLink = {
+  label: string;
+  anchor: string;
+  route: string;
+  children?: { label: string; route: string }[];
+};
+
+const NAV_LINKS: NavLink[] = [
   { label: "About", anchor: "#about", route: "/about" },
   { label: "Portfolio", anchor: "#portfolio", route: "/portfolio" },
   { label: "Services", anchor: "#services", route: "/services" },
+  {
+    label: "Industries",
+    anchor: "#industries",
+    route: "/industries/restaurants",
+    children: [
+      { label: "Restaurants", route: "/industries/restaurants" },
+      { label: "Churches", route: "/industries/churches" },
+      { label: "Contractors", route: "/industries/contractors" },
+      { label: "Farms & Markets", route: "/industries/farms-markets" },
+    ],
+  },
   { label: "Pricing", anchor: "#pricing", route: "/pricing" },
   { label: "FAQ", anchor: "#faq", route: "/faq" },
   { label: "Contact", anchor: "#contact", route: "/contact" },
@@ -110,8 +128,9 @@ export function NavLava() {
   const getHref = (link: (typeof NAV_LINKS)[number]) =>
     isHomepage ? link.anchor : link.route;
 
-  const isActive = (link: (typeof NAV_LINKS)[number]) => {
+  const isActive = (link: NavLink) => {
     if (isHomepage) return activeSection === link.anchor.slice(1);
+    if (link.children) return pathname.startsWith("/industries");
     return pathname === link.route;
   };
 
@@ -142,7 +161,7 @@ export function NavLava() {
           {/* Desktop links */}
           <ul className="hidden md:flex items-center gap-8">
             {NAV_LINKS.map((link) => (
-              <li key={link.label}>
+              <li key={link.label} className={link.children ? "relative group" : undefined}>
                 <Link
                   href={getHref(link)}
                   className={cn(
@@ -153,7 +172,35 @@ export function NavLava() {
                   )}
                 >
                   {link.label}
+                  {link.children && (
+                    <svg className="inline-block ml-1 w-3 h-3 opacity-60" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M3 5l3 3 3-3" />
+                    </svg>
+                  )}
                 </Link>
+                {link.children && (
+                  <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-200">
+                    <div
+                      className="rounded-xl py-2 min-w-[200px] backdrop-blur-xl"
+                      style={{ background: "rgba(38,57,43,0.95)", border: "1px solid var(--color-outline-variant)" }}
+                    >
+                      {link.children.map((child) => (
+                        <Link
+                          key={child.route}
+                          href={child.route}
+                          className={cn(
+                            "block px-4 py-2 text-sm transition-colors",
+                            pathname === child.route
+                              ? "text-text-light bg-white/5"
+                              : "text-text-muted hover:text-text-light hover:bg-white/5"
+                          )}
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </li>
             ))}
           </ul>
@@ -218,14 +265,29 @@ export function NavLava() {
       >
         <div className="flex flex-col gap-2 px-6 pt-24">
           {NAV_LINKS.map((link) => (
-            <Link
-              key={link.label}
-              href={getHref(link)}
-              onClick={closeMenu}
-              className="rounded-lg px-4 py-3 text-base font-medium text-text-muted transition-colors hover:bg-forest hover:text-text-light"
-            >
-              {link.label}
-            </Link>
+            <div key={link.label}>
+              <Link
+                href={getHref(link)}
+                onClick={closeMenu}
+                className="rounded-lg px-4 py-3 text-base font-medium text-text-muted transition-colors hover:bg-forest hover:text-text-light block"
+              >
+                {link.label}
+              </Link>
+              {link.children && (
+                <div className="ml-4 flex flex-col gap-1">
+                  {link.children.map((child) => (
+                    <Link
+                      key={child.route}
+                      href={child.route}
+                      onClick={closeMenu}
+                      className="rounded-lg px-4 py-2 text-sm text-text-muted transition-colors hover:bg-forest hover:text-text-light"
+                    >
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
           <div className="mt-4 border-t border-white/10 pt-4 space-y-3">
             <GlassButton size="default" href={isHomepage ? "#contact" : "/contact"} onClick={closeMenu} className="w-full">
