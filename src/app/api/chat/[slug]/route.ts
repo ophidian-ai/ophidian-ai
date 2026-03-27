@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { streamText, convertToModelMessages } from "ai";
+import { resolveModel } from "@/lib/chatbot/model";
 import { loadConfig } from "@/lib/chatbot/config";
 import { queryKnowledgeBase } from "@/lib/chatbot/rag";
 import { checkSessionRateLimit, checkMonthlyCap } from "@/lib/chatbot/rate-limit";
@@ -128,7 +129,7 @@ export async function POST(
   );
 
   const result = streamText({
-    model: config.model as any,
+    model: resolveModel(config.model),
     system: systemPrompt,
     messages: modelMessages,
     temperature: MODEL_TEMPERATURE,
