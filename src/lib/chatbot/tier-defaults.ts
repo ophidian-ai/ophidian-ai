@@ -13,6 +13,8 @@ export interface TierConfig {
 }
 
 export const TIER_DEFAULTS: Record<ChatbotTier, TierConfig> = {
+  // NOTE: All tiers use Gemini until AI Gateway / Anthropic keys are provisioned.
+  // When ready, update growth → anthropic/claude-haiku-4.5, pro → anthropic/claude-sonnet-4.5
   essentials: {
     model: "google/gemini-2.5-flash",
     leadCaptureMode: "message_count",
@@ -25,7 +27,7 @@ export const TIER_DEFAULTS: Record<ChatbotTier, TierConfig> = {
     webhooks: false,
   },
   growth: {
-    model: "anthropic/claude-haiku-4.5",
+    model: "google/gemini-2.5-flash",
     leadCaptureMode: "intent",
     pageLimit: 200,
     knowledgeSourceType: "namespace",
@@ -36,7 +38,7 @@ export const TIER_DEFAULTS: Record<ChatbotTier, TierConfig> = {
     webhooks: false,
   },
   pro: {
-    model: "anthropic/claude-sonnet-4.5",
+    model: "google/gemini-2.5-flash",
     leadCaptureMode: "intent",
     pageLimit: null,
     knowledgeSourceType: "index",
