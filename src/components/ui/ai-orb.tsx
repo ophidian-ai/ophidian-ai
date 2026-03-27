@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { useState, useRef, useEffect, Component, type ReactNode } from "react"
+import { useState, useRef, useEffect, useMemo, Component, type ReactNode } from "react"
 import { X, Send } from "lucide-react"
 import dynamic from "next/dynamic"
 import { useChat } from "@ai-sdk/react"
@@ -53,12 +53,14 @@ export function AIChatWidget() {
   const [input, setInput] = useState("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
+  const transport = useMemo(
+    () => new DefaultChatTransport({ api: "/api/chat/ophidianai-demo", body: { sessionId } }),
+    [sessionId]
+  )
+
   const { messages: chatMessages, sendMessage, status } = useChat({
     id: sessionId,
-    transport: new DefaultChatTransport({
-      api: "/api/chat/ophidianai-demo",
-      body: { sessionId },
-    }),
+    transport,
   })
 
   function getMessageText(m: (typeof chatMessages)[number]): string {
