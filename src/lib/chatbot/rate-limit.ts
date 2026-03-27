@@ -23,21 +23,25 @@ function getRedis(): Redis {
 export async function checkSessionRateLimit(
   sessionId: string
 ): Promise<RateLimitResult> {
-  const client = getRedis();
-  const key = `rl:session:${sessionId}`;
+  try {
+    const client = getRedis();
+    const key = `rl:session:${sessionId}`;
 
-  const count = await client.incr(key);
+    const count = await client.incr(key);
 
-  if (count === 1) {
-    await client.expire(key, SESSION_RATE_LIMIT.windowSeconds);
-  }
+    if (count === 1) {
+      await client.expire(key, SESSION_RATE_LIMIT.windowSeconds);
+    }
 
-  if (count > SESSION_RATE_LIMIT.maxMessages) {
-    return {
-      allowed: false,
-      message:
-        "You're sending messages too quickly. Please wait a moment before trying again.",
-    };
+    if (count > SESSION_RATE_LIMIT.maxMessages) {
+      return {
+        allowed: false,
+        message:
+          "You're sending messages too quickly. Please wait a moment before trying again.",
+      };
+    }
+  } catch (error) {
+    console.error("[rate-limit] Redis check failed, allowing request:", error);
   }
 
   return { allowed: true };
