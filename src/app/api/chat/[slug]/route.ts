@@ -105,15 +105,15 @@ export async function POST(
     );
   }
 
-  const sessionAllowed = await checkSessionRateLimit(sessionId);
-  if (!sessionAllowed) {
-    return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429, headers: corsHeaders });
+  const sessionCheck = await checkSessionRateLimit(sessionId);
+  if (!sessionCheck.allowed) {
+    return NextResponse.json({ error: sessionCheck.message ?? "Rate limit exceeded" }, { status: 429, headers: corsHeaders });
   }
 
   if (messages.length === 1) {
-    const capAllowed = await checkMonthlyCap(config);
-    if (!capAllowed) {
-      return NextResponse.json({ error: "Monthly message cap reached" }, { status: 429, headers: corsHeaders });
+    const capCheck = await checkMonthlyCap(config);
+    if (!capCheck.allowed) {
+      return NextResponse.json({ error: capCheck.message ?? "Monthly message cap reached" }, { status: 429, headers: corsHeaders });
     }
   }
 
