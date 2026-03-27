@@ -2,7 +2,9 @@
 
 import { PageWrapper } from "@/components/layout/PageWrapper";
 import { AIProductHero } from "@/components/sections/AIProductHero";
+import { ProductDemoSection } from "@/components/sections/ProductDemoSection";
 import { CTABanner } from "@/components/sections/CTABanner";
+import { SEODashboardMockup } from "@/components/mockups/SEODashboardMockup";
 
 const product = {
   title: "SEO Automation",
@@ -35,6 +37,12 @@ export default function SEOAutomationPage() {
   return (
     <PageWrapper>
       <AIProductHero product={product} />
+      <ProductDemoSection
+        eyebrow="See It in Action"
+        headline="Real scores from a real client site"
+        description="We don't just promise fast websites — we prove it. These are live Lighthouse scores from a site we built. Performance, accessibility, best practices, and SEO — all green across the board."
+        mockup={<SEODashboardMockup />}
+      />
       <CTABanner
         headline="Ready to climb the rankings?"
         subtitle="Start with a free SEO audit and see exactly where you stand."

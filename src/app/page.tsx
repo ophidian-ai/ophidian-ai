@@ -3,6 +3,7 @@ import { FooterLava } from "@/components/layout/FooterLava";
 import { HeroVideo } from "@/components/sections/HeroVideo";
 import { StatsTestimonial } from "@/components/sections/StatsTestimonial";
 import { ServicesShowcase } from "@/components/sections/ServicesShowcase";
+import { ProductShowcase } from "@/components/sections/ProductShowcase";
 import { VisualBreak } from "@/components/sections/VisualBreak";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { ParticleBackground } from "@/components/ui/particle-background";
@@ -19,6 +20,7 @@ export default function Home() {
         <HeroVideo />
         <StatsTestimonial />
         <ServicesShowcase />
+        <ProductShowcase />
         <VisualBreak />
         <FinalCTA />
       </main>
