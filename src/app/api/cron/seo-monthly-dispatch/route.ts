@@ -2,7 +2,9 @@ import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 export async function GET(request: NextRequest) {
   if (
@@ -47,7 +49,7 @@ export async function GET(request: NextRequest) {
     }
   );
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: "Iris <iris@ophidianai.com>",
     to: "eric.lefler@ophidianai.com",
     subject: `SEO Monthly Audit: Dispatched ${count} audits`,

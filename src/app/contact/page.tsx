@@ -8,6 +8,7 @@ import { Container } from "@/components/ui/Container";
 import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
 import { Card } from "@/components/ui/Card";
+import { CalendlyEmbed } from "@/components/ui/CalendlyEmbed";
 import { usePageContent } from "@/lib/use-page-content";
 import { EditableText } from "@/components/editable/editable-text";
 import { useEditMode } from "@/lib/edit-mode-context";
@@ -87,6 +88,19 @@ function ContactPageInner() {
                 </div>
               </Card>
             </div>
+          </div>
+
+          {/* Calendly Booking Section */}
+          <div className="mt-16 pt-16" style={{ borderTop: "1px solid rgba(170,208,173,0.1)" }}>
+            <div className="text-center mb-10">
+              <Heading level={2} className="text-3xl font-display italic mb-3">
+                Prefer to Talk?
+              </Heading>
+              <Text variant="body" className="max-w-md mx-auto">
+                Skip the form — book a free 30-minute discovery call and we&apos;ll discuss your project live.
+              </Text>
+            </div>
+            <CalendlyEmbed />
           </div>
         </Container>
       </section>
