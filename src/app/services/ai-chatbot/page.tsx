@@ -2,7 +2,9 @@
 
 import { PageWrapper } from "@/components/layout/PageWrapper";
 import { AIProductHero } from "@/components/sections/AIProductHero";
+import { ProductDemoSection } from "@/components/sections/ProductDemoSection";
 import { CTABanner } from "@/components/sections/CTABanner";
+import { ChatbotMockup } from "@/components/mockups/ChatbotMockup";
 
 const product = {
   title: "AI Chatbot",
@@ -35,6 +37,12 @@ export default function AIChatbotPage() {
   return (
     <PageWrapper>
       <AIProductHero product={product} />
+      <ProductDemoSection
+        eyebrow="See It in Action"
+        headline="A real conversation with Iris"
+        description="This is what your customers experience — a helpful, knowledgeable assistant that knows your business inside out. Iris handles FAQs, captures leads, and books appointments naturally, around the clock."
+        mockup={<ChatbotMockup />}
+      />
       <section className="mx-auto max-w-4xl px-6 py-16 text-center">
         <h2 className="mb-4 text-3xl font-bold tracking-tight">Try it now</h2>
         <p className="text-muted-foreground text-lg">

@@ -2,7 +2,9 @@
 
 import { PageWrapper } from "@/components/layout/PageWrapper";
 import { AIProductHero } from "@/components/sections/AIProductHero";
+import { ProductDemoSection } from "@/components/sections/ProductDemoSection";
 import { CTABanner } from "@/components/sections/CTABanner";
+import { ContentEngineMockup } from "@/components/mockups/ContentEngineMockup";
 
 const product = {
   title: "AI Content Generation",
@@ -35,6 +37,13 @@ export default function ContentGenerationPage() {
   return (
     <PageWrapper>
       <AIProductHero product={product} />
+      <ProductDemoSection
+        eyebrow="See It in Action"
+        headline="AI-generated, human-approved"
+        description="The Content Engine drafts platform-specific posts in your brand voice, complete with hashtags, scheduling, and performance tracking. Every piece is reviewed before it goes live."
+        mockup={<ContentEngineMockup />}
+        reversed
+      />
       <CTABanner
         headline="Ready for consistent, quality content?"
         subtitle="Book a free consultation and we will outline a content strategy for your business."
