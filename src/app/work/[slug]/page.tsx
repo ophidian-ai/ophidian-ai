@@ -337,7 +337,14 @@ export default async function CaseStudyPage({ params }: PageProps) {
                 gap: "8px",
               }}
             >
-              {nextProject.title} →
+              {nextProject.title}{" "}
+              <Image
+                src="/arrow-icon.png"
+                alt=""
+                width={24}
+                height={23}
+                style={{ display: "inline-block", verticalAlign: "middle" }}
+              />
             </Link>
           </div>
         )}

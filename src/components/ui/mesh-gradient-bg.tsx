@@ -16,8 +16,8 @@ interface MeshGradientBgProps {
 export function MeshGradientBg({
   className = "",
   colors = [
-    "#C4A265",
-    "#A88B52",
+    "#B8956A",
+    "#9A7E56",
     "#0F1F14",
     "#161616",
     "#7A9E7E",

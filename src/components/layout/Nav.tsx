@@ -68,11 +68,16 @@ export function Nav() {
         {/* Wordmark */}
         <Link
           href="/"
-          className="text-[1.75rem] leading-[1.1] no-underline"
-          style={{ fontFamily: "var(--font-wordmark)", color: "var(--color-forest)" }}
+          className="no-underline flex items-center"
           aria-label="OphidianAI — home"
         >
-          Ophidian
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logos/logotext.svg"
+            alt="OphidianAI"
+            height={28}
+            style={{ height: "28px", width: "auto", display: "block" }}
+          />
         </Link>
 
         {/* Menu button */}

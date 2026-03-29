@@ -124,7 +124,14 @@ export function ProjectSection({ project, index, totalCount }: ProjectSectionPro
               (e.currentTarget as HTMLAnchorElement).style.textDecoration = "none";
             }}
           >
-            View case study →
+            View case study{" "}
+            <Image
+              src="/arrow-icon.png"
+              alt=""
+              width={24}
+              height={23}
+              style={{ display: "inline-block", verticalAlign: "middle" }}
+            />
           </Link>
         </div>
 

@@ -15,18 +15,18 @@ export function StatementFooter() {
       }}
     >
       {/* Display wordmark */}
-      <p
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/logos/logotext.svg"
+        alt="OphidianAI"
         style={{
-          fontFamily: "var(--font-wordmark)",
-          fontWeight: 400,
-          fontSize: "clamp(48px, 8vw, 72px)",
-          lineHeight: 1.0,
-          color: "var(--color-cream)",
-          margin: 0,
+          height: "clamp(48px, 8vw, 72px)",
+          width: "auto",
+          display: "block",
+          filter: "brightness(0) invert(1)",
+          opacity: 0.9,
         }}
-      >
-        Ophidian
-      </p>
+      />
 
       <p
         style={{

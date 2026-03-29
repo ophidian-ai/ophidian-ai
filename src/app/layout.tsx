@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Space_Mono, Playfair_Display } from "next/font/google";
+import { Space_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { JsonLd } from "@/components/JsonLd";
@@ -8,27 +8,29 @@ import { EditModeProvider } from "@/lib/edit-mode-context";
 import { EditModeToolbar } from "@/components/editable/edit-mode-toolbar";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
 const spaceMono = Space_Mono({
   variable: "--font-space-mono",
   subsets: ["latin"],
   weight: ["400", "700"],
 });
 
-const playfair = Playfair_Display({
+// Ballet — variable font, used for all headings (h1–h6)
+// Replaces Playfair Display. Variable `--font-playfair` kept so globals.css picks it up unchanged.
+const ballet = localFont({
+  src: "../../assets/branding_guide/fonts/Ballet/Ballet-Regular-VariableFont_opsz.ttf",
   variable: "--font-playfair",
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  style: ["normal", "italic"],
+  display: "swap",
 });
 
-// Self-hosted wordmark font — file provided by Eric (assets/branding_guide/Romantically.woff2)
-// Falls back to cursive until the file is present.
+// Gruppo — body text
+// Replaces Inter. Variable `--font-inter` kept so globals.css picks it up unchanged.
+const gruppo = localFont({
+  src: "../../assets/branding_guide/fonts/Gruppo/Gruppo-Regular.ttf",
+  variable: "--font-inter",
+  display: "swap",
+});
+
+// Self-hosted wordmark font — file not yet provided; falls back to cursive.
 const romantically = localFont({
   src: "../../assets/branding_guide/Romantically.woff2",
   variable: "--font-romantically",
@@ -95,7 +97,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${spaceMono.variable} ${playfair.variable} ${romantically.variable} antialiased`}
+        className={`${ballet.variable} ${gruppo.variable} ${spaceMono.variable} ${romantically.variable} antialiased`}
         style={{ fontFamily: "var(--font-sans)" }}
       >
         <JsonLd data={organizationSchema} />

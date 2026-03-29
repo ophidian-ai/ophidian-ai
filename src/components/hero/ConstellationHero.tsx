@@ -39,6 +39,9 @@ export function ConstellationHero({ projects }: ConstellationHeroProps) {
     let ctx: { revert: () => void } | null = null;
 
     async function initGsap() {
+      // Skip scroll animations for users who prefer reduced motion
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
       const { gsap } = await import("gsap");
       const { ScrollTrigger } = await import("gsap/ScrollTrigger");
       gsap.registerPlugin(ScrollTrigger);
@@ -180,18 +183,16 @@ export function ConstellationHero({ projects }: ConstellationHeroProps) {
             pointerEvents: "none",
           }}
         >
-          <h1
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logos/logotext.svg"
+            alt="OphidianAI"
             style={{
-              fontFamily: "var(--font-wordmark)",
-              fontWeight: 400,
-              fontSize: "clamp(48px, 8vw, 72px)",
-              lineHeight: 1.0,
-              color: "var(--color-forest)",
-              margin: 0,
+              height: "clamp(48px, 8vw, 72px)",
+              width: "auto",
+              display: "block",
             }}
-          >
-            Ophidian
-          </h1>
+          />
           <p
             style={{
               fontFamily: "var(--font-sans)",

@@ -13,7 +13,7 @@ function RibbonBackground() {
     () => ({
       u_time: { value: 0 },
       u_speed: { value: 2.0 },
-      u_c1: { value: new THREE.Color("#C4A265") },
+      u_c1: { value: new THREE.Color("#B8956A") },
       u_c2: { value: new THREE.Color("#7A9E7E") },
       u_c3: { value: new THREE.Color("#D4B87A") },
     }),
