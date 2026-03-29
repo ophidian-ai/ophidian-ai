@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Inter, Space_Mono, Space_Grotesk, Playfair_Display } from "next/font/google";
+import { Inter, Space_Mono, Playfair_Display } from "next/font/google";
+import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { JsonLd } from "@/components/JsonLd";
-import AIChatWidget from "@/components/ui/ai-orb";
+import { ChatbotPanel } from "@/components/chatbot/ChatbotPanel";
 import { EditModeProvider } from "@/lib/edit-mode-context";
 import { EditModeToolbar } from "@/components/editable/edit-mode-toolbar";
-import { ScrollCTA } from "@/components/ui/ScrollCTA";
 import "./globals.css";
 
 const inter = Inter({
@@ -20,28 +20,31 @@ const spaceMono = Space_Mono({
   weight: ["400", "700"],
 });
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "600", "700"],
   style: ["normal", "italic"],
+});
+
+// Self-hosted wordmark font — file provided by Eric (assets/branding_guide/Romantically.woff2)
+// Falls back to cursive until the file is present.
+const romantically = localFont({
+  src: "../../assets/branding_guide/Romantically.woff2",
+  variable: "--font-romantically",
+  display: "swap",
+  preload: false, // don't error on missing file during build
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ophidianai.com"),
   title: {
-    default: "OphidianAI | Intelligence. Engineered.",
+    default: "OphidianAI — Where the natural world meets innovation.",
     template: "%s | OphidianAI",
   },
   description:
-    "AI agency and integrations company. We build intelligent systems that transform how businesses operate.",
-  keywords: ["AI", "artificial intelligence", "AI agency", "AI integrations", "automation"],
+    "A premium AI-powered digital studio. We build high-performance websites, native mobile apps, and AI-driven SaaS tools for businesses that want to stand out.",
+  keywords: ["AI", "web design", "digital studio", "AI agency", "SaaS", "small business"],
   alternates: {
     canonical: "/",
   },
@@ -90,17 +93,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body
-        className={`${inter.variable} ${spaceMono.variable} ${spaceGrotesk.variable} ${playfair.variable} font-sans antialiased`}
+        className={`${inter.variable} ${spaceMono.variable} ${playfair.variable} ${romantically.variable} antialiased`}
+        style={{ fontFamily: "var(--font-sans)" }}
       >
         <JsonLd data={organizationSchema} />
         <EditModeProvider>
-          <div className="relative z-10">
-            {children}
-          </div>
-          <AIChatWidget />
-          <ScrollCTA />
+          {children}
+          <ChatbotPanel />
           <EditModeToolbar />
         </EditModeProvider>
         <Analytics />
