@@ -43,7 +43,7 @@
   --color-error:  #C45B5B;
 
   /* ── Fonts ── */
-  --font-wordmark:  var(--font-romantically), cursive;
+  --font-wordmark: cursive; /* Romantically.woff2 placeholder — swap in when asset is provided */
   --font-serif:     var(--font-playfair), 'Ballet', Georgia, serif;
   --font-sans:      var(--font-inter), 'Gruppo', system-ui, sans-serif;
   --font-mono:      var(--font-space-mono), 'Space Mono', ui-monospace, monospace;

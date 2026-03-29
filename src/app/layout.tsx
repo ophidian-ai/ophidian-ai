@@ -30,13 +30,7 @@ const gruppo = localFont({
   display: "swap",
 });
 
-// Self-hosted wordmark font — file not yet provided; falls back to cursive.
-const romantically = localFont({
-  src: "../../assets/branding_guide/Romantically.woff2",
-  variable: "--font-romantically",
-  display: "swap",
-  preload: false, // don't error on missing file during build
-});
+// Romantically.woff2 — not yet provided; --font-wordmark falls back to cursive in globals.css
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ophidianai.com"),
@@ -97,7 +91,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${ballet.variable} ${gruppo.variable} ${spaceMono.variable} ${romantically.variable} antialiased`}
+        className={`${ballet.variable} ${gruppo.variable} ${spaceMono.variable} antialiased`}
         style={{ fontFamily: "var(--font-sans)" }}
       >
         <JsonLd data={organizationSchema} />
