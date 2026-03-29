@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Mono } from "next/font/google";
-import localFont from "next/font/local";
+import { Ballet, Gruppo, Space_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { JsonLd } from "@/components/JsonLd";
 import { ChatbotPanel } from "@/components/chatbot/ChatbotPanel";
@@ -14,19 +13,20 @@ const spaceMono = Space_Mono({
   weight: ["400", "700"],
 });
 
-// Ballet — variable font, used for all headings (h1–h6)
-// Replaces Playfair Display. Variable `--font-playfair` kept so globals.css picks it up unchanged.
-const ballet = localFont({
-  src: "../../assets/branding_guide/fonts/Ballet/Ballet-Regular-VariableFont_opsz.ttf",
+// Ballet — Google Font, variable, used for all headings (h1–h6)
+// Variable `--font-playfair` kept so globals.css picks it up unchanged.
+const ballet = Ballet({
   variable: "--font-playfair",
+  subsets: ["latin"],
   display: "swap",
 });
 
-// Gruppo — body text
-// Replaces Inter. Variable `--font-inter` kept so globals.css picks it up unchanged.
-const gruppo = localFont({
-  src: "../../assets/branding_guide/fonts/Gruppo/Gruppo-Regular.ttf",
+// Gruppo — Google Font, body text
+// Variable `--font-inter` kept so globals.css picks it up unchanged.
+const gruppo = Gruppo({
   variable: "--font-inter",
+  subsets: ["latin"],
+  weight: "400",
   display: "swap",
 });
 
