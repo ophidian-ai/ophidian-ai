@@ -73,10 +73,10 @@ export function Nav() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/logos/logotext.svg"
+            src="/logos/logomark.png"
             alt="OphidianAI"
-            height={28}
-            style={{ height: "28px", width: "auto", display: "block" }}
+            height={42}
+            style={{ height: "42px", width: "auto", display: "block" }}
           />
         </Link>
 

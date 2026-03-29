@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 import { Thumbnail } from "./Thumbnail";
 import type { PortfolioProject } from "@/lib/portfolio";
 
@@ -124,10 +125,9 @@ export function ConstellationHero({ projects }: ConstellationHeroProps) {
           overflow: "hidden",
         }}
       >
-        {/* Thumbnails layer */}
+        {/* Thumbnails layer — pointer events enabled so thumbnails are clickable */}
         <div
           ref={thumbnailsRef}
-          aria-hidden="true"
           style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
         >
           {/* Desktop thumbnails */}
@@ -136,16 +136,19 @@ export function ConstellationHero({ projects }: ConstellationHeroProps) {
             return (
               <div
                 key={project.id}
-                className={i % 2 === 0 ? "hidden md:block" : "hidden md:block"}
+                className="hidden md:block"
+                style={{ pointerEvents: "auto" }}
               >
-                <Thumbnail
-                  src={project.hero_image}
-                  alt={project.hero_image_alt}
-                  projectName={project.title}
-                  size={pos.size}
-                  driftClass={i % 2 === 0 ? "animate-drift-a" : "animate-drift-b"}
-                  style={{ left: pos.x, top: pos.y, transform: "translate(-50%, -50%)" }}
-                />
+                <Link href={`/work/${project.slug}`} aria-label={`View ${project.title} case study`} style={{ display: "contents" }}>
+                  <Thumbnail
+                    src={project.hero_image}
+                    alt={project.hero_image_alt}
+                    projectName={project.title}
+                    size={pos.size}
+                    driftClass={i % 2 === 0 ? "animate-drift-a" : "animate-drift-b"}
+                    style={{ left: pos.x, top: pos.y, transform: "translate(-50%, -50%)" }}
+                  />
+                </Link>
               </div>
             );
           })}
@@ -154,15 +157,17 @@ export function ConstellationHero({ projects }: ConstellationHeroProps) {
           {visibleProjects.slice(0, 3).map((project, i) => {
             const pos = mobilePositions[i];
             return (
-              <div key={`mobile-${project.id}`} className="block md:hidden">
-                <Thumbnail
-                  src={project.hero_image}
-                  alt={project.hero_image_alt}
-                  projectName={project.title}
-                  size="sm"
-                  driftClass={i % 2 === 0 ? "animate-drift-a" : "animate-drift-b"}
-                  style={{ left: pos.x, top: pos.y, transform: "translate(-50%, -50%)" }}
-                />
+              <div key={`mobile-${project.id}`} className="block md:hidden" style={{ pointerEvents: "auto" }}>
+                <Link href={`/work/${project.slug}`} aria-label={`View ${project.title} case study`} style={{ display: "contents" }}>
+                  <Thumbnail
+                    src={project.hero_image}
+                    alt={project.hero_image_alt}
+                    projectName={project.title}
+                    size="sm"
+                    driftClass={i % 2 === 0 ? "animate-drift-a" : "animate-drift-b"}
+                    style={{ left: pos.x, top: pos.y, transform: "translate(-50%, -50%)" }}
+                  />
+                </Link>
               </div>
             );
           })}
@@ -185,10 +190,10 @@ export function ConstellationHero({ projects }: ConstellationHeroProps) {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/logos/logotext.svg"
+            src="/logos/logo.png"
             alt="OphidianAI"
             style={{
-              height: "clamp(48px, 8vw, 72px)",
+              height: "clamp(96px, 16vw, 144px)",
               width: "auto",
               display: "block",
             }}

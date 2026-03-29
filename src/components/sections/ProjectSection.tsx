@@ -41,7 +41,7 @@ export function ProjectSection({ project, index, totalCount }: ProjectSectionPro
       id={`project-${project.slug}`}
       aria-label={`Project ${number}: ${project.title}`}
       style={{
-        height: "100svh",
+        height: "70svh",
         scrollSnapAlign: "start",
         display: "flex",
         alignItems: "center",
