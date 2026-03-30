@@ -157,15 +157,19 @@ export function ProjectSection({ project, index }: ProjectSectionProps) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              overflow: "hidden",
             }}
           >
             <div
               style={{
                 width: "100%",
                 height: "600px",
+                maxHeight: "600px",
+                flexShrink: 0,
                 borderRadius: "var(--radius-lg)",
                 overflow: "hidden",
                 position: "relative",
+                willChange: "transform",
                 opacity: isVisible ? 1 : 0,
                 transition: `opacity var(--duration-slow) var(--ease-out) ${
                   isVisible ? "100ms" : "0ms"
