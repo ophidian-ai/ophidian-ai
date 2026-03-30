@@ -201,12 +201,12 @@ export function ConstellationHero({ projects }: ConstellationHeroProps) {
           <p
             style={{
               fontFamily: "var(--font-sans)",
-              fontSize: "18px",
+              fontSize: "32px",
               fontWeight: 400,
-              lineHeight: 1.65,
+              lineHeight: 1.4,
               color: "var(--color-taupe)",
               marginTop: "16px",
-              maxWidth: "360px",
+              maxWidth: "560px",
             }}
           >
             Where the natural world meets innovation.

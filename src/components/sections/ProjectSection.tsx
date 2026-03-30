@@ -5,6 +5,18 @@ import Image from "next/image";
 import Link from "next/link";
 import type { PortfolioProject } from "@/lib/portfolio";
 
+// Map project slugs to local case-study-hero screenshots.
+// These are the hero page screenshots requested by Eric (PR #18 Rev.3).
+const HERO_SCREENSHOT_MAP: Record<string, string> = {
+  "bloomin-acres": "/case-study-heroes/bloomin-acres.png",
+  "midwest-maintenance": "/case-study-heroes/midwest-maint.png",
+  "point-of-hope-church": "/case-study-heroes/point-of-hope.png",
+};
+
+function getHeroImage(project: PortfolioProject): string {
+  return HERO_SCREENSHOT_MAP[project.slug] ?? project.hero_image;
+}
+
 interface ProjectSectionProps {
   project: PortfolioProject;
   index: number;
@@ -43,6 +55,7 @@ export function ProjectSection({ project, index, totalCount }: ProjectSectionPro
       style={{
         height: "100svh",
         scrollSnapAlign: "start",
+        scrollMarginTop: "80px",
         display: "flex",
         alignItems: "center",
         background: "var(--color-cream)",
@@ -53,6 +66,7 @@ export function ProjectSection({ project, index, totalCount }: ProjectSectionPro
         style={{
           display: "flex",
           flexDirection: isEven ? "row" : "row-reverse",
+          alignItems: "center",
           width: "100%",
           height: "100%",
           maxWidth: "1152px",
@@ -69,6 +83,7 @@ export function ProjectSection({ project, index, totalCount }: ProjectSectionPro
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
+            alignSelf: "center",
             paddingRight: isEven ? "48px" : 0,
             paddingLeft: isEven ? 0 : "48px",
             opacity: isVisible ? 1 : 0,
@@ -141,14 +156,14 @@ export function ProjectSection({ project, index, totalCount }: ProjectSectionPro
             flex: "0 0 50%",
             display: "flex",
             alignItems: "center",
+            alignSelf: "center",
             position: "relative",
-            padding: "48px 0",
           }}
         >
           <div
             style={{
               width: "100%",
-              height: "100%",
+              aspectRatio: "16 / 9",
               borderRadius: "var(--radius-lg)",
               overflow: "hidden",
               position: "relative",
@@ -166,23 +181,13 @@ export function ProjectSection({ project, index, totalCount }: ProjectSectionPro
               el.style.boxShadow = "none";
             }}
           >
-            {project.hero_image ? (
-              <Image
-                src={project.hero_image}
-                alt={project.hero_image_alt}
-                fill
-                style={{ objectFit: "cover" }}
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-            ) : (
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  background: "var(--color-surface)",
-                }}
-              />
-            )}
+            <Image
+              src={getHeroImage(project)}
+              alt={project.hero_image_alt || project.title}
+              fill
+              style={{ objectFit: "cover" }}
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
           </div>
         </div>
       </div>
@@ -227,10 +232,12 @@ export function SnapScrollContainer({ projects, children }: SnapScrollContainerP
   return (
     <div
       style={{
-        scrollSnapType: "y mandatory",
+        scrollSnapType: "y proximity",
         overflowY: "scroll",
         height: "100svh",
         position: "relative",
+        scrollPaddingTop: "80px",
+        scrollPaddingBottom: "80px",
       }}
     >
       {/* Scroll progress dots */}
