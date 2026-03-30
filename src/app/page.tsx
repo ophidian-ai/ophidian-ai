@@ -1,7 +1,6 @@
 import { Nav } from "@/components/layout/Nav";
 import { ConstellationHero } from "@/components/hero/ConstellationHero";
 import { SnapScrollContainer } from "@/components/sections/ProjectSection";
-import { StatementFooter } from "@/components/sections/StatementFooter";
 import { getPortfolioProjects } from "@/lib/portfolio";
 
 export const revalidate = 3600; // ISR — rebuild every hour
@@ -16,10 +15,8 @@ export default async function Home() {
       {/* Constellation hero — sticky 300vh container driving the GSAP funnel */}
       <ConstellationHero projects={projects} />
 
-      {/* Snap-scroll project sections + statement footer */}
-      <SnapScrollContainer projects={projects}>
-        <StatementFooter />
-      </SnapScrollContainer>
+      {/* Snap-scroll project sections */}
+      <SnapScrollContainer projects={projects} />
     </>
   );
 }

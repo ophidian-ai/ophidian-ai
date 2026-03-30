@@ -41,7 +41,7 @@ export function ProjectSection({ project, index, totalCount }: ProjectSectionPro
       id={`project-${project.slug}`}
       aria-label={`Project ${number}: ${project.title}`}
       style={{
-        height: "70svh",
+        height: "100svh",
         scrollSnapAlign: "start",
         display: "flex",
         alignItems: "center",
@@ -81,11 +81,11 @@ export function ProjectSection({ project, index, totalCount }: ProjectSectionPro
           </span>
           <h2
             style={{
-              fontFamily: "var(--font-serif)",
+              fontFamily: "var(--font-playfair), 'Ballet', Georgia, serif",
               fontSize: "40px",
               fontWeight: 600,
               lineHeight: 1.15,
-              color: "var(--color-forest)",
+              color: "#855362",
               margin: 0,
             }}
           >
@@ -142,17 +142,28 @@ export function ProjectSection({ project, index, totalCount }: ProjectSectionPro
             display: "flex",
             alignItems: "center",
             position: "relative",
+            padding: "48px 0",
           }}
         >
           <div
             style={{
               width: "100%",
-              aspectRatio: "4/3",
+              height: "100%",
               borderRadius: "var(--radius-lg)",
               overflow: "hidden",
               position: "relative",
               opacity: isVisible ? 1 : 0,
-              transition: `opacity var(--duration-slow) var(--ease-out) ${isVisible ? "100ms" : "0ms"}`,
+              transition: `opacity var(--duration-slow) var(--ease-out) ${isVisible ? "100ms" : "0ms"}, transform var(--duration-base) var(--ease-organic), box-shadow var(--duration-base) var(--ease-organic)`,
+            }}
+            onMouseEnter={(e) => {
+              const el = e.currentTarget as HTMLDivElement;
+              el.style.transform = "translateY(-8px)";
+              el.style.boxShadow = "0 24px 60px rgba(58, 58, 53, 0.20)";
+            }}
+            onMouseLeave={(e) => {
+              const el = e.currentTarget as HTMLDivElement;
+              el.style.transform = "translateY(0)";
+              el.style.boxShadow = "none";
             }}
           >
             {project.hero_image ? (
@@ -190,8 +201,11 @@ export function ProjectSection({ project, index, totalCount }: ProjectSectionPro
             width: 100% !important;
             padding: 0 !important;
           }
+          #project-${project.slug} .project-section-inner > div:last-child {
+            height: 40svh !important;
+          }
           #project-${project.slug} .project-section-inner > div:last-child > div {
-            aspect-ratio: 16/9 !important;
+            height: 100% !important;
           }
         }
         @media (min-width: 769px) and (max-width: 1200px) {
