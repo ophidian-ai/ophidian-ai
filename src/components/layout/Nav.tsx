@@ -62,8 +62,8 @@ export function Nav() {
       }}
     >
       <div
-        className="flex items-center justify-between px-6 md:px-12 lg:px-20"
-        style={{ height: "64px" }}
+        className="flex items-center justify-between"
+        style={{ height: "64px", padding: "0 10px" }}
       >
         {/* Wordmark */}
         <Link
@@ -79,6 +79,27 @@ export function Nav() {
             style={{ height: "42px", width: "auto", display: "block" }}
           />
         </Link>
+
+        {/* Right side: user icon + menu button */}
+        <div className="flex items-center gap-3">
+          {/* Client sign-in */}
+          <Link
+            href="/sign-in"
+            aria-label="Sign in to your account"
+            className="flex items-center justify-center rounded-full transition-opacity hover:opacity-70"
+            style={{
+              width: "36px",
+              height: "36px",
+              background: "var(--color-dark)",
+              color: "var(--color-cream)",
+              flexShrink: 0,
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <circle cx="9" cy="6" r="3.5" stroke="currentColor" strokeWidth="1.5" />
+              <path d="M2 16c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </Link>
 
         {/* Menu button */}
         <div className="relative">
@@ -194,6 +215,7 @@ export function Nav() {
               </div>
             </div>
           )}
+        </div>
         </div>
       </div>
     </header>

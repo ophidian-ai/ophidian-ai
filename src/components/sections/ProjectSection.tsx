@@ -55,7 +55,8 @@ export function ProjectSection({ project, index, totalCount }: ProjectSectionPro
       style={{
         height: "100svh",
         scrollSnapAlign: "start",
-        scrollMarginTop: "80px",
+        scrollMarginTop: "60px",
+        marginBottom: "60px",
         display: "flex",
         alignItems: "center",
         background: "var(--color-cream)",
@@ -84,22 +85,22 @@ export function ProjectSection({ project, index, totalCount }: ProjectSectionPro
             flexDirection: "column",
             justifyContent: "center",
             alignSelf: "center",
-            paddingRight: isEven ? "48px" : 0,
-            paddingLeft: isEven ? 0 : "48px",
+            paddingRight: isEven ? "96px" : 0,
+            paddingLeft: isEven ? 0 : "96px",
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? "translateY(0)" : "translateY(24px)",
             transition: "opacity var(--duration-slow) var(--ease-out), transform var(--duration-slow) var(--ease-out)",
           }}
         >
-          <span className="label-mono" style={{ marginBottom: "16px", display: "block" }}>
+          <span className="label-mono" style={{ marginBottom: "16px", display: "block", fontSize: "1.5rem" }}>
             {number}
           </span>
           <h2
             style={{
               fontFamily: "var(--font-playfair), 'Ballet', Georgia, serif",
-              fontSize: "40px",
+              fontSize: "80px",
               fontWeight: 600,
-              lineHeight: 1.15,
+              lineHeight: 1.1,
               color: "#855362",
               margin: 0,
             }}
@@ -109,13 +110,13 @@ export function ProjectSection({ project, index, totalCount }: ProjectSectionPro
           <p
             style={{
               fontFamily: "var(--font-sans)",
-              fontSize: "18px",
+              fontSize: "36px",
               fontWeight: 400,
-              lineHeight: 1.65,
+              lineHeight: 1.5,
               color: "var(--color-taupe)",
-              maxWidth: "360px",
-              marginTop: "16px",
-              marginBottom: "32px",
+              maxWidth: "480px",
+              marginTop: "24px",
+              marginBottom: "40px",
             }}
           >
             {project.subtitle}
@@ -124,13 +125,13 @@ export function ProjectSection({ project, index, totalCount }: ProjectSectionPro
             href={`/work/${project.slug}`}
             style={{
               fontFamily: "var(--font-sans)",
-              fontSize: "15px",
+              fontSize: "30px",
               fontWeight: 500,
               color: "var(--color-terracotta)",
               textDecoration: "none",
               display: "inline-flex",
               alignItems: "center",
-              gap: "8px",
+              gap: "12px",
             }}
             onMouseEnter={(e) => {
               (e.currentTarget as HTMLAnchorElement).style.textDecoration = "underline";
@@ -143,8 +144,8 @@ export function ProjectSection({ project, index, totalCount }: ProjectSectionPro
             <Image
               src="/arrow-icon.png"
               alt=""
-              width={24}
-              height={23}
+              width={48}
+              height={46}
               style={{ display: "inline-block", verticalAlign: "middle" }}
             />
           </Link>
@@ -163,7 +164,7 @@ export function ProjectSection({ project, index, totalCount }: ProjectSectionPro
           <div
             style={{
               width: "100%",
-              aspectRatio: "16 / 9",
+              height: "800px",
               borderRadius: "var(--radius-lg)",
               overflow: "hidden",
               position: "relative",
@@ -232,12 +233,11 @@ export function SnapScrollContainer({ projects, children }: SnapScrollContainerP
   return (
     <div
       style={{
-        scrollSnapType: "y proximity",
+        scrollSnapType: "y mandatory",
         overflowY: "scroll",
         height: "100svh",
         position: "relative",
-        scrollPaddingTop: "80px",
-        scrollPaddingBottom: "80px",
+        scrollPaddingTop: "60px",
       }}
     >
       {/* Scroll progress dots */}
