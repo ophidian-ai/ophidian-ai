@@ -71,10 +71,11 @@ export function ProjectSection({ project, index }: ProjectSectionProps) {
           }}
           className="project-section-inner"
         >
-          {/* Text column — flex-shrink:0 via shorthand, no min-width:0 override */}
+          {/* Text column — flex-shrink:0 via shorthand, box-sizing:border-box so padding stays within flex-basis */}
           <div
             style={{
               flex: "0 0 45%",
+              boxSizing: "border-box",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -160,8 +161,7 @@ export function ProjectSection({ project, index }: ProjectSectionProps) {
           >
             <div
               style={{
-                width: "1067px",
-                maxWidth: "100%",
+                width: "100%",
                 height: "600px",
                 borderRadius: "var(--radius-lg)",
                 overflow: "hidden",
@@ -230,6 +230,8 @@ export function SnapScrollContainer({ projects, children }: SnapScrollContainerP
   const containerRef = useRef<HTMLDivElement>(null);
   // Pre-compute containerTop once on mount so the scroll handler is stable
   const containerTopRef = useRef(0);
+  // Track scroll direction so we can snap backward on scroll-up
+  const scrollingDownRef = useRef(true);
 
   useEffect(() => {
     function updateContainerTop() {
@@ -245,13 +247,15 @@ export function SnapScrollContainer({ projects, children }: SnapScrollContainerP
   useEffect(() => {
     let snapTimeout: ReturnType<typeof setTimeout>;
     let isSnapping = false;
+    let lastScrollY = window.scrollY;
 
-    function snapForwardIfInGap() {
+    function snapIfInGap() {
       if (isSnapping) return;
       const vh = window.innerHeight;
       const sectionScrollHeight = vh * 2; // each wrapper is 200svh
       const containerTop = containerTopRef.current;
       const scrollY = window.scrollY;
+      const goingDown = scrollingDownRef.current;
 
       for (let i = 0; i < projects.length; i++) {
         const sectionStart = containerTop + i * sectionScrollHeight;
@@ -260,9 +264,10 @@ export function SnapScrollContainer({ projects, children }: SnapScrollContainerP
         const nextSectionStart = sectionStart + sectionScrollHeight;
 
         if (scrollY >= releasePoint && scrollY < nextSectionStart) {
-          // User is in the gap after the pin releases — snap to the next section
+          // In the gap zone: snap forward (down) or backward (up)
+          const target = goingDown ? nextSectionStart : sectionStart;
           isSnapping = true;
-          window.scrollTo({ top: nextSectionStart, behavior: "smooth" });
+          window.scrollTo({ top: target, behavior: "smooth" });
           setTimeout(() => {
             isSnapping = false;
           }, 800);
@@ -273,8 +278,10 @@ export function SnapScrollContainer({ projects, children }: SnapScrollContainerP
 
     function onScroll() {
       if (isSnapping) return;
+      scrollingDownRef.current = window.scrollY > lastScrollY;
+      lastScrollY = window.scrollY;
       clearTimeout(snapTimeout);
-      snapTimeout = setTimeout(snapForwardIfInGap, 120);
+      snapTimeout = setTimeout(snapIfInGap, 120);
     }
 
     window.addEventListener("scroll", onScroll, { passive: true });
