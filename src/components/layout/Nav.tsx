@@ -86,19 +86,15 @@ export function Nav() {
           <Link
             href="/sign-in"
             aria-label="Sign in to your account"
-            className="flex items-center justify-center rounded-full transition-opacity hover:opacity-70"
-            style={{
-              width: "36px",
-              height: "36px",
-              background: "var(--color-dark)",
-              color: "var(--color-cream)",
-              flexShrink: 0,
-            }}
+            className="flex items-center justify-center transition-opacity hover:opacity-70"
+            style={{ flexShrink: 0 }}
           >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-              <circle cx="9" cy="6" r="3.5" stroke="currentColor" strokeWidth="1.5" />
-              <path d="M2 16c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/icons/user-icon.png"
+              alt="Sign in"
+              style={{ height: "36px", width: "auto", display: "block" }}
+            />
           </Link>
 
         {/* Menu button */}
