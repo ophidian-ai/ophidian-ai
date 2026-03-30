@@ -79,8 +79,8 @@ export function ProjectSection({ project, index }: ProjectSectionProps) {
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
-              paddingRight: isEven ? "80px" : 0,
-              paddingLeft: isEven ? 0 : "80px",
+              paddingRight: isEven ? "clamp(24px, 4vw, 60px)" : 0,
+              paddingLeft: isEven ? 0 : "clamp(24px, 4vw, 60px)",
               opacity: isVisible ? 1 : 0,
               transform: isVisible ? "translateY(0)" : "translateY(24px)",
               transition:
@@ -89,7 +89,7 @@ export function ProjectSection({ project, index }: ProjectSectionProps) {
           >
             <span
               className="label-mono"
-              style={{ marginBottom: "16px", display: "block", fontSize: "1.5rem" }}
+              style={{ marginBottom: "16px", display: "block", fontSize: "1.5rem", color: "var(--color-forest)" }}
             >
               {number}
             </span>
@@ -126,7 +126,7 @@ export function ProjectSection({ project, index }: ProjectSectionProps) {
                 fontFamily: "var(--font-sans)",
                 fontSize: "20px",
                 fontWeight: 500,
-                color: "var(--color-terracotta)",
+                color: "#855362",
                 textDecoration: "none",
                 display: "inline-flex",
                 alignItems: "center",

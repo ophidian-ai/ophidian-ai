@@ -380,7 +380,6 @@ export function ChatbotPanel({ contextPills = DEFAULT_PILLS }: ChatbotPanelProps
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          aria-label="Open contact panel"
           style={{
             position: "fixed",
             bottom: "24px",

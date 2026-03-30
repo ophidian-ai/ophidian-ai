@@ -11,12 +11,13 @@ export default async function Home() {
   return (
     <>
       <Nav />
+      <main>
+        {/* Constellation hero — sticky 300vh container driving the GSAP funnel */}
+        <ConstellationHero projects={projects} />
 
-      {/* Constellation hero — sticky 300vh container driving the GSAP funnel */}
-      <ConstellationHero projects={projects} />
-
-      {/* Snap-scroll project sections */}
-      <SnapScrollContainer projects={projects} />
+        {/* Snap-scroll project sections */}
+        <SnapScrollContainer projects={projects} />
+      </main>
     </>
   );
 }
