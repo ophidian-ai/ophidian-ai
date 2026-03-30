@@ -24,6 +24,7 @@ interface ProjectSectionProps {
 
 export function ProjectSection({ project, index }: ProjectSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
+  // One-way: once visible, stays visible so section is not hidden after snap
   const [isVisible, setIsVisible] = useState(false);
 
   const isEven = index % 2 === 0;
@@ -32,9 +33,9 @@ export function ProjectSection({ project, index }: ProjectSectionProps) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) setIsVisible(true);
-        else setIsVisible(false);
+        // Intentionally not resetting to false — one-way visibility
       },
-      { threshold: 0.3 }
+      { threshold: 0.15 }
     );
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
@@ -43,7 +44,7 @@ export function ProjectSection({ project, index }: ProjectSectionProps) {
   const number = String(index + 1).padStart(2, "0");
 
   return (
-    // 200svh wrapper: section sticks for the first 100svh of scroll, then releases
+    // 200svh wrapper: sticky section pins for the first 100svh of scroll, then releases
     <div style={{ height: "200svh" }}>
       <section
         ref={sectionRef}
@@ -67,11 +68,10 @@ export function ProjectSection({ project, index }: ProjectSectionProps) {
             width: "100%",
             height: "100%",
             padding: "0 40px",
-            gap: "0",
           }}
           className="project-section-inner"
         >
-          {/* Text column */}
+          {/* Text column — flex-shrink:0 via shorthand, no min-width:0 override */}
           <div
             style={{
               flex: "0 0 45%",
@@ -82,8 +82,8 @@ export function ProjectSection({ project, index }: ProjectSectionProps) {
               paddingLeft: isEven ? 0 : "80px",
               opacity: isVisible ? 1 : 0,
               transform: isVisible ? "translateY(0)" : "translateY(24px)",
-              transition: "opacity var(--duration-slow) var(--ease-out), transform var(--duration-slow) var(--ease-out)",
-              minWidth: 0,
+              transition:
+                "opacity var(--duration-slow) var(--ease-out), transform var(--duration-slow) var(--ease-out)",
             }}
           >
             <span
@@ -95,12 +95,12 @@ export function ProjectSection({ project, index }: ProjectSectionProps) {
             <h2
               style={{
                 fontFamily: "var(--font-playfair), 'Ballet', Georgia, serif",
-                fontSize: "80px",
+                fontSize: "clamp(36px, 4vw, 72px)",
                 fontWeight: 600,
                 lineHeight: 1.1,
                 color: "#855362",
                 margin: 0,
-                whiteSpace: "nowrap",
+                whiteSpace: "normal",
               }}
             >
               {project.title}
@@ -108,13 +108,13 @@ export function ProjectSection({ project, index }: ProjectSectionProps) {
             <p
               style={{
                 fontFamily: "var(--font-sans)",
-                fontSize: "36px",
+                fontSize: "clamp(18px, 2vw, 36px)",
                 fontWeight: 400,
                 lineHeight: 1.5,
                 color: "var(--color-taupe)",
                 marginTop: "24px",
                 marginBottom: "40px",
-                whiteSpace: "nowrap",
+                whiteSpace: "normal",
               }}
             >
               {project.subtitle}
@@ -167,7 +167,9 @@ export function ProjectSection({ project, index }: ProjectSectionProps) {
                 overflow: "hidden",
                 position: "relative",
                 opacity: isVisible ? 1 : 0,
-                transition: `opacity var(--duration-slow) var(--ease-out) ${isVisible ? "100ms" : "0ms"}, transform var(--duration-base) var(--ease-organic), box-shadow var(--duration-base) var(--ease-organic)`,
+                transition: `opacity var(--duration-slow) var(--ease-out) ${
+                  isVisible ? "100ms" : "0ms"
+                }, transform var(--duration-base) var(--ease-organic), box-shadow var(--duration-base) var(--ease-organic)`,
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLDivElement;
@@ -204,14 +206,6 @@ export function ProjectSection({ project, index }: ProjectSectionProps) {
               width: 100% !important;
               padding: 0 !important;
             }
-            #project-${project.slug} .project-section-inner > div:first-child h2 {
-              font-size: 36px !important;
-              white-space: normal !important;
-            }
-            #project-${project.slug} .project-section-inner > div:first-child p {
-              font-size: 18px !important;
-              white-space: normal !important;
-            }
             #project-${project.slug} .project-section-inner > div:last-child {
               flex: none !important;
               width: 100% !important;
@@ -234,38 +228,53 @@ interface SnapScrollContainerProps {
 
 export function SnapScrollContainer({ projects, children }: SnapScrollContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  // Pre-compute containerTop once on mount so the scroll handler is stable
+  const containerTopRef = useRef(0);
 
-  // Vanilla JS scroll snap: after sticky pin releases, snap to nearest section boundary
+  useEffect(() => {
+    function updateContainerTop() {
+      if (!containerRef.current) return;
+      containerTopRef.current =
+        containerRef.current.getBoundingClientRect().top + window.scrollY;
+    }
+    updateContainerTop();
+    window.addEventListener("resize", updateContainerTop);
+    return () => window.removeEventListener("resize", updateContainerTop);
+  }, []);
+
   useEffect(() => {
     let snapTimeout: ReturnType<typeof setTimeout>;
     let isSnapping = false;
 
-    function snapToNearest() {
-      if (isSnapping || !containerRef.current) return;
-      const containerTop =
-        containerRef.current.getBoundingClientRect().top + window.scrollY;
+    function snapForwardIfInGap() {
+      if (isSnapping) return;
       const vh = window.innerHeight;
-      const sectionScrollHeight = vh * 2; // each section wrapper is 200svh
+      const sectionScrollHeight = vh * 2; // each wrapper is 200svh
+      const containerTop = containerTopRef.current;
+      const scrollY = window.scrollY;
 
-      const scrollInContainer = window.scrollY - containerTop;
-      if (scrollInContainer < 0) return;
+      for (let i = 0; i < projects.length; i++) {
+        const sectionStart = containerTop + i * sectionScrollHeight;
+        // Sticky section releases after 1 full vh of pinned scrolling
+        const releasePoint = sectionStart + vh;
+        const nextSectionStart = sectionStart + sectionScrollHeight;
 
-      const rawIndex = scrollInContainer / sectionScrollHeight;
-      const nearestIndex = Math.round(rawIndex);
-      const clampedIndex = Math.max(0, Math.min(nearestIndex, projects.length - 1));
-      const targetScroll = containerTop + clampedIndex * sectionScrollHeight;
-
-      if (Math.abs(window.scrollY - targetScroll) > 8) {
-        isSnapping = true;
-        window.scrollTo({ top: targetScroll, behavior: "smooth" });
-        setTimeout(() => { isSnapping = false; }, 600);
+        if (scrollY >= releasePoint && scrollY < nextSectionStart) {
+          // User is in the gap after the pin releases — snap to the next section
+          isSnapping = true;
+          window.scrollTo({ top: nextSectionStart, behavior: "smooth" });
+          setTimeout(() => {
+            isSnapping = false;
+          }, 800);
+          break;
+        }
       }
     }
 
     function onScroll() {
       if (isSnapping) return;
       clearTimeout(snapTimeout);
-      snapTimeout = setTimeout(snapToNearest, 120);
+      snapTimeout = setTimeout(snapForwardIfInGap, 120);
     }
 
     window.addEventListener("scroll", onScroll, { passive: true });
