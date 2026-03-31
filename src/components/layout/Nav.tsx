@@ -62,8 +62,8 @@ export function Nav() {
       }}
     >
       <div
-        className="flex items-center justify-between px-6 md:px-12 lg:px-20"
-        style={{ height: "64px" }}
+        className="flex items-center justify-between"
+        style={{ height: "64px", padding: "0 10px" }}
       >
         {/* Wordmark */}
         <Link
@@ -73,12 +73,29 @@ export function Nav() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/logos/logotext.svg"
+            src="/logos/logomark.png"
             alt="OphidianAI"
-            height={28}
-            style={{ height: "28px", width: "auto", display: "block" }}
+            height={42}
+            style={{ height: "42px", width: "auto", display: "block" }}
           />
         </Link>
+
+        {/* Right side: user icon + menu button */}
+        <div className="flex items-center gap-3">
+          {/* Client sign-in */}
+          <Link
+            href="/sign-in"
+            aria-label="Sign in to your account"
+            className="flex items-center justify-center transition-opacity hover:opacity-70"
+            style={{ flexShrink: 0 }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/icons/user-icon.png"
+              alt="Sign in"
+              style={{ height: "36px", width: "auto", display: "block" }}
+            />
+          </Link>
 
         {/* Menu button */}
         <div className="relative">
@@ -194,6 +211,7 @@ export function Nav() {
               </div>
             </div>
           )}
+        </div>
         </div>
       </div>
     </header>

@@ -38,7 +38,7 @@ export function Thumbnail({
           borderRadius: "9999px",
           border: "2px solid var(--color-sage)",
           overflow: "hidden",
-          cursor: "default",
+          cursor: "pointer",
           transition: "transform var(--duration-base) var(--ease-organic), border-color var(--duration-fast)",
           position: "relative",
         }}
