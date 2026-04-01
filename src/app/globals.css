@@ -37,6 +37,13 @@
   --color-nav-bg:           var(--color-dark);
   --color-nav-text:         var(--color-cream);
 
+  /* ── Semantic UI Tokens (used by dashboard + shared components) ── */
+  --color-foreground:       var(--color-dark);
+  --color-foreground-muted: var(--color-taupe);
+  --color-foreground-dim:   #B0AA9E;
+  --color-primary:          var(--color-terracotta);
+  --color-accent:           #7A9E7E;
+
   /* ── Utility ── */
   --color-white:  #FFFFFF;
   --color-black:  #1A1A18;
@@ -101,6 +108,88 @@ body {
 ::selection {
   background: rgba(194, 151, 127, 0.25);
   color: var(--color-forest);
+}
+
+/* ============================================================
+   Glass & Card Components
+   ============================================================ */
+
+.glass {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 1px 3px rgba(58, 58, 53, 0.06);
+}
+
+.glow-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.glow-card > [data-glow] {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(
+    300px circle at calc(var(--x, 0) * 1px) calc(var(--y, 0) * 1px),
+    rgba(194, 151, 127, 0.08),
+    transparent 70%
+  );
+}
+
+.glow-card:hover > [data-glow] {
+  opacity: 1;
+}
+
+/* ============================================================
+   Dashboard Theme — dark, high-contrast environment
+   Scoped to [data-dashboard] so the marketing site is unaffected.
+   ============================================================ */
+
+html:has([data-dashboard]) {
+  background: #151413;
+}
+
+[data-dashboard] {
+  --color-background:       #151413;
+  --color-surface:          #1E1D1B;
+  --color-surface-hover:    #252422;
+  --color-foreground:       #F1F0ED;
+  --color-foreground-muted: #9B9589;
+  --color-foreground-dim:   #5E5A53;
+  --color-primary:          #C4A265;
+  --color-accent:           #7A9E7E;
+  --color-border:           rgba(196, 162, 101, 0.12);
+  --color-border-strong:    rgba(196, 162, 101, 0.25);
+  --color-text-primary:     #F1F0ED;
+  --color-text-body:        #9B9589;
+  --color-error:            #EF4444;
+
+  color: var(--color-foreground-muted);
+}
+
+[data-dashboard] h1,
+[data-dashboard] h2,
+[data-dashboard] h3,
+[data-dashboard] h4,
+[data-dashboard] h5,
+[data-dashboard] h6 {
+  color: var(--color-foreground);
+}
+
+[data-dashboard] .glass {
+  background: rgba(30, 29, 27, 0.65);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+[data-dashboard] .glow-card > [data-glow] {
+  background: radial-gradient(
+    300px circle at calc(var(--x, 0) * 1px) calc(var(--y, 0) * 1px),
+    rgba(196, 162, 101, 0.08),
+    transparent 70%
+  );
 }
 
 /* ============================================================
