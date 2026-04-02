@@ -29,12 +29,11 @@ export async function POST(request: NextRequest, context: RouteContext): Promise
 
   const supabase = getAdminClient();
 
-  const { data: scanRow, error } = await supabase
+  const { data: rows, error } = await supabase
     .from('scans')
     .update({ email: email.trim().toLowerCase() })
     .eq('scan_id', id)
-    .select('result')
-    .single();
+    .select('result');
 
   if (error) {
     console.error('[capture-email] Supabase update error:', error);
@@ -43,7 +42,7 @@ export async function POST(request: NextRequest, context: RouteContext): Promise
 
   // Notify admins — non-blocking, best-effort
   try {
-    const result = scanRow?.result as ScanResult | null;
+    const result = (rows?.[0]?.result ?? null) as ScanResult | null;
     const score = result?.overall_score ?? '?';
     const leak = result?.estimated_monthly_leak
       ? `$${result.estimated_monthly_leak.toLocaleString()}/mo`

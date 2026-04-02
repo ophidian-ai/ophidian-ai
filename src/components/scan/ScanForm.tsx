@@ -181,6 +181,38 @@ export function ScanForm({ onScanStart, onScanComplete, onScanError }: ScanFormP
       <p className="mt-6 text-sm text-foreground-dim text-center">
         Trusted analysis built on industry-standard tools
       </p>
+
+      {/* What you'll get */}
+      <div className="mt-10 grid grid-cols-2 gap-3">
+        {[
+          { label: 'Speed Score', desc: 'Load time & Core Web Vitals' },
+          { label: 'SEO Grade', desc: 'Search visibility & meta health' },
+          { label: 'Mobile Check', desc: 'Responsive design & touch UX' },
+          { label: 'Trust Signals', desc: 'HTTPS, contact info & social proof' },
+        ].map(({ label, desc }) => (
+          <div
+            key={label}
+            className="rounded-xl border border-surface-border bg-background-alt px-4 py-3"
+          >
+            <p className="text-sm font-semibold text-foreground">{label}</p>
+            <p className="text-xs text-foreground-dim mt-0.5">{desc}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* No website? Book directly */}
+      <div className="mt-8 rounded-xl border border-surface-border bg-background-alt px-6 py-5 text-center">
+        <p className="text-sm font-semibold text-foreground mb-1">No website yet?</p>
+        <p className="text-sm text-foreground-muted mb-4">
+          Skip the scan and talk to us directly. We&apos;ll tell you exactly what you need.
+        </p>
+        <a
+          href="/contact"
+          className="inline-flex items-center justify-center px-5 py-2.5 rounded-full border border-primary text-primary text-sm font-semibold hover:bg-primary hover:text-background transition-colors"
+        >
+          Book a Free 15-Minute Call
+        </a>
+      </div>
     </div>
   );
 }
