@@ -9,8 +9,17 @@ interface ScanFormProps {
   onScanError: (error: string) => void;
 }
 
+const INDUSTRIES = [
+  'Home Services',
+  'Restaurants',
+  'Auto Services',
+  'Health/Wellness',
+  'Professional Services',
+] as const;
+
 export function ScanForm({ onScanStart, onScanComplete, onScanError }: ScanFormProps) {
   const [url, setUrl] = useState('');
+  const [industry, setIndustry] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationError, setValidationError] = useState('');
   const honeypotRef = useRef<HTMLInputElement>(null);
@@ -53,7 +62,7 @@ export function ScanForm({ onScanStart, onScanComplete, onScanError }: ScanFormP
       const res = await fetch('/api/scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: normalized }),
+        body: JSON.stringify({ url: normalized, industry: industry || undefined }),
       });
 
       if (!res.ok) {
@@ -124,6 +133,31 @@ export function ScanForm({ onScanStart, onScanComplete, onScanError }: ScanFormP
           {validationError && (
             <p className="mt-2 text-sm text-[var(--color-error-light)]">{validationError}</p>
           )}
+        </div>
+
+        {/* Industry select (optional) */}
+        <div>
+          <label htmlFor="scan-industry" className="sr-only">
+            Business type (optional)
+          </label>
+          <select
+            id="scan-industry"
+            value={industry}
+            onChange={(e) => setIndustry(e.target.value)}
+            disabled={isSubmitting}
+            className={[
+              'w-full px-5 py-4 rounded-xl text-base',
+              'bg-background-alt text-foreground',
+              'border border-surface-border transition-all duration-200',
+              'focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none',
+              !industry ? 'text-foreground-dim' : '',
+            ].join(' ')}
+          >
+            <option value="">What type of business? (optional)</option>
+            {INDUSTRIES.map((ind) => (
+              <option key={ind} value={ind}>{ind}</option>
+            ))}
+          </select>
         </div>
 
         {/* Submit button */}
