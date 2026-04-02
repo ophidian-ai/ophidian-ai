@@ -9,6 +9,8 @@ const NAV_LINKS = [
   { label: "Pricing", href: "/pricing" },
 ];
 
+const CHECKUP_LINK = { label: "Free Website Checkup", href: "/tools/website-checkup" };
+
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -180,6 +182,29 @@ export function Nav() {
                       </Link>
                     </li>
                   ))}
+                  <li>
+                    <Link
+                      href={CHECKUP_LINK.href}
+                      role="menuitem"
+                      onClick={() => setOpen(false)}
+                      className="block no-underline transition-colors"
+                      style={{
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "14px",
+                        fontWeight: 600,
+                        color: "var(--color-terracotta)",
+                        letterSpacing: "0.01em",
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLAnchorElement).style.opacity = "0.75";
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLAnchorElement).style.opacity = "1";
+                      }}
+                    >
+                      {CHECKUP_LINK.label} →
+                    </Link>
+                  </li>
                 </ul>
               </nav>
               <div
