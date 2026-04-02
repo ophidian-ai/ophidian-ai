@@ -97,19 +97,19 @@ export default function ClientEmailPage() {
       label: "Contacts",
       value: stats.contact_count.toLocaleString(),
       icon: Users,
-      color: "#C4A265",
+      color: "#2D8CFF",
     },
     {
       label: "Campaigns This Month",
       value: stats.campaigns_this_month.toString(),
       icon: Mail,
-      color: "#7A9E7E",
+      color: "#00E67A",
     },
     {
       label: "Open Rate",
       value: pct(stats.open_rate),
       icon: BarChart3,
-      color: "#D4B87A",
+      color: "#A78BFA",
     },
     {
       label: "Click Rate",

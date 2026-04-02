@@ -140,19 +140,19 @@ export default function ChatbotConfigDetailPage({
       label: "Conversations (30d)",
       value: analytics.conversations_30d.toLocaleString(),
       icon: MessageSquare,
-      color: "#C4A265",
+      color: "#2D8CFF",
     },
     {
       label: "Messages (30d)",
       value: analytics.messages_30d.toLocaleString(),
       icon: BarChart3,
-      color: "#7A9E7E",
+      color: "#00E67A",
     },
     {
       label: "Leads Captured (30d)",
       value: analytics.leads_30d.toLocaleString(),
       icon: Users,
-      color: "#D4B87A",
+      color: "#A78BFA",
     },
     {
       label: "Avg. Messages / Conv.",

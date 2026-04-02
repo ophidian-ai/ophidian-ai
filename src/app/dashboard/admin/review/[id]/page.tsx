@@ -221,13 +221,13 @@ export default function AdminReviewDetailPage({
       label: "Total Reviews",
       value: analytics?.totalReviews?.toLocaleString() ?? "-",
       icon: Star,
-      color: "#C4A265",
+      color: "#2D8CFF",
     },
     {
       label: "Response Rate",
       value: analytics ? `${analytics.overallResponseRate}%` : "-",
       icon: MessageSquare,
-      color: "#7A9E7E",
+      color: "#00E67A",
     },
     {
       label: "Positive Sentiment",
@@ -235,7 +235,7 @@ export default function AdminReviewDetailPage({
         ? `${analytics.sentimentSummary.positive}`
         : "-",
       icon: CheckCircle,
-      color: "#39ff14",
+      color: "#00E67A",
     },
     {
       label: "Negative Sentiment",

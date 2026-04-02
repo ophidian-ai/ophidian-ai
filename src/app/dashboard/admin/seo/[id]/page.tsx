@@ -120,12 +120,12 @@ const GBP_STATUS_COLORS: Record<string, string> = {
 };
 
 const SCORE_LINES = [
-  { key: "technical_score", name: "Technical", color: "#C4A265" },
-  { key: "content_score", name: "Content", color: "#7A9E7E" },
-  { key: "backlink_score", name: "Backlinks", color: "#9B8EC4" },
-  { key: "local_score", name: "Local", color: "#D4B87A" },
-  { key: "performance_score", name: "Performance", color: "#6BAFCA" },
-  { key: "mobile_score", name: "Mobile", color: "#E07C7C" },
+  { key: "technical_score", name: "Technical", color: "#2D8CFF" },
+  { key: "content_score", name: "Content", color: "#00E67A" },
+  { key: "backlink_score", name: "Backlinks", color: "#A78BFA" },
+  { key: "local_score", name: "Local", color: "#F59E0B" },
+  { key: "performance_score", name: "Performance", color: "#FF4D6A" },
+  { key: "mobile_score", name: "Mobile", color: "#7C8494" },
 ];
 
 function formatDate(iso: string | null): string {
@@ -491,10 +491,11 @@ export default function SeoConfigDetailPage({
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "rgba(10,10,15,0.95)",
-                    border: "1px solid rgba(255,255,255,0.1)",
+                    background: "#141722",
+                    border: "1px solid rgba(45,140,255,0.15)",
                     borderRadius: "8px",
-                    fontSize: "12px",
+                    color: "#E4E7ED",
+                    fontSize: 12,
                   }}
                   labelStyle={{ color: "rgba(255,255,255,0.6)", marginBottom: "4px" }}
                 />

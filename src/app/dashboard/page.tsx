@@ -68,12 +68,12 @@ interface ClientRow {
 
 // --- Pie chart colors ---
 const PIE_COLORS = [
-  "#C4A265",
-  "#7A9E7E",
-  "#D4B87A",
-  "#A88B52",
-  "#5C7F61",
-  "#94A3B8",
+  "#2D8CFF",
+  "#00E67A",
+  "#FF4D6A",
+  "#7C8494",
+  "#A78BFA",
+  "#F59E0B",
 ];
 
 // --- Stat Card with float ---
@@ -542,10 +542,10 @@ function AdminDashboard() {
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    background: "#1B2E21",
-                    border: "1px solid rgba(57,255,20,0.2)",
+                    background: "#141722",
+                    border: "1px solid rgba(45,140,255,0.15)",
                     borderRadius: "8px",
-                    color: "#F1F5F9",
+                    color: "#E4E7ED",
                     fontSize: 12,
                   }}
                 />
@@ -597,22 +597,22 @@ function AdminDashboard() {
                   />
                   <XAxis
                     dataKey="name"
-                    stroke="rgba(255,255,255,0.3)"
+                    stroke="#7C8494"
                     fontSize={11}
                   />
-                  <YAxis stroke="rgba(255,255,255,0.3)" fontSize={12} />
+                  <YAxis stroke="#7C8494" fontSize={12} />
                   <Tooltip
                     contentStyle={{
-                      background: "#1B2E21",
-                      border: "1px solid rgba(57,255,20,0.2)",
+                      background: "#141722",
+                      border: "1px solid rgba(45,140,255,0.15)",
                       borderRadius: "8px",
-                      color: "#F1F5F9",
+                      color: "#E4E7ED",
                       fontSize: 12,
                     }}
                   />
                   <Bar
                     dataKey="users"
-                    fill="#7A9E7E"
+                    fill="#2D8CFF"
                     radius={[4, 4, 0, 0]}
                     opacity={0.85}
                   />

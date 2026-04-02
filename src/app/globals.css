@@ -5,7 +5,7 @@
    Warm, cream-based palette. Handcrafted feeling, premium execution.
    ============================================================ */
 
-@theme inline {
+@theme {
   /* ── Core Brand Palette ── */
   --color-cream:        #F7EFE6;
   --color-sage:         #AAAC9A;
@@ -149,23 +149,23 @@ body {
    ============================================================ */
 
 html:has([data-dashboard]) {
-  background: #151413;
+  background: #0C0E14;
 }
 
 [data-dashboard] {
-  --color-background:       #151413;
-  --color-surface:          #1E1D1B;
-  --color-surface-hover:    #252422;
-  --color-foreground:       #F1F0ED;
-  --color-foreground-muted: #9B9589;
-  --color-foreground-dim:   #5E5A53;
-  --color-primary:          #C4A265;
-  --color-accent:           #7A9E7E;
-  --color-border:           rgba(196, 162, 101, 0.12);
-  --color-border-strong:    rgba(196, 162, 101, 0.25);
-  --color-text-primary:     #F1F0ED;
-  --color-text-body:        #9B9589;
-  --color-error:            #EF4444;
+  --color-background:       #0C0E14;
+  --color-surface:          #141722;
+  --color-surface-hover:    #1C2030;
+  --color-foreground:       #E4E7ED;
+  --color-foreground-muted: #7C8494;
+  --color-foreground-dim:   #4A5060;
+  --color-primary:          #2D8CFF;
+  --color-accent:           #00E67A;
+  --color-border:           rgba(45, 140, 255, 0.06);
+  --color-border-strong:    rgba(45, 140, 255, 0.12);
+  --color-text-primary:     #E4E7ED;
+  --color-text-body:        #7C8494;
+  --color-error:            #FF4D6A;
 
   color: var(--color-foreground-muted);
 }
@@ -180,14 +180,26 @@ html:has([data-dashboard]) {
 }
 
 [data-dashboard] .glass {
-  background: rgba(30, 29, 27, 0.65);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  background: rgba(20, 23, 34, 0.65);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Every GlowCard in the dashboard gets the floating card treatment by default.
+   Individual cards can still override border-radius, padding, or overflow. */
+[data-dashboard] .glow-card {
+  background: var(--color-surface);
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.3),
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    0 0 0 0.5px rgba(255, 255, 255, 0.04) inset;
 }
 
 [data-dashboard] .glow-card > [data-glow] {
   background: radial-gradient(
     300px circle at calc(var(--x, 0) * 1px) calc(var(--y, 0) * 1px),
-    rgba(196, 162, 101, 0.08),
+    rgba(45, 140, 255, 0.06),
     transparent 70%
   );
 }

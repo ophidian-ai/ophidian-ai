@@ -25,7 +25,7 @@ type DateRange = "7d" | "30d" | "90d";
 
 const RANGE_DAYS: Record<DateRange, number> = { "7d": 7, "30d": 30, "90d": 90 };
 
-const PIE_COLORS = ["#C4A265", "#7A9E7E", "#6366F1", "#F59E0B", "#EF4444", "#8B5CF6"];
+const PIE_COLORS = ["#2D8CFF", "#00E67A", "#FF4D6A", "#7C8494", "#A78BFA", "#F59E0B"];
 
 export default function AnalyticsPage() {
   const { modules, clientId } = useDashboard();
@@ -199,25 +199,26 @@ function AnalyticsContent({ clientId }: { clientId: string | null }) {
                 <AreaChart data={chartData}>
                   <defs>
                     <linearGradient id="viewsGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#C4A265" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#C4A265" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#2D8CFF" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#2D8CFF" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
-                  <XAxis dataKey="date" stroke="#6B7280" fontSize={12} />
-                  <YAxis stroke="#6B7280" fontSize={12} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                  <XAxis dataKey="date" stroke="#7C8494" fontSize={12} />
+                  <YAxis stroke="#7C8494" fontSize={12} />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#0A0A0A",
-                      border: "1px solid rgba(13,177,178,0.2)",
+                      background: "#141722",
+                      border: "1px solid rgba(45,140,255,0.15)",
                       borderRadius: "8px",
-                      color: "#fff",
+                      color: "#E4E7ED",
+                      fontSize: 12,
                     }}
                   />
                   <Area
                     type="monotone"
                     dataKey="page_views"
-                    stroke="#C4A265"
+                    stroke="#2D8CFF"
                     fill="url(#viewsGradient)"
                     strokeWidth={2}
                   />
@@ -235,24 +236,25 @@ function AnalyticsContent({ clientId }: { clientId: string | null }) {
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={topPages} layout="vertical" margin={{ left: 80 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
-                      <XAxis type="number" stroke="#6B7280" fontSize={12} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                      <XAxis type="number" stroke="#7C8494" fontSize={12} />
                       <YAxis
                         type="category"
                         dataKey="path"
-                        stroke="#6B7280"
+                        stroke="#7C8494"
                         fontSize={12}
                         width={75}
                       />
                       <Tooltip
                         contentStyle={{
-                          backgroundColor: "#0A0A0A",
-                          border: "1px solid rgba(13,177,178,0.2)",
+                          background: "#141722",
+                          border: "1px solid rgba(45,140,255,0.15)",
                           borderRadius: "8px",
-                          color: "#fff",
+                          color: "#E4E7ED",
+                          fontSize: 12,
                         }}
                       />
-                      <Bar dataKey="views" fill="#7A9E7E" radius={[0, 4, 4, 0]} />
+                      <Bar dataKey="views" fill="#2D8CFF" radius={[0, 4, 4, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -283,10 +285,11 @@ function AnalyticsContent({ clientId }: { clientId: string | null }) {
                       </Pie>
                       <Tooltip
                         contentStyle={{
-                          backgroundColor: "#0A0A0A",
-                          border: "1px solid rgba(13,177,178,0.2)",
+                          background: "#141722",
+                          border: "1px solid rgba(45,140,255,0.15)",
                           borderRadius: "8px",
-                          color: "#fff",
+                          color: "#E4E7ED",
+                          fontSize: 12,
                         }}
                       />
                     </PieChart>

@@ -25,11 +25,11 @@ import {
 import type { AdminOverview, RevenueBreakdown } from "@/lib/analytics/overview";
 
 const PRODUCT_COLORS: Record<string, string> = {
-  chatbot: "#C4A265",
-  seo: "#7A9E7E",
-  email: "#6366F1",
+  chatbot: "#2D8CFF",
+  seo: "#00E67A",
+  email: "#A78BFA",
   crm: "#F59E0B",
-  review: "#EC4899",
+  review: "#FF4D6A",
 };
 
 const PRODUCT_LABELS: Record<string, string> = {
@@ -115,19 +115,19 @@ export default function AdminAnalyticsPage() {
       label: "Total MRR",
       value: revenue ? `$${revenue.totalMrr.toLocaleString()}` : "--",
       icon: DollarSign,
-      color: "#C4A265",
+      color: "#2D8CFF",
     },
     {
       label: "Total Clients",
       value: overview?.totalClients ?? 0,
       icon: Users,
-      color: "#7A9E7E",
+      color: "#00E67A",
     },
     {
       label: "Total Leads (MTD)",
       value: overview?.totalLeadsThisMonth ?? 0,
       icon: TrendingUp,
-      color: "#6366F1",
+      color: "#A78BFA",
     },
     {
       label: "Avg Health Score",
@@ -193,30 +193,31 @@ export default function AdminAnalyticsPage() {
             <AreaChart data={chartData}>
               <defs>
                 <linearGradient id="mrrGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#C4A265" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#C4A265" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#2D8CFF" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#2D8CFF" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
-              <XAxis dataKey="month" stroke="#6B7280" fontSize={12} />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <XAxis dataKey="month" stroke="#7C8494" fontSize={12} />
               <YAxis
-                stroke="#6B7280"
+                stroke="#7C8494"
                 fontSize={12}
                 tickFormatter={(v) => `$${v}`}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "#0A0A0A",
-                  border: "1px solid rgba(196,162,101,0.2)",
+                  background: "#141722",
+                  border: "1px solid rgba(45,140,255,0.15)",
                   borderRadius: "8px",
-                  color: "#fff",
+                  color: "#E4E7ED",
+                  fontSize: 12,
                 }}
                 formatter={(value) => [`$${Number(value ?? 0).toLocaleString()}`, "MRR"]}
               />
               <Area
                 type="monotone"
                 dataKey="total"
-                stroke="#C4A265"
+                stroke="#2D8CFF"
                 fill="url(#mrrGradient)"
                 strokeWidth={2}
               />
