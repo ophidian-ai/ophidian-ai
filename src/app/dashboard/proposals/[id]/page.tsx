@@ -410,7 +410,7 @@ export default function ProposalDetailPage() {
                   type="checkbox"
                   checked={agreed}
                   onChange={(e) => setAgreed(e.target.checked)}
-                  className="mt-0.5 accent-[#C4A265] w-4 h-4 flex-shrink-0"
+                  className="mt-0.5 accent-[#2D8CFF] w-4 h-4 flex-shrink-0"
                 />
                 <span className="text-sm text-foreground">
                   I have read and agree to the terms above
@@ -443,7 +443,7 @@ export default function ProposalDetailPage() {
                 onClick={handleSign}
                 disabled={!agreed || !typedName.trim() || actionState === "signing"}
                 className="w-full py-3 rounded-full bg-primary text-background font-semibold text-sm transition-opacity disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90"
-                style={{ backgroundColor: "#C4A265" }}
+                style={{ backgroundColor: "#2D8CFF" }}
               >
                 {actionState === "signing" ? "Submitting..." : "Sign & Submit"}
               </button>

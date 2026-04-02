@@ -200,19 +200,19 @@ export default function AdminDashboardPage() {
       label: "Total Clients",
       value: stats.totalClients,
       icon: Users,
-      color: "#C4A265",
+      color: "#2D8CFF",
     },
     {
       label: "Active Projects",
       value: stats.activeProjects,
       icon: FolderKanban,
-      color: "#7A9E7E",
+      color: "#00E67A",
     },
     {
       label: "Pending Proposals",
       value: stats.pendingProposals,
       icon: FileSignature,
-      color: "#D4B87A",
+      color: "#A78BFA",
     },
     {
       label: "Outstanding Invoices",

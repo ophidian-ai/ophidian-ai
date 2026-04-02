@@ -155,19 +155,19 @@ export default function ClientReviewPage() {
       label: "Total Reviews",
       value: stats.totalReviews.toLocaleString(),
       icon: Star,
-      color: "#C4A265",
+      color: "#2D8CFF",
     },
     {
       label: "Average Rating",
       value: stats.avgRating > 0 ? stats.avgRating.toFixed(1) : "-",
       icon: TrendingUp,
-      color: "#7A9E7E",
+      color: "#00E67A",
     },
     {
       label: "New This Month",
       value: stats.newThisMonth.toLocaleString(),
       icon: Star,
-      color: "#D4B87A",
+      color: "#A78BFA",
     },
     {
       label: "Response Rate",

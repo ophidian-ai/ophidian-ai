@@ -36,12 +36,12 @@ const SERVICE_LABELS: Record<ServiceType, string> = {
 };
 
 const PIE_COLORS = [
-  "#C4A265",
-  "#7A9E7E",
-  "#D4B87A",
-  "#A88B52",
-  "#5C7F61",
-  "#64748B",
+  "#2D8CFF",
+  "#00E67A",
+  "#FF4D6A",
+  "#7C8494",
+  "#A78BFA",
+  "#F59E0B",
 ];
 
 export default function AdminRevenuePage() {
@@ -156,19 +156,19 @@ export default function AdminRevenuePage() {
       label: "Total Revenue",
       value: `$${totalRevenue.toLocaleString()}`,
       icon: DollarSign,
-      color: "#C4A265",
+      color: "#2D8CFF",
     },
     {
       label: "Outstanding",
       value: `$${outstanding.toLocaleString()}`,
       icon: Clock,
-      color: "#FF6B6B",
+      color: "#FF4D6A",
     },
     {
       label: "Monthly Recurring Revenue",
       value: `$${mrr.toLocaleString()}/mo`,
       icon: TrendingUp,
-      color: "#7A9E7E",
+      color: "#00E67A",
     },
   ];
 
@@ -237,10 +237,11 @@ export default function AdminRevenuePage() {
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#0F1F14",
-                      border: "1px solid rgba(255,255,255,0.1)",
+                      background: "#141722",
+                      border: "1px solid rgba(45,140,255,0.15)",
                       borderRadius: "8px",
-                      color: "#fff",
+                      color: "#E4E7ED",
+                      fontSize: 12,
                     }}
                     formatter={(value) => [
                       `$${Number(value).toLocaleString()}`,
@@ -249,7 +250,7 @@ export default function AdminRevenuePage() {
                   />
                   <Bar
                     dataKey="amount"
-                    fill="#C4A265"
+                    fill="#2D8CFF"
                     radius={[4, 4, 0, 0]}
                     maxBarSize={48}
                   />
@@ -292,10 +293,11 @@ export default function AdminRevenuePage() {
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#0F1F14",
-                      border: "1px solid rgba(255,255,255,0.1)",
+                      background: "#141722",
+                      border: "1px solid rgba(45,140,255,0.15)",
                       borderRadius: "8px",
-                      color: "#fff",
+                      color: "#E4E7ED",
+                      fontSize: 12,
                     }}
                     formatter={(value) => [
                       `$${Number(value).toLocaleString()}`,

@@ -5,7 +5,7 @@
    Warm, cream-based palette. Handcrafted feeling, premium execution.
    ============================================================ */
 
-@theme inline {
+@theme {
   /* ── Core Brand Palette ── */
   --color-cream:        #F7EFE6;
   --color-sage:         #AAAC9A;
@@ -36,6 +36,13 @@
 
   --color-nav-bg:           var(--color-dark);
   --color-nav-text:         var(--color-cream);
+
+  /* ── Semantic UI Tokens (used by dashboard + shared components) ── */
+  --color-foreground:       var(--color-dark);
+  --color-foreground-muted: var(--color-taupe);
+  --color-foreground-dim:   #B0AA9E;
+  --color-primary:          var(--color-terracotta);
+  --color-accent:           #7A9E7E;
 
   /* ── Utility ── */
   --color-white:  #FFFFFF;
@@ -101,6 +108,100 @@ body {
 ::selection {
   background: rgba(194, 151, 127, 0.25);
   color: var(--color-forest);
+}
+
+/* ============================================================
+   Glass & Card Components
+   ============================================================ */
+
+.glass {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 1px 3px rgba(58, 58, 53, 0.06);
+}
+
+.glow-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.glow-card > [data-glow] {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(
+    300px circle at calc(var(--x, 0) * 1px) calc(var(--y, 0) * 1px),
+    rgba(194, 151, 127, 0.08),
+    transparent 70%
+  );
+}
+
+.glow-card:hover > [data-glow] {
+  opacity: 1;
+}
+
+/* ============================================================
+   Dashboard Theme — dark, high-contrast environment
+   Scoped to [data-dashboard] so the marketing site is unaffected.
+   ============================================================ */
+
+html:has([data-dashboard]) {
+  background: #0C0E14;
+}
+
+[data-dashboard] {
+  --color-background:       #0C0E14;
+  --color-surface:          #141722;
+  --color-surface-hover:    #1C2030;
+  --color-foreground:       #E4E7ED;
+  --color-foreground-muted: #7C8494;
+  --color-foreground-dim:   #4A5060;
+  --color-primary:          #2D8CFF;
+  --color-accent:           #00E67A;
+  --color-border:           rgba(45, 140, 255, 0.06);
+  --color-border-strong:    rgba(45, 140, 255, 0.12);
+  --color-text-primary:     #E4E7ED;
+  --color-text-body:        #7C8494;
+  --color-error:            #FF4D6A;
+
+  color: var(--color-foreground-muted);
+}
+
+[data-dashboard] h1,
+[data-dashboard] h2,
+[data-dashboard] h3,
+[data-dashboard] h4,
+[data-dashboard] h5,
+[data-dashboard] h6 {
+  color: var(--color-foreground);
+}
+
+[data-dashboard] .glass {
+  background: rgba(20, 23, 34, 0.65);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Every GlowCard in the dashboard gets the floating card treatment by default.
+   Individual cards can still override border-radius, padding, or overflow. */
+[data-dashboard] .glow-card {
+  background: var(--color-surface);
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.3),
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    0 0 0 0.5px rgba(255, 255, 255, 0.04) inset;
+}
+
+[data-dashboard] .glow-card > [data-glow] {
+  background: radial-gradient(
+    300px circle at calc(var(--x, 0) * 1px) calc(var(--y, 0) * 1px),
+    rgba(45, 140, 255, 0.06),
+    transparent 70%
+  );
 }
 
 /* ============================================================

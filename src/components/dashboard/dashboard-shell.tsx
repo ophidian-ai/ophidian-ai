@@ -26,7 +26,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarContext.Provider value={{ open, toggle, close }}>
-      <div className="flex min-h-screen bg-background">{children}</div>
+      <div data-dashboard className="flex min-h-screen bg-background">{children}</div>
     </SidebarContext.Provider>
   );
 }
